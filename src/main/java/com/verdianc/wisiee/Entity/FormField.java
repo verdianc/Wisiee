@@ -1,5 +1,6 @@
 package com.verdianc.wisiee.Entity;
 
+import com.verdianc.wisiee.Common.SelectOption;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -16,7 +17,9 @@ public class FormField {
   private FormFieldId formFieldId;
   //enum, 단일인지, 다중인지
   // dto에서 리스트로 받아서 여러개 넣기
-  private String selectOption;
+  @Column(name = "select_option")
+  @Enumerated(EnumType.STRING)
+  private SelectOption selectOption;
 
   @Column(name = "option_items")
   private String optionItems;
