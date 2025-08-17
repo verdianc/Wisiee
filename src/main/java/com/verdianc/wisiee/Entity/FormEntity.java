@@ -1,7 +1,11 @@
 package com.verdianc.wisiee.Entity;
 
+import com.verdianc.wisiee.Common.Category;
+import com.verdianc.wisiee.Common.DeliveryOption;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -61,7 +65,8 @@ public class FormEntity {
   private int version;
 
   // 제품 카테고리
-  private String category;
+  @Enumerated(EnumType.STRING)
+  private Category category;
 
 
   // 판매 가격
@@ -74,8 +79,10 @@ public class FormEntity {
   // 재고
   private int stock;
 
+
   //enum, 상품 배송 옵션
-  private String deliveryOption;
+  @Enumerated(EnumType.STRING)
+  private DeliveryOption deliveryOption;
 
   // 연락처
   private String contact;
