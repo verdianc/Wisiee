@@ -1,11 +1,9 @@
 package com.verdianc.wisiee.Entity;
 
-import com.verdianc.wisiee.Common.SelectOption;
+import com.verdianc.wisiee.Common.Enum.SelectOption;
 import jakarta.persistence.*;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Embeddable
 @Entity(name = "FormField")
@@ -38,8 +36,5 @@ public class FormField {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "form_id", nullable = false)
   private FormEntity form;
-
-
-
 
 }
