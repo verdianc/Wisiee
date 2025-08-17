@@ -18,14 +18,18 @@ public class FormField {
   // dto에서 리스트로 받아서 여러개 넣기
   private String selectOption;
 
-  @Column(name = "optionInfos")
-  private String optionInfos;
+  @Column(name = "option_items")
+  private String optionItems;
 
-  private String title;
+  @Column(name = "field_title")
+  private String fieldTitle;
 
-  private String descipt;
+  @Column(name = "field_descript")
+  private String fieldDescipt;
 
-  private Boolean required;
+
+  @Column(name = "is_required")
+  private Boolean isRequired;
 
 
   @ManyToOne(fetch = FetchType.LAZY)
