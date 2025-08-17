@@ -1,4 +1,4 @@
-package com.verdianc.wisiee.Common;
+package com.verdianc.wisiee.Common.Enum;
 
 
 public enum SelectOption {
