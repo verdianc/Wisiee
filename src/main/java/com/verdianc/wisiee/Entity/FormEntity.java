@@ -25,7 +25,7 @@ public class FormEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private String id;
 
 
   // 판매자 이름
@@ -84,21 +84,16 @@ public class FormEntity {
   // 계좌 번호
   private String account;
 
-  // 하위 항목들
-  private List<FormField> fields;
 
-
-  // 폼에 들어가는 파일 이미지
   @OneToMany(mappedBy = "form",
       cascade = CascadeType.ALL,
       orphanRemoval = true)
-  @OrderColumn(name = "sort_index") // 0부터 시작하는 순서 보장 옵션
+  @OrderColumn(name = "sort_index") // DB에 sort_index 컬럼 생김, 순서 보존
+  private List<FileInfo> files = new ArrayList<>();
 
 
-  // 하위 필드들
-  @OneToMany(mappedBy = "formFiled",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true)
-  @OrderColumn(name = "sort_index") // 0부터 시작하는 순서 보장 옵션
+  @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderColumn(name = "sort_index")
+  private List<FormField> fields = new ArrayList<>();
 
 }
