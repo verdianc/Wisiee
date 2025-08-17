@@ -79,6 +79,7 @@ public class FormEntity {
   // 재고
   private int stock;
 
+  private boolean isSoldOut;
 
   //enum, 상품 배송 옵션
   @Enumerated(EnumType.STRING)
