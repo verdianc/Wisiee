@@ -1,7 +1,7 @@
 package com.verdianc.wisiee.Entity;
 
-import com.verdianc.wisiee.Common.Category;
-import com.verdianc.wisiee.Common.DeliveryOption;
+import com.verdianc.wisiee.Common.Enum.Category;
+import com.verdianc.wisiee.Common.Enum.DeliveryOption;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
