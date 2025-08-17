@@ -1,15 +1,23 @@
 package com.verdianc.wisiee.Entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderColumn;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 
 @Entity
+@Getter
+@RequiredArgsConstructor
 public class FormEntity {
 
   // 폼전체
@@ -79,8 +87,18 @@ public class FormEntity {
   // 하위 항목들
   private List<FormField> fields;
 
-  // 이미지
-  private List<FileInfo> files;
 
+  // 폼에 들어가는 파일 이미지
+  @OneToMany(mappedBy = "form",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
+  @OrderColumn(name = "sort_index") // 0부터 시작하는 순서 보장 옵션
+
+
+  // 하위 필드들
+  @OneToMany(mappedBy = "formFiled",
+      cascade = CascadeType.ALL,
+      orphanRemoval = true)
+  @OrderColumn(name = "sort_index") // 0부터 시작하는 순서 보장 옵션
 
 }
