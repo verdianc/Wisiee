@@ -2,13 +2,20 @@ package com.verdianc.wisiee.DTO;
 
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class FormRequestDTO {
+public class FormDTO {
 
   //form 생성 응답 사용 가능, 서비스레이어에서 엔티티 대신 사용 가능
   // 판매자 이름
@@ -26,8 +33,20 @@ public class FormRequestDTO {
   // 판매 종료 날짜
   private LocalDate endDate;
 
+  // 폼 생성 날짜
+  private LocalDateTime createdAt;
+
+  // 폼 수정 날짜
+  private LocalDateTime updatedAt;
+
+  // 삭제 여부
+  private boolean isDeleted;
+
   // 글 공개 여부
   private boolean isPublic;
+
+  // 수정 버전 관리
+  private int version;
 
   // 제품 카테고리
   private Category category;
@@ -37,6 +56,11 @@ public class FormRequestDTO {
 
   // 제품 설명
   private String description;
+
+  // 재고
+  private int stock;
+
+  private boolean isSoldOut;
 
   //enum, 상품 배송 옵션
   private DeliveryOption deliveryOption;
