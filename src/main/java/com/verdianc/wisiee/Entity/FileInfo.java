@@ -15,14 +15,16 @@ import lombok.RequiredArgsConstructor;
 @Getter
 public class FileInfo {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private String id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private String id;
+
+    //주석
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "form_id", nullable = false)
 
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "form_id", nullable = false)
-  private FormEntity form;
+    private FormEntity form;
 
 
 }

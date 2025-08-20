@@ -1,7 +1,6 @@
 package com.verdianc.wisiee.Entity;
 
 import jakarta.persistence.Embeddable;
-
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -13,11 +12,19 @@ public class FormFieldId implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof FormFieldId that)) return false;
-        return order == that.order && Objects.equals(formId, that.formId);
+        return order==that.order && Objects.equals(formId, that.formId);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(formId, order);
+    }
+
+    public FormFieldId() {
+    } // JPA용 기본 생성자
+
+    public FormFieldId(String formId, int order) {
+        this.formId = formId;
+        this.order = order;
     }
 }
