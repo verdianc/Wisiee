@@ -1,19 +1,15 @@
-package com.verdianc.wisiee.DTO;
+package com.verdianc.wisiee.DTO.Form;
 
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 public class FormDTO {
 

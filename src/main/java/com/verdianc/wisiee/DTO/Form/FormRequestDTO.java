@@ -1,4 +1,4 @@
-package com.verdianc.wisiee.DTO;
+package com.verdianc.wisiee.DTO.Form;
 
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
