@@ -17,7 +17,8 @@ import lombok.RequiredArgsConstructor;
 public class FileInfo {
 
     @Id
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private String name;
 
