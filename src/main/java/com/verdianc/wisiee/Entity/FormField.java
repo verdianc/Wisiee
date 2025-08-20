@@ -12,11 +12,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 @Embeddable
 @Entity(name = "FormField")
-@RequiredArgsConstructor
 @Builder
 @Getter
 public class FormField {
@@ -38,14 +36,11 @@ public class FormField {
     @Column(name = "field_descript")
     private String fieldDescipt;
 
-
     @Column(name = "is_required")
-    private Boolean isRequired;
-
+    private boolean isRequired;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "form_id", nullable = false)
     private FormEntity form;
-
-
+    
 }
