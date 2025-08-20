@@ -28,7 +28,6 @@ public class FormEntity {
   // 폼 공통 정보 기본값 세팅
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private String id;
 
 
