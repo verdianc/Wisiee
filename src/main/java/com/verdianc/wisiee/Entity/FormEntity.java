@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
+import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import lombok.RequiredArgsConstructor;
 @Entity
 @Getter
 @RequiredArgsConstructor
+@Table(name = "form")
 public class FormEntity {
 
   // 폼전체
@@ -91,15 +93,12 @@ public class FormEntity {
   private String account;
 
 
-  @OneToMany(mappedBy = "form",
-      cascade = CascadeType.ALL,
-      orphanRemoval = true)
-  @OrderColumn(name = "sort_index") // DB에 sort_index 컬럼 생김, 순서 보존
-  private List<FileInfo> files = new ArrayList<>();
-
-
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderColumn(name = "sort_index")
-  private List<FormField> fields = new ArrayList<>();
+  private List<FileInfo> files = new ArrayList<>();
+
+//  @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
+//  @OrderColumn(name = "sort_index")
+//  private List<FormField> fields = new ArrayList<>();
 
 }
