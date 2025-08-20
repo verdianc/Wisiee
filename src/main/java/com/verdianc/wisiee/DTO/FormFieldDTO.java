@@ -18,7 +18,7 @@ public class FormFieldDTO {
     //field 설명
     private String fieldDescipt;
     //필수 여부
-    private Boolean isRequired;
+    private boolean isRequired;
     //선택 옵션값
     private SelectOption selectOption;
     //선택값 리스트

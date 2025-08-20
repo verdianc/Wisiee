@@ -24,7 +24,7 @@ public class FormFieldMapper {
         return FormFieldDTO.builder()
                 .fieldTitle(entity.getFieldTitle())
                 .fieldDescipt(entity.getFieldDescipt())
-                .isRequired(entity.getIsRequired())
+                .isRequired(entity.isRequired())
                 .selectOption(entity.getSelectOption())
                 .optionItems(optionList)
                 .build();
@@ -47,7 +47,7 @@ public class FormFieldMapper {
                 .formFieldId(id)
                 .fieldTitle(dto.getFieldTitle())
                 .fieldDescipt(dto.getFieldDescipt())
-                .isRequired(dto.getIsRequired())
+                .isRequired(dto.isRequired())
                 .selectOption(dto.getSelectOption())
                 .optionItems(optionItems)
                 .build();
