@@ -12,7 +12,7 @@ import lombok.Setter;
 public class FormFieldDTO {
 
     //formId
-    private String formId;
+    private Long formId;
     //field 제목
     private String fieldTitle;
     //field 설명
