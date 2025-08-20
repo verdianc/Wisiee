@@ -17,6 +17,10 @@ bin/
 !**/src/main/**/bin/
 !**/src/test/**/bin/
 
+# Spring local profile configs (do not commit)
+**/application-local.yml
+**/application-local.yaml
+
 ### IntelliJ IDEA ###
 .idea
 *.iws
