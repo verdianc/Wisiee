@@ -26,10 +26,9 @@ public class FormEntity {
 
   // 폼전체
   // 폼 공통 정보 기본값 세팅
-
   @Id
-  private String id;
-
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
 
   // 판매자 이름
   private String userName;
