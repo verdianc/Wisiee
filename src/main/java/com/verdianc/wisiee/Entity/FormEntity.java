@@ -32,8 +32,13 @@ public class FormEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+  // 판매자 이름
+  private String nickName;
+
     // 판매자 이름
     private String userName;
+
 
     // 입장 코드
     private String code;
