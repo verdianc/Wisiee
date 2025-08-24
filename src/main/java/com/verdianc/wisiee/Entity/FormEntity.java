@@ -33,7 +33,7 @@ public class FormEntity {
   private Long id;
 
   // 판매자 이름
-  private String userName;
+  private String nickName;
 
   // 입장 코드
   private String code;
