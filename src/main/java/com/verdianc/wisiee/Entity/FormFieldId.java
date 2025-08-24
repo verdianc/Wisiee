@@ -6,25 +6,25 @@ import java.util.Objects;
 
 @Embeddable
 public class FormFieldId implements Serializable {
-    private String formId;
-    private int order;
+    private Long formId;
+    private int sortOrder;
 
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof FormFieldId that)) return false;
-        return order==that.order && Objects.equals(formId, that.formId);
+        return sortOrder==that.sortOrder && Objects.equals(formId, that.formId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(formId, order);
+        return Objects.hash(formId, sortOrder);
     }
 
     public FormFieldId() {
     } // JPA용 기본 생성자
 
-    public FormFieldId(String formId, int order) {
+    public FormFieldId(Long formId, int order) {
         this.formId = formId;
-        this.order = order;
+        this.sortOrder = order;
     }
 }
