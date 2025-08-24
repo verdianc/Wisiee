@@ -2,7 +2,6 @@ package com.verdianc.wisiee.Entity;
 
 import com.verdianc.wisiee.Common.Enum.SelectOption;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,10 +9,11 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MapsId;
 import lombok.Builder;
 import lombok.Getter;
 
-@Embeddable
+
 @Entity(name = "FormField")
 @Builder
 @Getter
@@ -40,7 +40,8 @@ public class FormField {
     private boolean isRequired;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("formId")
     @JoinColumn(name = "form_id", nullable = false)
     private FormEntity form;
-    
+
 }
