@@ -1,4 +1,4 @@
-package com.verdianc.wisiee.DTO;
+package com.verdianc.wisiee.DTO.Form;
 
 import com.verdianc.wisiee.Common.Enum.SelectOption;
 import java.util.List;
@@ -12,7 +12,7 @@ import lombok.Setter;
 public class FormFieldDTO {
 
     //formId
-    private String formId;
+    private Long formId;
     //field 제목
     private String fieldTitle;
     //field 설명

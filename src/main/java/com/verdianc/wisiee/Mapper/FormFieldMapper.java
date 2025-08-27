@@ -1,6 +1,6 @@
 package com.verdianc.wisiee.Mapper;
 
-import com.verdianc.wisiee.DTO.FormFieldDTO;
+import com.verdianc.wisiee.DTO.Form.FormFieldDTO;
 import com.verdianc.wisiee.Entity.FormField;
 import com.verdianc.wisiee.Entity.FormFieldId;
 import java.util.Arrays;
