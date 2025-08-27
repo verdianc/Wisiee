@@ -22,6 +22,15 @@ public class FileInfo extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // S3 API에서는 영속적인 파일 식별자를 bucket + objectKey + versionId로 함
+    private String bucket;
+
+    private String objectKey;
+
+    private String versionId;
+
+    private Long size;
+
     private String name;
 
     private String description;
