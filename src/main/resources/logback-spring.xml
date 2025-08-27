@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true">
+
+  <include resource="org/springframework/boot/logging/logback/base.xml"/>
+
+  <springProperty scope="context" name="LOG_FILE" source="logging.file.name"/>
+  <springProperty scope="context" name="LOG_PATH" source="logging.file.path"/>
+
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+</configuration>
