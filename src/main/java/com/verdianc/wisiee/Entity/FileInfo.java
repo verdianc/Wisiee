@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Getter
 @Table(name = "file")
-public class FileInfo {
+public class FileInfo extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +25,6 @@ public class FileInfo {
     private String name;
 
     private String description;
-
-    private LocalDateTime createdAt;
-
-    private LocalDateTime modifiedAt;
 
     private String url;
 
