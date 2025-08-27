@@ -1,46 +1,55 @@
 package com.verdianc.wisiee.DTO;
 
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.verdianc.wisiee.Common.Enum.Error.ErrorCode;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResDTO {
 
-  @Schema(description = "응답 코드", example = "200")
-  private int ;
+  // API 요청 성공 여부
+  private final boolean success;
 
-  @Schema(description = "응답 메시지", example = "성공")
-  private String message;
+  // 요청 결과
+  private final Object data;
 
-  @Schema(description = "응답 데이터")
-  private T data;
+  // 실패할 경우에만 표시
+  private final ErrorCode errorCode;
+  private final String errorMessage;
 
-  public static <T> ResDTO<T> success(T data) {
-    return ResDTO.<T>builder()
-        .code(200)
-        .message("성공")
+  // API 요청 응답 시간
+  private final long timestamp;
+
+  //ex
+  // success : true
+  // data : [ 파일이 추가되었습니다, url]
+  // errorcode : 1002
+  // errMsg : "유효하지 않은 파일 형식입니다"
+
+  // 성공 응답 팩토리
+  public static ResDTO ok(Object data) {
+    return ResDTO.<Void>builder()
+        .success(true)
         .data(data)
+        .timestamp(System.currentTimeMillis())
         .build();
   }
 
-  public static <T> ResDTO<T> success(String message, T data) {
-    return ResDTO.<T>builder()
-        .code(200)
-        .message(message)
-        .data(data)
+
+  // 실패 응답 팩토리
+  public static ResDTO fail(ErrorCode code, String message) {
+    return ResDTO.<Void>builder()
+        .success(false)
+        .errorCode(code)
+        .errorMessage(message)
+        .timestamp(System.currentTimeMillis())
         .build();
   }
-
-  public static <T> ResDTO<T> fail(int code, String message) {
-    return ResDTO.<T>builder()
-        .code(code)
-        .message(message)
-        .build();
-  }
-
 
 }
