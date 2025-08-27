@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 @Table(name = "form")
-public class FormEntity {
+public class FormEntity extends BaseEntity {
 
     // 폼전체
     // 폼 공통 정보 기본값 세팅
@@ -51,13 +51,6 @@ public class FormEntity {
 
     // 판매 종료 날짜
     private LocalDate endDate;
-
-    // 폼 생성 날짜
-    private LocalDateTime createdAt;
-
-    // 폼 수정 날짜
-    private LocalDateTime updatedAt;
-
 
     // 삭제 여부
     private boolean isDeleted;
