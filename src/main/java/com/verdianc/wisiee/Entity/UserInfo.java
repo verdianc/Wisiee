@@ -3,9 +3,12 @@ package com.verdianc.wisiee.Entity;
 import com.verdianc.wisiee.Common.Enum.OauthProvider;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Builder;
@@ -37,12 +40,14 @@ public class UserInfo {
     @Column(name = "provider_id", nullable = false)
     private String providerId;
 
-    @Column(name = "nick_name", nullable = false, unique = true)
+    @Column(name = "nick_name", nullable = false, unique = true, length = 50)
     private String nickNm;
 
     @Column(name = "email")
     private String email;
+    
 
-    @Column(name = "profile_image_url")
-    private String profileImgUrl;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_image_id") // FK
+    private FileInfo profileImg;
 }
