@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
         })
 @Builder
 @Getter
-public class UseEntity {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;

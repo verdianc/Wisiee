@@ -1,6 +1,6 @@
 package com.verdianc.wisiee.Oauth;
 
-import com.verdianc.wisiee.Entity.UseEntity;
+import com.verdianc.wisiee.Entity.UserEntity;
 import com.verdianc.wisiee.Exception.Oauth.UserIdNotFound;
 import com.verdianc.wisiee.Repository.UserRepository;
 import jakarta.servlet.ServletException;
@@ -54,7 +54,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             default -> throw new IllegalArgumentException("지원하지 않는 Provider: " + providerNm);
         }
         // 3️. DB 조회 (providerNm + providerId 기준)
-        UseEntity user = userRepository.findByProviderNmAndProviderId(providerNm.toUpperCase(), providerId)
+        UserEntity user = userRepository.findByProviderNmAndProviderId(providerNm.toUpperCase(), providerId)
                 .orElseThrow(() -> new UserIdNotFound(providerNm.toUpperCase(), providerId));
 
         // 4️. 세션에 userId 저장
