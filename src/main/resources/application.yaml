@@ -13,3 +13,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+s3:
+  region: ap-northeast-2
+  endpoint: http://localhost:9000
+  access-key: minioadmin
+  secret-key: minioadmin
+  path-style: true
+  bucket: wisiee
+

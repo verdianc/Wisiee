@@ -18,63 +18,25 @@ public class FormFacadeService {
 
   private final FormService formService;
 
-  public ResDTO createForm(FormRequestDTO request) {
-    try {
-      FormDTO created = formService.createForm(request);
-      return ResDTO.ok(created);
-    } catch (BaseException e) {
-      return ResDTO.fail(e.getErrorCode(), e.getMessage());
-    } catch (Exception e) {
-      return ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "폼 생성 중 알 수 없는 오류 발생");
-    }
+  public FormDTO createForm(FormRequestDTO request) {
+    return formService.createForm(request);
   }
 
-
-  public ResDTO getForm(Long id) {
-    try {
-      FormDTO dto = formService.getForm(id);
-      return ResDTO.ok(dto);
-    } catch (BaseException e) {
-      return ResDTO.fail(e.getErrorCode(), e.getMessage());
-    } catch (Exception e) {
-      return ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "폼 조회 중 알 수 없는 오류 발생");
-    }
+  public FormDTO getForm(Long id) {
+    return formService.getForm(id);
   }
 
-
-  public ResDTO getFormList() {
-    try {
-      List<FormDTO> list = formService.getFormList();
-      return ResDTO.ok(list);
-    } catch (BaseException e) {
-      return ResDTO.fail(e.getErrorCode(), e.getMessage());
-    } catch (Exception e) {
-      return ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "폼 리스트 조회 중 알 수 없는 오류 발생");
-    }
+  public List<FormDTO> getFormList() {
+    return formService.getFormList();
   }
 
-
-  public ResDTO updateForm(Long id, FormRequestDTO request) {
-    try {
-      FormDTO updated = formService.updateForm(id, request);
-      return ResDTO.ok(updated);
-    } catch (BaseException e) {
-      return ResDTO.fail(e.getErrorCode(), e.getMessage());
-    } catch (Exception e) {
-      return ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "폼 수정 중 알 수 없는 오류 발생");
-    }
+  public FormDTO updateForm(Long id, FormRequestDTO request) {
+    return formService.updateForm(id, request);
   }
 
-
-  public ResDTO deleteForm(Long id) {
-    try {
-      formService.deleteForm(id);
-      return ResDTO.ok("삭제되었습니다.");
-    } catch (BaseException e) {
-      return ResDTO.fail(e.getErrorCode(), e.getMessage());
-    } catch (Exception e) {
-      return ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "폼 삭제 중 알 수 없는 오류 발생");
-    }
+  public void deleteForm(Long id) {
+    formService.deleteForm(id);
   }
+
 
 }

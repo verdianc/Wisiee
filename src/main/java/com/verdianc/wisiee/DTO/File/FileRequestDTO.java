@@ -9,8 +9,6 @@ import lombok.Setter;
 @Builder
 public class FileRequestDTO {
 
-  private String url;
-
   private String name;
 
   private String description;
