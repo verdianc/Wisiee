@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
         })
 @Builder
 @Getter
-public class UserEntity {
+public class UserEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
@@ -48,7 +48,6 @@ public class UserEntity {
 
     @Column(name = "email")
     private String email;
-
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_image_id") // FK
