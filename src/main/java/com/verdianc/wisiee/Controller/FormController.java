@@ -25,29 +25,27 @@ public class FormController {
   private final FormFacadeService formFacadeService;
 
   @PostMapping
-  public ResDTO createForm(@RequestBody FormRequestDTO request) {
-    return formFacadeService.createForm(request);
+  public ResDTO<FormDTO> getForm(@RequestBody FormRequestDTO request) {
+    return new ResDTO<>(formFacadeService.createForm(request));
   }
+
 
 
   @GetMapping("/{id}")
-  public ResDTO getForm(@PathVariable Long id) {
-    return formFacadeService.getForm(id);
+  public ResDTO<FormDTO> getForm(@PathVariable Long id) {
+    return new ResDTO<>(formFacadeService.getForm(id));
   }
 
   @GetMapping
-  public ResDTO getFormList() {
-    return formFacadeService.getFormList();
-  }
-
-  @PutMapping("/{id}")
-  public ResDTO updateForm(@PathVariable Long id, @RequestBody FormRequestDTO request) {
-    return formFacadeService.updateForm(id, request);
+  public ResDTO<List<FormDTO>> getFormList() {
+    return new ResDTO<>(formFacadeService.getFormList());
   }
 
   @DeleteMapping("/{id}")
-  public ResDTO deleteForm(@PathVariable Long id) {
-    return formFacadeService.deleteForm(id);
+  public ResDTO<Void> deleteForm(@PathVariable Long id) {
+    formFacadeService.deleteForm(id);
+    return new ResDTO<>(null);
   }
+
 
 }
