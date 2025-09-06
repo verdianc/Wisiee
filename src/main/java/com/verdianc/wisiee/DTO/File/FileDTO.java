@@ -9,4 +9,20 @@ import lombok.Setter;
 @Builder
 public class FileDTO {
 
+  private Long id;
+
+  private String bucket;
+
+  private String objectKey;
+
+  private String versionId;
+
+  private Long size;
+
+  private String name;
+
+  private String description;
+
+  private Long formId;
+
 }
