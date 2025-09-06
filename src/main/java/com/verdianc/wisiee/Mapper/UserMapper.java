@@ -1,7 +1,8 @@
 package com.verdianc.wisiee.Mapper;
 
-import com.verdianc.wisiee.DTO.UserInfoUpdateDTO;
-import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
+import com.verdianc.wisiee.DTO.User.UserResponseDTO;
+import com.verdianc.wisiee.Entity.UserInfo;
 
 public class UserMapper {
 
