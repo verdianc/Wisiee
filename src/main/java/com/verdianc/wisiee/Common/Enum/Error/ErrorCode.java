@@ -24,8 +24,9 @@ public enum ErrorCode {
     FILE_DELETE_FAILED(3002, "File 삭제에 실패했습니다."),
     FILE_READ_FAILED(3003, "File 조회에 실패했습니다."),
 
-    //4000번대: User 관련 에러
-    USER_NOT_FOUND(4000, "존재하지 않는 User 입니다."),
+    //4000번대: Oauth 관련 에러
+    PROVIDER_NOT_FOUND(4000, "존재하지 않는 Provider 입니다."),
+    USER_ID_NOT_FOUND(4001, "User ID를 찾을 수 없습니다."),
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
 
