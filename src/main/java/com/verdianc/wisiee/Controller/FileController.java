@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 @RestController
-@RequestMapping("/api/wisiee/file")
+@RequestMapping("/api/file")
 @RequiredArgsConstructor
 public class FileController {
 
