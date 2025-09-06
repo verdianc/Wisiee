@@ -1,13 +1,13 @@
 package com.verdianc.wisiee.Mapper;
 
 import com.verdianc.wisiee.DTO.UserInfoUpdateDTO;
-import com.verdianc.wisiee.Entity.UserInfo;
+import com.verdianc.wisiee.Entity.UseEntity;
 
 public class UserMapper {
 
-    public static UserInfo toDTO(UserInfoUpdateDTO userInfoUpdateDTO) {
+    public static UseEntity toDTO(UserInfoUpdateDTO userInfoUpdateDTO) {
         if (userInfoUpdateDTO==null) return null;
-        return UserInfo.builder()
+        return UseEntity.builder()
                 .nickNm(userInfoUpdateDTO.getNickNm())
                 .build();
     }
