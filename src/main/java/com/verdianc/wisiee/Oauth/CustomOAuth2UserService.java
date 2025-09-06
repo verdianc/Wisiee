@@ -1,6 +1,6 @@
 package com.verdianc.wisiee.Oauth;
 
-import com.verdianc.wisiee.Entity.UseEntity;
+import com.verdianc.wisiee.Entity.UserEntity;
 import com.verdianc.wisiee.Oauth.Interface.OauthUserInfoResp;
 import com.verdianc.wisiee.Repository.UserRepository;
 import org.slf4j.Logger;
@@ -41,8 +41,8 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         log.debug(userInfo.toString());
 
         // DB에서 사용자 조회
-        UseEntity user = userRepository.findByProviderNmAndProviderId(registrationId, userInfo.getId())
-                .orElseGet(() -> UseEntity.builder()
+        UserEntity user = userRepository.findByProviderNmAndProviderId(registrationId, userInfo.getId())
+                .orElseGet(() -> UserEntity.builder()
                         .providerNm(registrationId)
                         .providerId(userInfo.getId())
                         .email(userInfo.getEmail())
