@@ -18,6 +18,14 @@ public enum ErrorCode {
   INVALID_REQUEST(2000, "유효하지 않은 요청 값입니다."),
   MISSING_PARAMETER(2001, "필수 요청 파라미터가 누락되었습니다."),
 
+
+  // 3000번대: File 관련 에러
+  FILE_NOT_FOUND(3000, "존재하지 않는 File 입니다."),
+  FILE_UPLOAD_FAILED(3001, "File 업로드에 실패했습니다."),
+  FILE_DELETE_FAILED(3002, "File 삭제에 실패했습니다."),
+  FILE_READ_FAILED(3003, "File 조회에 실패했습니다."),
+
+
   // 9000번대: 서버 공통 에러
   INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
 

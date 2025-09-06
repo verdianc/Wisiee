@@ -9,47 +9,50 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ResDTO {
+public class ResDTO<T> {
 
-  // API 요청 성공 여부
   private final boolean success;
-
-  // 요청 결과
-  private final Object data;
-
-  // 실패할 경우에만 표시
-  private final ErrorCode errorCode;
+  private final T data;
+  private final Integer errorCode;   // 숫자 코드만 노출
   private final String errorMessage;
-
-  // API 요청 응답 시간
   private final long timestamp;
 
-  //ex
-  // success : true
-  // data : [ 파일이 추가되었습니다, url]
-  // errorcode : 1002
-  // errMsg : "유효하지 않은 파일 형식입니다"
+  // 성공 응답
+  public ResDTO(T data) {
+    this.success = true;
+    this.data = data;
+    this.errorCode = null;
+    this.errorMessage = null;
+    this.timestamp = System.currentTimeMillis();
+  }
 
-  // 성공 응답 팩토리
-  public static ResDTO ok(Object data) {
-    return ResDTO.<Void>builder()
-        .success(true)
-        .data(data)
-        .timestamp(System.currentTimeMillis())
-        .build();
+  // 실패 응답
+  public ResDTO(ErrorCode errorCode) {
+    this.success = false;
+    this.data = null;
+    this.errorCode = errorCode.getCode();
+    this.errorMessage = errorCode.getMessage();
+    this.timestamp = System.currentTimeMillis();
+  }
+
+  // 실패 응답
+  public ResDTO(ErrorCode errorCode, String customMessage) {
+    this.success = false;
+    this.data = null;
+    this.errorCode = errorCode.getCode();
+    this.errorMessage = customMessage;
+    this.timestamp = System.currentTimeMillis();
   }
 
 
-  // 실패 응답 팩토리
-  public static ResDTO fail(ErrorCode code, String message) {
-    return ResDTO.<Void>builder()
-        .success(false)
-        .errorCode(code)
-        .errorMessage(message)
-        .timestamp(System.currentTimeMillis())
-        .build();
+  public static <T> ResDTO<T> fail(ErrorCode code) {
+    return new ResDTO<>(code);
   }
+
+  public static <T> ResDTO<T> fail(ErrorCode code, String message) {
+    return new ResDTO<>(code, message);
+  }
+
 
 }
