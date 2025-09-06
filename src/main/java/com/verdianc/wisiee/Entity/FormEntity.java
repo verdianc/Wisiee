@@ -14,7 +14,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
@@ -95,7 +94,7 @@ public class FormEntity extends BaseEntity {
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderColumn(name = "sort_index")
-  private List<FileInfo> files = new ArrayList<>();
+  private List<FileEntity> files = new ArrayList<>();
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderColumn(name = "sort_index")
