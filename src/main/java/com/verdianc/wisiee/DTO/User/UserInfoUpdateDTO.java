@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserResponseDTO {
+public class UserInfoUpdateDTO {
     private String nickNm;
     private String email;
     private String profileImg;

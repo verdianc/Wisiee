@@ -1,6 +1,7 @@
 package com.verdianc.wisiee.Repository;
 
 import com.verdianc.wisiee.Entity.UserEntity;
+import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -13,7 +14,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     // provider + providerId로 유저 조회
     Optional<UserEntity> findByProviderNmAndProviderId(String provider, String providerId);
 
+    @Transactional
     @Modifying
-    @Query("UPDATE UserEntity u SET u.nickNm = :nickNm WHERE u.userId = :userId")
+    @Query("UPDATE UserEntity u SET u.nickNm = :nickNm, u.updatedAt = CURRENT_TIMESTAMP WHERE u.userId = :userId")
     void updateNickNm(@Param("userId") Long userId, @Param("nickNm") String nickNm);
 }
