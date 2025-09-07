@@ -1,0 +1,67 @@
+package com.verdianc.wisiee.Oauth;
+
+import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.Exception.Oauth.UserIdNotFound;
+import com.verdianc.wisiee.Repository.UserRepository;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import java.io.IOException;
+import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
+
+    private final HttpSession httpSession; // 스프링 세션
+    private final UserRepository userRepository;
+
+    @Override
+    public void onAuthenticationSuccess(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        Authentication authentication) throws IOException, ServletException {
+
+        // OAuth2User
+        OAuth2User oAuth2User = (OAuth2User) authentication.getPrincipal();
+
+        // Authentication 안에 OAuth2AuthenticationToken 캐스팅
+        OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+
+        // 여기서 registrationId (= providerNm) 얻을 수 있음 (google, naver, kakao 등)
+        String providerNm = oauthToken.getAuthorizedClientRegistrationId();
+
+        // providerId (구글은 sub, 네이버는 id 등)
+        String providerId;
+
+        switch (providerNm.toLowerCase()) {
+            case "google" -> {
+                providerId = oAuth2User.getAttribute("sub");
+            }
+            case "naver" -> {
+                Map<String, Object> resp = (Map<String, Object>) oAuth2User.getAttribute("response");
+                providerId = (String) resp.get("id");
+            }
+            case "kakao" -> {
+                providerId = String.valueOf(oAuth2User.getAttribute("id"));
+            }
+            default -> throw new IllegalArgumentException("지원하지 않는 Provider: " + providerNm);
+        }
+        // 3️. DB 조회 (providerNm + providerId 기준)
+        UserEntity user = userRepository.findByProviderNmAndProviderId(providerNm.toUpperCase(), providerId)
+                .orElseThrow(() -> new UserIdNotFound(providerNm.toUpperCase(), providerId));
+
+        // 4️. 세션에 userId 저장
+        httpSession.setAttribute("userId", user.getUserId());
+
+        // 5. 로그인 후 리다이렉트
+        response.sendRedirect("/wisiee/home");
+    }
+
+}
