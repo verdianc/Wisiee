@@ -18,4 +18,13 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Modifying
     @Query("UPDATE UserEntity u SET u.nickNm = :nickNm, u.updatedAt = CURRENT_TIMESTAMP WHERE u.userId = :userId")
     void updateNickNm(@Param("userId") Long userId, @Param("nickNm") String nickNm);
+
+    @Transactional
+    @Modifying
+    @Query("UPDATE UserEntity u SET u.refreshToken = :refreshToken WHERE u.userId = :userId")
+    void updateRefreshToken(@Param("userId") Long userId, @Param("refreshToken") String refreshToken);
+
+    @Transactional
+    @Query("SELECT u.refreshToken FROM UserEntity u WHERE u.userId = :userId")
+    Optional<String> findRefreshTokenByUserId(@Param("userId") Long userId);
 }
