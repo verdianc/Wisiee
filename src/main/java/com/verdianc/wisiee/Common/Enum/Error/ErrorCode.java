@@ -27,6 +27,8 @@ public enum ErrorCode {
     //4000번대: Oauth 관련 에러
     PROVIDER_NOT_FOUND(4000, "존재하지 않는 Provider 입니다."),
     USER_ID_NOT_FOUND(4001, "User ID를 찾을 수 없습니다."),
+    REFRESH_TOKEN_NOT_FOUND(4002, "REFRESH TOKEN이 없습니다."),
+    REFRESH_ACCESS_TOKEN_FAIL(4003, "ACCESS TOKEN REFRESH에 실패하였습니다."),
 
     //5000번대: User 관련 에러
     SESSION_USER_NOT_FOUND(5000, "세션에 사용자 정보가 없습니다."),

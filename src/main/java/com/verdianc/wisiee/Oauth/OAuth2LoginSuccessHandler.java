@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,6 +24,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     private final HttpSession httpSession; // 스프링 세션
     private final UserRepository userRepository;
+    private final OAuth2AuthorizedClientService authorizedClientService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -53,9 +56,31 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             }
             default -> throw new IllegalArgumentException("지원하지 않는 Provider: " + providerNm);
         }
-        // 3️. DB 조회 (providerNm + providerId 기준)
+
+        // 이미 저장된 authorizedClient에서 accessToken / refreshToken 가져오기
+        OAuth2AuthorizedClient client =
+                authorizedClientService.loadAuthorizedClient(providerNm, oAuth2User.getName());
+
+        String refreshToken = null;
+        if (client!=null) {
+            //access token 만료 시간 session에 저장
+            httpSession.setAttribute("accessTokenExpiresAt", client.getAccessToken().getExpiresAt().toEpochMilli());
+            if (client.getRefreshToken()!=null) {
+                //refresh token 얻기
+                refreshToken = client.getRefreshToken().getTokenValue();
+                String accessToken = client.getAccessToken().getTokenValue();
+            }
+
+
+        }
+        // DB 조회 (providerNm + providerId 기준)
         UserEntity user = userRepository.findByProviderNmAndProviderId(providerNm.toUpperCase(), providerId)
                 .orElseThrow(() -> new UserIdNotFound(providerNm.toUpperCase(), providerId));
+
+        //refresh token 저장
+        if (refreshToken!=null && !refreshToken.equals(user.getRefreshToken())) {
+            userRepository.updateRefreshToken(user.getUserId(), refreshToken);
+        }
 
         // 4️. 세션에 userId 저장
         httpSession.setAttribute("userId", user.getUserId());

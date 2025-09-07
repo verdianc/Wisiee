@@ -49,6 +49,9 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "refresh_token", length = 512)
+    private String refreshToken;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_image_id") // FK
     private FileEntity profileImg;
