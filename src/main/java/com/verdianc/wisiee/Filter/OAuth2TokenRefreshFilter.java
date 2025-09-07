@@ -43,6 +43,6 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
 
     private boolean isAccessTokenExpired() {
         Long expiresAt = (Long) httpSession.getAttribute("accessTokenExpiresAt");
-        return expiresAt!=null && System.currentTimeMillis() > expiresAt;
+        return expiresAt!=null && System.currentTimeMillis() > (expiresAt - 60_000);
     }
 }
