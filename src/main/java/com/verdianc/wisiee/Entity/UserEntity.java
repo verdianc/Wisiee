@@ -52,7 +52,10 @@ public class UserEntity extends BaseEntity {
     @Column(name = "refresh_token", length = 512)
     private String refreshToken;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "profile_image_id") // FK
-    private FileEntity profileImg;
+    @Column(name = "profile_image_id")
+    private Long profileImgId;
+
+    public void changeProfileImage(Long newFileId) {
+        this.profileImgId = newFileId;
+    }
 }
