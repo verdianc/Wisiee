@@ -49,6 +49,8 @@ public class UserEntity extends BaseEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "refresh_token", length = 512)
+    private String refreshToken;
 
     @Column(name = "profile_image_id")
     private Long profileImgId;

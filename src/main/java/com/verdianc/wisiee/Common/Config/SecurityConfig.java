@@ -1,5 +1,6 @@
 package com.verdianc.wisiee.Common.Config;
 
+import com.verdianc.wisiee.Oauth.CustomAuthorizationRequestResolver;
 import com.verdianc.wisiee.Oauth.CustomOAuth2UserService;
 import com.verdianc.wisiee.Oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -16,16 +18,25 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final ClientRegistrationRepository clientRegistrationRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/wisiee/**").permitAll()
+                        .requestMatchers("/**", "/oauth2/authorization/**", "/login/oauth2/code/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
+                        .authorizationEndpoint(authorization -> authorization
+                                .authorizationRequestResolver(
+                                        new CustomAuthorizationRequestResolver(
+                                                clientRegistrationRepository,
+                                                "/oauth2/authorization"  // ✅ redirect-uri prefix 맞추기
+                                        )
+                                )
+                        )
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
