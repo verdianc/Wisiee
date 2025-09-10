@@ -77,6 +77,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         UserEntity user = userRepository.findByProviderNmAndProviderId(providerNm.toUpperCase(), providerId)
                 .orElseThrow(() -> new UserIdNotFound(providerNm.toUpperCase(), providerId));
 
+
+        // 기본 닉네임 없으면 생성
+        user.generateDefaultNickname();
+        userRepository.save(user);
+
+
+
         //refresh token 저장
         if (refreshToken!=null && !refreshToken.equals(user.getRefreshToken())) {
             userRepository.updateRefreshToken(user.getUserId(), refreshToken);
@@ -85,8 +92,13 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 4️. 세션에 userId 저장
         httpSession.setAttribute("userId", user.getUserId());
 
-        // 5. 로그인 후 리다이렉트
-        response.sendRedirect("/wisiee/home");
+        // 로그인 성공 후 API 호출로만 처리
+        response.sendRedirect("/api/user/login/success");
+
+
+
+//        // 5. 로그인 후 리다이렉트
+//        response.sendRedirect("/wisiee/home");
     }
 
 }
