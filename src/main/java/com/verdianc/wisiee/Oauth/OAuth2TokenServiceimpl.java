@@ -19,7 +19,7 @@ public class OAuth2TokenServiceimpl implements OAuth2TokenService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final HttpSession httpSession;
 
-    @Value("${oauth2.google.token-uri}")
+    @Value("${spring.security.oauth2.client.registration.google.token-uri}")
     private String tokenUri;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -31,7 +31,7 @@ public class OAuth2TokenServiceimpl implements OAuth2TokenService {
     @Override
     public String refreshAccessToken(String refreshToken) {
         if (refreshToken==null) throw new RefreshTokenNotFound();
-        
+
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("client_id", clientId);
         params.add("client_secret", clientSecret);
