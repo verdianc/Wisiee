@@ -5,7 +5,7 @@ import com.verdianc.wisiee.Entity.UserEntity;
 
 public interface UserService {
     //NickNm Update
-    public void updateUserNickNm(UserInfoUpdateDTO updateUserInfo);
+    void updateUserNickNm(UserInfoUpdateDTO updateUserInfo);
 
 
     // change profile image
