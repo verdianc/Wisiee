@@ -34,6 +34,8 @@ public enum ErrorCode {
     //5000번대: User 관련 에러
     SESSION_USER_NOT_FOUND(5000, "세션에 사용자 정보가 없습니다."),
     USER_NOT_FOUND(5001, "존재하지 않는 사용자 입니다."),
+    NICKNAME_CNT_EXCEEDED(5002, "닉네임 변경 횟수가 초과되었습니다."),
+    NICKNAME_ALREADY_EXISTS(5003, "이미 존재하는 닉네임입니다."),
 
 
     // 9000번대: 서버 공통 에러
