@@ -1,6 +1,7 @@
 package com.verdianc.wisiee.facade;
 
 import com.verdianc.wisiee.DTO.File.FileDTO;
+import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdianc.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdianc.wisiee.Service.Interface.FileService;
@@ -16,6 +17,10 @@ public class UserFacadeService {
 
     private final UserService userService;
     private final FileService fileService;
+
+    public OauthDTO getCurrentUser() {
+        return userService.getCurrentUser();
+    }
 
     public void updateUserNickNm(UserInfoUpdateDTO userInfoUpdateDTO) {
         userService.updateUserNickNm(userInfoUpdateDTO);

@@ -1,7 +1,9 @@
 package com.verdianc.wisiee.Service;
 
+import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.Exception.User.NicknameAlreadyExistsException;
 import com.verdianc.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdianc.wisiee.Exception.User.UserNotFound;
 import com.verdianc.wisiee.Repository.UserRepository;
@@ -18,15 +20,42 @@ public class UserServiceImpl implements UserService {
     private final HttpSession httpSession;
 
     @Override
+    @Transactional
     public void updateUserNickNm(UserInfoUpdateDTO updateUserInfo) {
-        // 세션에서 userId 꺼내기
         Long userId = (Long) httpSession.getAttribute("userId");
-        if (userId==null) {
+        if (userId == null) {
             throw new SessionUserNotFoundException();
         }
 
+        // 중복 체크
+        if (userRepository.existsByNickNm(updateUserInfo.getNickNm())) {
+            throw new NicknameAlreadyExistsException(updateUserInfo.getNickNm());
+        }
 
-        userRepository.updateNickNm(userId, updateUserInfo.getNickNm());
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFound(userId));
+
+        // 도메인 로직 호출
+        user.changeNickName(updateUserInfo.getNickNm());
+    }
+
+
+    @Override
+    public OauthDTO getCurrentUser() {
+        Long userId = (Long) httpSession.getAttribute("userId");
+        if (userId == null) {
+            throw new SessionUserNotFoundException();
+        }
+
+        UserEntity user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFound(userId));
+
+        return OauthDTO.builder()
+            .userId(user.getUserId())
+            .email(user.getEmail())
+            .nickNm(user.getNickNm())
+            .profileImgId(user.getProfileImgId())
+            .build();
     }
 
 
