@@ -3,15 +3,16 @@ package com.verdianc.wisiee.Mapper;
 import com.verdianc.wisiee.DTO.Form.FormDTO;
 import com.verdianc.wisiee.DTO.Form.FormRequestDTO;
 import com.verdianc.wisiee.Entity.FormEntity;
+import com.verdianc.wisiee.Entity.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FormMapper {
 
 
-  public FormEntity toEntity(FormRequestDTO dto) {
+  public FormEntity toEntity(FormRequestDTO dto, UserEntity user) {
     return FormEntity.builder()
-        .userName(dto.getUserName())
+        .user(user)
         .code(dto.getCode())
         .title(dto.getTitle())
         .startDate(dto.getStartDate())
@@ -28,7 +29,8 @@ public class FormMapper {
 
   public FormDTO toDTO(FormEntity entity) {
     return FormDTO.builder()
-        .nickName(entity.getNickName())
+        .id(entity.getId())
+        .nickName(entity.getUser().getNickNm())
         .code(entity.getCode())
         .title(entity.getTitle())
         .startDate(entity.getStartDate())

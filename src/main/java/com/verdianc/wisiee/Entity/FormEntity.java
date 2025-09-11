@@ -7,9 +7,12 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
@@ -34,12 +37,9 @@ public class FormEntity extends BaseEntity {
   private Long id;
 
 
-  // 판매자 이름
-  private String nickName;
-
-  // 판매자 이름
-  private String userName;
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false) // FK 이름 user_id
+  private UserEntity user;
 
   // 입장 코드
   private String code;
@@ -102,13 +102,21 @@ public class FormEntity extends BaseEntity {
 
 
   @Builder
-  public FormEntity(String userName, String code, String title,
-      LocalDate startDate, LocalDate endDate,
-      boolean isPublic, Category category,
-      int price, String description,
+  public FormEntity(
+      UserEntity user,
+      String code,
+      String title,
+      LocalDate startDate,
+      LocalDate endDate,
+      boolean isPublic,
+      Category category,
+      int price,
+      String description,
       DeliveryOption deliveryOption,
-      String contact, String account) {
-    this.userName = userName;
+      String contact,
+      String account
+  ) {
+    this.user = user;
     this.code = code;
     this.title = title;
     this.startDate = startDate;
@@ -124,7 +132,6 @@ public class FormEntity extends BaseEntity {
 
 
   public void update(FormRequestDTO dto) {
-    this.userName = dto.getUserName();
     this.code = dto.getCode();
     this.title = dto.getTitle();
     this.startDate = dto.getStartDate();

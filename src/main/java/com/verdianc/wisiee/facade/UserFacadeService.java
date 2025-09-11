@@ -4,8 +4,13 @@ import com.verdianc.wisiee.DTO.File.FileDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdianc.wisiee.DTO.User.UserProfileImageDTO;
+import com.verdianc.wisiee.Exception.File.FileUploadFailedException;
+import com.verdianc.wisiee.Infrastructure.S3.S3Port;
 import com.verdianc.wisiee.Service.Interface.FileService;
 import com.verdianc.wisiee.Service.Interface.UserService;
+import java.time.Duration;
+import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,7 +21,7 @@ import org.springframework.stereotype.Service;
 public class UserFacadeService {
 
     private final UserService userService;
-    private final FileService fileService;
+    private final S3Port s3Port;
 
     public OauthDTO getCurrentUser() {
         return userService.getCurrentUser();
@@ -28,16 +33,20 @@ public class UserFacadeService {
 
 
     // 프로필 이미지 업데이트
-    public FileDTO updateUserProfileImage(UserProfileImageDTO dto) {
-        FileDTO fileDTO = fileService.createFile(
-            dto.getUserId(),
-            dto.getFileRequest(),
-            dto.getFileData(),
-            dto.getContentType()
-        );
+    public String updateUserProfileImage(UserProfileImageDTO dto) {
+        String objectKey = "profile/" + UUID.randomUUID();
+        try {
+            S3Port.PutResult put = s3Port.put(objectKey, dto.getFileData(), dto.getContentType(), Map.of());
+            String url = s3Port.presignGet(objectKey, put.versionId(), Duration.ofDays(7));
 
-        userService.updateUserProfileImage(dto.getUserId(), fileDTO.getId());
+            // 👇 엔티티 직접 안 건드리고 서비스에 위임
+            userService.updateUserProfileImage(dto.getUserId(), url);
 
-        return fileDTO;
+            return url;
+        } catch (Exception e) {
+            throw new FileUploadFailedException("프로필 이미지 업로드 실패: " + e.getMessage());
+        }
     }
+
+
 }
