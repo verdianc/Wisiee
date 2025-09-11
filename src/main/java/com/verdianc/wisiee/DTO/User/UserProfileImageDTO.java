@@ -12,8 +12,6 @@ import lombok.Setter;
 public class UserProfileImageDTO {
 
   private Long userId;
-  private FileRequestDTO fileRequest;
   private byte[] fileData;
   private String contentType;
-
 }

@@ -2,17 +2,15 @@ package com.verdianc.wisiee.DTO.Form;
 
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
+import com.verdianc.wisiee.DTO.File.FileRequestDTO;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 public class FormRequestDTO {
-
-  //form 생성 응답 사용 가능, 서비스레이어에서 엔티티 대신 사용 가능
-  // 판매자 이름
-  private String userName;
 
   // 입장 코드
   private String code;
@@ -48,6 +46,8 @@ public class FormRequestDTO {
   // 계좌 번호
   private String account;
 
+  // 첨부 파일
+  private List<FileRequestDTO> files;
 
 
 }

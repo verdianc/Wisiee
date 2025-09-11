@@ -38,21 +38,22 @@ public class UserController {
     return new ResDTO<>((Void) null);
   }
 
-  @PutMapping("/profile-image/{id}")
-  public ResDTO<FileDTO> updateUserProfileImage(
-      @PathVariable Long id,
-      @RequestPart("file") MultipartFile file,
-      @RequestPart("meta") FileRequestDTO fileRequest) throws IOException {
+
+  @PutMapping("/profile-image")
+  public ResDTO<String> updateUserProfileImage(
+      @RequestPart("file") MultipartFile file) throws IOException {
+
+    Long userId = userFacadeService.getCurrentUser().getUserId();
 
     UserProfileImageDTO dto = new UserProfileImageDTO();
-    dto.setUserId(id);
-    dto.setFileRequest(fileRequest);
+    dto.setUserId(userId);
     dto.setFileData(file.getBytes());
     dto.setContentType(file.getContentType());
 
-    FileDTO result = userFacadeService.updateUserProfileImage(dto);
-    return new ResDTO<>(result);
+    String imageUrl = userFacadeService.updateUserProfileImage(dto);
+    return new ResDTO<>(imageUrl);
   }
+
 
 
 }

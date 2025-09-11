@@ -29,4 +29,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     Optional<String> findRefreshTokenByUserId(@Param("userId") Long userId);
 
     boolean existsByNickNm(String nickNm);
+
+    @Query("SELECT COUNT(f) FROM FormEntity f WHERE f.user = :user")
+    int countFormsByUser(@Param("user") UserEntity user);
 }

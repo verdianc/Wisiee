@@ -59,12 +59,13 @@ public class UserEntity extends BaseEntity {
   @Column(name = "refresh_token", length = 512)
   private String refreshToken;
 
-  @Column(name = "profile_image_id")
-  private Long profileImgId;
+  @Column(name = "profile_image_url", columnDefinition = "TEXT")
+  private String profileImgUrl;
 
-  public void changeProfileImage(Long newFileId) {
-    this.profileImgId = newFileId;
+  public void changeProfileImage(String newUrl) {
+    this.profileImgUrl = newUrl;
   }
+
 
   public void changeNickName(String newNick) {
     if (this.nickChangeCount >= 3) {
@@ -74,11 +75,11 @@ public class UserEntity extends BaseEntity {
     this.nickChangeCount++;
   }
 
-    public void generateDefaultNickname() {
-        if (this.nickNm == null || this.nickNm.isBlank()) {
-            this.nickNm = "user-" + this.userId;
-        }
+  public void generateDefaultNickname() {
+    if (this.nickNm == null || this.nickNm.isBlank()) {
+      this.nickNm = "user-" + this.userId;
     }
+  }
 
 
 }

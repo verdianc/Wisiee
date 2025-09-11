@@ -9,6 +9,4 @@ public class OauthDTO {
   private Long userId;
   private String nickNm;
   private String email;
-  private Long profileImgId;
-
 }
