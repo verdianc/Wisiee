@@ -13,6 +13,9 @@ public enum ErrorCode {
     FORM_UPDATE_FAILED(1002, "Form 수정에 실패했습니다."),
     FORM_DELETE_FAILED(1003, "Form 삭제에 실패했습니다."),
     FORM_FILE_LIMIT_EXCEEDED(1004, "폼에는 최대 3개의 파일만 첨부할 수 있습니다."),
+    CODE_REQUIRED(1005, "비공개 게시글에는 코드가 필수입니다."),
+    INVALID_CODE_LENGTH(1006, "코드는 5자 이상, 20자 이하만 가능합니다."),
+
 
     // 2000번대: Validation 관련 에러
     INVALID_REQUEST(2000, "유효하지 않은 요청 값입니다."),
