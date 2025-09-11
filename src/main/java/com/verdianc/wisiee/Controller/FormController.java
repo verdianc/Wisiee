@@ -10,6 +10,7 @@ import com.verdianc.wisiee.facade.FormFacadeService;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,58 +30,17 @@ public class FormController {
 
   private final FormFacadeService formFacadeService;
 
-  @PostMapping
-  public ResDTO<FormDTO> getForm(@RequestBody FormRequestDTO request) {
-    return new ResDTO<>(formFacadeService.createForm(request));
+  @PostMapping(value = "/forms", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResDTO<FormDTO> createForm(
+      @RequestPart("form") FormRequestDTO request,
+      @RequestPart(value = "files", required = false) List<MultipartFile> files
+  ) {
+    return new ResDTO<>(formFacadeService.createForm(request, files));
   }
 
 
 
-  @GetMapping("/{id}")
-  public ResDTO<FormDTO> getForm(@PathVariable Long id) {
-    return new ResDTO<>(formFacadeService.getForm(id));
-  }
 
-  @GetMapping
-  public ResDTO<List<FormDTO>> getFormList() {
-    return new ResDTO<>(formFacadeService.getFormList());
-  }
-
-  @DeleteMapping("/{id}")
-  public ResDTO<Void> deleteForm(@PathVariable Long id) {
-    formFacadeService.deleteForm(id);
-    return new ResDTO<>(null);
-  }
-
-
-  @PostMapping("/{Id}")
-  public ResDTO<FileDTO> addFileToForm(@PathVariable Long formId,
-      @RequestPart("file") MultipartFile file,
-      @RequestPart("meta") FileRequestDTO fileRequest) throws IOException {
-    FileDTO result = formFacadeService.addFileToForm(
-        formId,
-        fileRequest,
-        file.getBytes(),
-        file.getContentType()
-    );
-    return new ResDTO<>(result);
-  }
-
-  @GetMapping("/files/list/{id}")
-  public ResDTO<List<FileDTO>> getFilesOfForm(@PathVariable Long formId) {
-    return new ResDTO<>(formFacadeService.getFilesOfForm(formId));
-  }
-
-  @GetMapping("/files/{fileId}")
-  public ResDTO<FileDTO> getFile(@PathVariable Long fileId) {
-    return new ResDTO<>(formFacadeService.getFile(fileId));
-  }
-
-  @DeleteMapping("/files/{fileId}")
-  public ResDTO<Void> deleteFile(@PathVariable Long fileId) {
-    formFacadeService.deleteFile(fileId);
-    return new ResDTO<>((Void) null);
-  }
 
 
 }

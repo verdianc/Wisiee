@@ -2,13 +2,13 @@ package com.verdianc.wisiee.Service.Interface;
 
 import com.verdianc.wisiee.DTO.Form.FormDTO;
 import com.verdianc.wisiee.DTO.Form.FormRequestDTO;
+import com.verdianc.wisiee.Entity.UserEntity;
 import java.util.List;
 
 public interface FormService {
 
   // 생성
-  FormDTO createForm(FormRequestDTO request);
-
+  FormDTO createForm(FormRequestDTO request, UserEntity user);
   // 단건 조회
   FormDTO getForm(Long id);
 

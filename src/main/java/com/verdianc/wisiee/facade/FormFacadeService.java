@@ -6,14 +6,19 @@ import com.verdianc.wisiee.DTO.File.FileDTO;
 import com.verdianc.wisiee.DTO.File.FileRequestDTO;
 import com.verdianc.wisiee.DTO.Form.FormDTO;
 import com.verdianc.wisiee.DTO.Form.FormRequestDTO;
+import com.verdianc.wisiee.Entity.UserEntity;
 import com.verdianc.wisiee.Exception.BaseException;
+import com.verdianc.wisiee.Exception.File.FileUploadFailedException;
 import com.verdianc.wisiee.Exception.Form.FormFileLimitExceededException;
+import com.verdianc.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdianc.wisiee.Service.Interface.FileService;
 import com.verdianc.wisiee.Service.Interface.FormService;
+import com.verdianc.wisiee.Service.Interface.UserService;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @Slf4j
@@ -22,54 +27,41 @@ public class FormFacadeService {
 
   private final FormService formService;
   private final FileService fileService;
+  private final UserService userService;
 
-  public FormDTO createForm(FormRequestDTO request) {
-    return formService.createForm(request);
-  }
+  public FormDTO createForm(FormRequestDTO request, List<MultipartFile> files) {
+    // 1. 현재 로그인 유저 조회
+    UserEntity user = userService.getUser();
 
-  public FormDTO getForm(Long id) {
-    return formService.getForm(id);
-  }
+    // 2. Form 생성
+    FormDTO formDTO = formService.createForm(request, user);
+    Long formId = formDTO.getId();
 
-  public List<FormDTO> getFormList() {
-    return formService.getFormList();
-  }
+    // 3. 파일 첨부
+    if (files != null && !files.isEmpty()) {
+      if (files.size() > 3) {
+        throw new FormFileLimitExceededException();
+      }
+      for (MultipartFile file : files) {
+        try {
+          FileRequestDTO meta = FileRequestDTO.builder()
+              .name(file.getOriginalFilename())
+              .description("첨부파일")
+              .build();
 
-  public FormDTO updateForm(Long id, FormRequestDTO request) {
-    return formService.updateForm(id, request);
-  }
-
-  public void deleteForm(Long id) {
-    formService.deleteForm(id);
-  }
-
-
-  //================== 파일 관련 =====================//
-
-  // 파일 첨부
-  public FileDTO addFileToForm(Long formId, FileRequestDTO request,
-      byte[] fileData, String contentType) {
-    List<FileDTO> existingFiles = fileService.getFileList(formId);
-    if (existingFiles.size() >= 3) {
-      throw new FormFileLimitExceededException();
+          fileService.createFile(
+              formId,
+              meta,
+              file.getBytes(),
+              file.getContentType()
+          );
+        } catch (Exception e) {
+          throw new FileUploadFailedException(e.getMessage());
+        }
+      }
     }
-    return fileService.createFile(formId, request, fileData, contentType);
-  }
 
-
-  // 파일 목록 조회
-  public List<FileDTO> getFilesOfForm(Long formId) {
-    return fileService.getFileList(formId);
-  }
-
-  // 파일 단건 조회
-  public FileDTO getFile(Long fileId) {
-    return fileService.getFile(fileId);
-  }
-
-  // 파일 삭제
-  public void deleteFile(Long fileId) {
-    fileService.deleteFile(fileId);
+    return formService.getForm(formId);
   }
 
 

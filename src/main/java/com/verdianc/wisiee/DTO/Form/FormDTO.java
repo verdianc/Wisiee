@@ -13,6 +13,8 @@ import lombok.Setter;
 @Builder
 public class FormDTO {
 
+  private Long id;
+
   //form 생성 응답 사용 가능, 서비스레이어에서 엔티티 대신 사용 가능
   // 판매자 이름
   private String nickName;
