@@ -90,11 +90,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
 
         //refresh token 저장
+        // TODO : 암호화 필요
         if (refreshToken!=null && !refreshToken.equals(user.getRefreshToken())) {
             userRepository.updateRefreshToken(user.getUserId(), refreshToken);
         }
 
-        // 4️. 세션에 userId 저장
+        // 세션에 userId 저장
         httpSession.setAttribute("userId", user.getUserId());
 
         // 로그인 성공 후 API 호출로만 처리
