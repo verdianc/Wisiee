@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -25,6 +26,10 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final HttpSession httpSession; // 스프링 세션
     private final UserRepository userRepository;
     private final OAuth2AuthorizedClientService authorizedClientService;
+
+    @Value("${spring.config.sandRedirect}")    // MinIO=true, AWS는 false여도 동작
+    private String sandRedirect;
+
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request,
@@ -93,7 +98,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         httpSession.setAttribute("userId", user.getUserId());
 
         // 로그인 성공 후 API 호출로만 처리
-        response.sendRedirect("/api/user/login/success");
+        response.sendRedirect(sandRedirect);
 
 
 
