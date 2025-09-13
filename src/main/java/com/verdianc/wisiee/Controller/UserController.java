@@ -32,7 +32,7 @@ public class UserController {
   }
 
 
-  @PutMapping("/update")
+  @PutMapping("/nickname")
   public ResDTO<Void> updateUserNickNm(@RequestBody UserInfoUpdateDTO userInfoUpdateDTO) {
     userFacadeService.updateUserNickNm(userInfoUpdateDTO);
     return new ResDTO<>((Void) null);
