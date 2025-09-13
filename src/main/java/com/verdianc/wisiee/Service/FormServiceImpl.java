@@ -25,7 +25,7 @@ public class FormServiceImpl implements FormService {
   @Transactional
   public FormDTO createForm(FormRequestDTO request, UserEntity user) {
     try {
-      // code 관련 검증
+      // TODO : code 암호화 추후 고려
       if (!request.isPublic() && (request.getCode() == null || request.getCode().isBlank())) {
         throw new CodeRequiredException();
       }

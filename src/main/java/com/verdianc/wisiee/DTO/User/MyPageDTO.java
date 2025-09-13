@@ -16,5 +16,8 @@ public class MyPageDTO {
   private int nickChangeLeft; // 닉네임 변경 가능 횟수 (3 - nickChangeCount)
   private LocalDateTime createdAt; // 가입일
 
+  // TODO : 주문 개수 추가
+
+
 
 }
