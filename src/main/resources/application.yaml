@@ -1,4 +1,6 @@
 server:
+  servlet:
+    context-path: /wisiee
   port: 8080
   error:
     include-stacktrace: never
@@ -13,25 +15,26 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
   security:
     oauth2:
       client:
         registration:
           google:
-            token-uri: https://oauth2.googleapis.com/token
             client-id:
             client-secret:
             scope:
               - email
               - profile
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
-  s3:
+  config:
+    sandRedirect: "/wisiee/api/user/login/success"
+
 
 s3:
-  region: ap-northeast-2
-  endpoint: http://localhost:9000
-  access-key: minioadmin
-  secret-key: minioadmin
-  path-style: true
-  bucket: wisiee
-
+  region:
+  endpoint:
+  access-key:
+  secret-key:
+  path-style:
+  bucket:
