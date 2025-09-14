@@ -19,6 +19,12 @@ public class FormDTO {
   // 판매자 이름
   private String nickName;
 
+  // 총 수량
+  private int totCnt;
+
+  // 총 재고
+  private int totStock;
+
   // 입장 코드
   private String code;
 
@@ -37,14 +43,8 @@ public class FormDTO {
   // 제품 카테고리
   private Category category;
 
-  // 판매 가격
-  private int price;
-
   // 제품 설명
   private String description;
-
-  // 재고
-  private int stock;
 
   private boolean isSoldOut;
 
@@ -54,9 +54,14 @@ public class FormDTO {
   // 연락처
   private String contact;
 
-
   // 계좌 번호
   private String account;
+
+  //예금주
+  private String accName;
+
+  //은행 이름
+  private String bank;
 
 
 
