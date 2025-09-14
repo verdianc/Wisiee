@@ -9,13 +9,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "address_book")
+@Table(
+        name = "address_book",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "alias"})
+)
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -49,10 +53,15 @@ public class AddressBookEntity {
 
     //기본 여부
     @Column(name = "is_default")
-    private boolean isDefault;
+    private boolean defaultAddress;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    public void chgDefault(boolean defaultAddress) {
+        this.defaultAddress = defaultAddress;
+    }
+
 
 }
