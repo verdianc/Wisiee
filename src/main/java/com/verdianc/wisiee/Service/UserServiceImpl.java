@@ -1,15 +1,23 @@
 package com.verdianc.wisiee.Service;
 
+import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdianc.wisiee.DTO.User.MyPageDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
+import com.verdianc.wisiee.Entity.AddressBookEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.Exception.User.AddressNotFoundException;
+import com.verdianc.wisiee.Exception.User.AliasConflictException;
 import com.verdianc.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdianc.wisiee.Exception.User.UserNotFound;
+import com.verdianc.wisiee.Mapper.AddressBookMapper;
+import com.verdianc.wisiee.Repository.AddressBookRepository;
 import com.verdianc.wisiee.Repository.UserRepository;
 import com.verdianc.wisiee.Service.Interface.UserService;
 import jakarta.servlet.http.HttpSession;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final AddressBookRepository addressBookRepository;
     private final HttpSession httpSession;
 
     @Override
@@ -91,6 +100,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public void updateUserProfile(UserInfoUpdateDTO dto) {
         UserEntity user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() -> new UserNotFound(dto.getUserId()));
@@ -102,7 +112,6 @@ public class UserServiceImpl implements UserService {
 
     // TODO : 사용자 폼 리스트 조회 메소드 추가
 
-
     @Override
     @Transactional
     public void updateUserProfileImage(Long userId, String url) {
@@ -110,6 +119,79 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFound(userId));
 
         user.changeProfileImage(url);
+    }
+
+    @Override
+    @Transactional
+    public void deleteUser(Long usedId) {
+        userRepository.deleteById(usedId);
+    }
+
+    @Override
+    @Transactional
+    public AddressBookRequestDTO createAddressBook(AddressBookRequestDTO dto, Long userId) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(userId));
+
+        if (addressBookRepository.existsByUser_UserIdAndAlias(userId, dto.getAlias())) {
+            throw new AliasConflictException(dto.getAlias());
+        }
+
+        // 처음 등록이면 자동 default
+        boolean isFirstAddress = addressBookRepository.countByUser_UserId(userId)==0;
+        if (isFirstAddress) {
+            dto.setDefaultAddress(true);
+        }
+
+        AddressBookEntity addressBook = AddressBookMapper.toEntity(dto, user);
+        addressBookRepository.save(addressBook);
+        return dto;
+    }
+
+    @Override
+    public AddressBookListResponseDTO getAddressBook(Long userId) {
+        List<AddressBookEntity> userAddressBook = addressBookRepository.findByUser_UserId(userId);
+        return AddressBookMapper.toListDTO(userAddressBook);
+    }
+
+    @Override
+    public AddressBookRequestDTO updateAddressBook(AddressBookRequestDTO dto, Long userId) {
+
+        // 2. 기존 주소록 엔티티 조회 (id가 있어야 함)
+        AddressBookEntity entity = addressBookRepository.findById(dto.getId())
+                .orElseThrow(AddressNotFoundException::new);
+
+        // 4. alias 유니크 체크 (alias가 바뀌었을 때만)
+        if (!entity.getAlias().equals(dto.getAlias()) &&
+                addressBookRepository.existsByUser_UserIdAndAlias(userId, dto.getAlias())) {
+            throw new AliasConflictException(dto.getAlias());
+        }
+        
+        // 5. Builder로 기존 엔티티 기반 새 객체 생성
+        AddressBookEntity updatedEntity = AddressBookMapper.buildUpdatedEntity(dto, entity);
+
+        // 6. save() → merge → update
+        addressBookRepository.save(updatedEntity);
+
+        return dto;
+    }
+
+    @Override
+    public void setDefaultAddress(Long addressId, Long userId) {
+        AddressBookEntity target = addressBookRepository.findById(addressId)
+                .orElseThrow(AddressNotFoundException::new);
+
+        // 1. 기존 기본 주소 false 처리 (쿼리 한 번)
+        addressBookRepository.resetDefaultAddress(addressId, userId);
+
+        // 2. 선택한 주소를 기본으로
+        target.chgDefault(true);
+        addressBookRepository.save(target);
+    }
+
+    @Override
+    public void delAddressBook(Long id) {
+        addressBookRepository.deleteById(id);
     }
 
 

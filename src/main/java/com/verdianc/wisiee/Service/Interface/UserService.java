@@ -1,5 +1,7 @@
 package com.verdianc.wisiee.Service.Interface;
 
+import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdianc.wisiee.DTO.User.MyPageDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
@@ -22,4 +24,17 @@ public interface UserService {
     MyPageDTO getMyPage();
 
     void updateUserProfile(UserInfoUpdateDTO updateUserInfo);
+
+    void deleteUser(Long usedId);
+
+    AddressBookRequestDTO createAddressBook(AddressBookRequestDTO dto, Long userId);
+
+    AddressBookListResponseDTO getAddressBook(Long userId);
+
+    AddressBookRequestDTO updateAddressBook(AddressBookRequestDTO dto, Long userId);
+
+    void setDefaultAddress(Long addressId, Long userId);
+
+    void delAddressBook(Long id);
+
 }
