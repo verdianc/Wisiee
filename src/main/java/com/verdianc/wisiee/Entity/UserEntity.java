@@ -1,6 +1,5 @@
 package com.verdianc.wisiee.Entity;
 
-import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -62,16 +61,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "profile_image_url", columnDefinition = "TEXT")
     private String profileImgUrl;
 
-    // 환불 계좌
-    @Column(name = "bank_name")
-    private String bankNm;
-
-    @Column(name = "account_number")
-    private String accountNum;
-
-    @Column(name = "account_holder")
-    private String accountHolder;
-
+    @Builder.Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AddressBookEntity> addressBooks = new ArrayList<>();
 
@@ -89,13 +79,6 @@ public class UserEntity extends BaseEntity {
         if (this.nickNm==null || this.nickNm.isBlank()) {
             this.nickNm = "user-" + this.userId;
         }
-    }
-
-    public void updateProfile(UserInfoUpdateDTO dto) {
-        dto.getNickNmOpt().ifPresent(nickNm -> this.nickNm = nickNm);
-        dto.getBankNameOpt().ifPresent(bank -> this.bankNm = bank);
-        dto.getAccountNumberOpt().ifPresent(num -> this.accountNum = num);
-        dto.getAccountHolderOpt().ifPresent(holder -> this.accountHolder = holder);
     }
 
 

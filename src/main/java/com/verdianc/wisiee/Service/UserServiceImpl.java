@@ -96,7 +96,6 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new UserNotFound(dto.getUserId()));
 
         // 엔티티 내 메서드로 값 업데이트
-        user.updateProfile(dto);
         user.changeNickName(dto.getNickNm());
         userRepository.save(user);
     }
