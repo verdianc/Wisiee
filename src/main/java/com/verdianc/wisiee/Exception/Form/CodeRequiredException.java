@@ -6,7 +6,7 @@ import com.verdianc.wisiee.Exception.BaseException;
 public class CodeRequiredException extends BaseException {
 
   public CodeRequiredException() {
-    super(ErrorCode.CODE_REQUIRED, "Code 필수 생성 필요");
+    super(ErrorCode.CODE_REQUIRED, "Code 필요");
   }
 
 }
