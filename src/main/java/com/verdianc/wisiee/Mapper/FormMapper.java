@@ -19,11 +19,12 @@ public class FormMapper {
         .endDate(dto.getEndDate())
         .isPublic(dto.isPublic())
         .category(dto.getCategory())
-        .price(dto.getPrice())
         .description(dto.getDescription())
         .deliveryOption(dto.getDeliveryOption())
         .contact(dto.getContact())
         .account(dto.getAccount())
+        .accName(dto.getAccName())
+        .bank(dto.getBank())
         .build();
   }
 
@@ -32,18 +33,20 @@ public class FormMapper {
         .id(entity.getId())
         .nickName(entity.getUser().getNickNm())
         .code(entity.getCode())
+        .totCnt(entity.getTotCnt())
+        .totStock(entity.getTotStock())
         .title(entity.getTitle())
         .startDate(entity.getStartDate())
         .endDate(entity.getEndDate())
         .isPublic(entity.isPublic())
         .category(entity.getCategory())
-        .price(entity.getPrice())
         .description(entity.getDescription())
-        .stock(entity.getStock())
         .isSoldOut(entity.isSoldOut())
         .deliveryOption(entity.getDeliveryOption())
         .contact(entity.getContact())
         .account(entity.getAccount())
+        .accName(entity.getAccName())
+        .bank(entity.getBank())
         .build();
   }
 }

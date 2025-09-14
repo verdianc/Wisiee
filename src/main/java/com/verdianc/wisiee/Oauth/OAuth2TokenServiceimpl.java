@@ -19,7 +19,7 @@ public class OAuth2TokenServiceimpl implements OAuth2TokenService {
     private final RestTemplate restTemplate = new RestTemplate();
     private final HttpSession httpSession;
 
-    @Value("${spring.security.oauth2.client.registration.google.token-uri}")
+    @Value("${spring.security.oauth2.client.provider.google.token-uri}")
     private String tokenUri;
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
