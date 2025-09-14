@@ -39,6 +39,8 @@ public enum ErrorCode {
     USER_NOT_FOUND(5001, "존재하지 않는 사용자 입니다."),
     NICKNAME_CNT_EXCEEDED(5002, "닉네임 변경 횟수가 초과되었습니다."),
     NICKNAME_ALREADY_EXISTS(5003, "이미 존재하는 닉네임입니다."),
+    AliasConflict(5004, "이미 존재하는 별칭입니다."),
+    AddressNotFound(5005, "주소록을 찾을 수 없습니다."),
 
 
     // 9000번대: 서버 공통 에러

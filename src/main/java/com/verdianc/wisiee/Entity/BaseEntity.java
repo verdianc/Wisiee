@@ -16,12 +16,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = lombok.AccessLevel.PROTECTED)
 public abstract class BaseEntity {
 
-  @CreatedDate
-  @Column(name = "created_at", nullable = false, updatable = false)
-  protected LocalDateTime createdAt;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    protected LocalDateTime createdAt;
 
-  @LastModifiedDate
-  @Column(name = "updated_at", nullable = false)
-  protected LocalDateTime updatedAt;
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = true, insertable = false)
+    protected LocalDateTime updatedAt;
 
 }

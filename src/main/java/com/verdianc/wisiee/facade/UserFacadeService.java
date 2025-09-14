@@ -1,12 +1,12 @@
 package com.verdianc.wisiee.facade;
 
-import com.verdianc.wisiee.DTO.File.FileDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
+import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
-import com.verdianc.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdianc.wisiee.Exception.File.FileUploadFailedException;
 import com.verdianc.wisiee.Infrastructure.S3.S3Port;
-import com.verdianc.wisiee.Service.Interface.FileService;
 import com.verdianc.wisiee.Service.Interface.UserService;
 import java.time.Duration;
 import java.util.Map;
@@ -31,9 +31,13 @@ public class UserFacadeService {
         userService.updateUserNickNm(userInfoUpdateDTO);
     }
 
+    public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto) {
+        return userService.chkExistNickNm(dto);
+    }
+
 
     // 프로필 이미지 업데이트
-    public String updateUserProfileImage(UserProfileImageDTO dto) {
+    public String updateUserProfileImage(UserInfoUpdateDTO dto) {
         String objectKey = "profile/" + UUID.randomUUID();
         try {
             S3Port.PutResult put = s3Port.put(objectKey, dto.getFileData(), dto.getContentType(), Map.of());
@@ -48,5 +52,31 @@ public class UserFacadeService {
         }
     }
 
+    public void updateUserInfo(UserInfoUpdateDTO dto) {
+        userService.updateUserProfile(dto);
+    }
 
+    public void deleteUser(Long usedId) {
+        userService.deleteUser(usedId);
+    }
+
+    public AddressBookRequestDTO createAddressBook(AddressBookRequestDTO dto, Long userId) {
+        return userService.createAddressBook(dto, userId);
+    }
+
+    public AddressBookListResponseDTO getAddressBook(Long userId) {
+        return userService.getAddressBook(userId);
+    }
+
+    public AddressBookRequestDTO updateAddressBook(AddressBookRequestDTO dto, Long userId) {
+        return userService.updateAddressBook(dto, userId);
+    }
+
+    public void delAddressBook(Long addressId) {
+        userService.delAddressBook(addressId);
+    }
+
+    public void setDefaultAddress(Long addressId, Long userId) {
+        userService.setDefaultAddress(addressId, userId);
+    }
 }
