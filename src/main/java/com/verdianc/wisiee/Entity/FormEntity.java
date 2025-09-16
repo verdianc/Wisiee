@@ -59,7 +59,6 @@ public class FormEntity extends BaseEntity {
   // 글 공개 여부
   private boolean isPublic;
 
-
   // 수정 버전 관리
   private int version;
 
@@ -67,16 +66,14 @@ public class FormEntity extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private Category category;
 
-
-  // 판매 가격
-  private int price;
-
-
   // 제품 설명
   private String description;
 
-  // 재고
-  private int stock;
+  // 재고 29개
+  private int totStock;
+
+  // 상품 수량  ex. 30
+  private int totCnt;
 
   private boolean isSoldOut;
 
@@ -91,6 +88,12 @@ public class FormEntity extends BaseEntity {
   // 계좌 번호
   private String account;
 
+  // 예금주명
+  private String accName;
+
+  // 은행
+  private String bank;
+
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderColumn(name = "sort_index")
@@ -98,36 +101,42 @@ public class FormEntity extends BaseEntity {
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
   @OrderColumn(name = "sort_index")
-  private List<FormField> fields = new ArrayList<>();
+  private List<Product> fields = new ArrayList<>();
 
 
   @Builder
   public FormEntity(
       UserEntity user,
+      int totCnt,
+      int totStock,
       String code,
       String title,
       LocalDate startDate,
       LocalDate endDate,
       boolean isPublic,
       Category category,
-      int price,
       String description,
       DeliveryOption deliveryOption,
       String contact,
-      String account
+      String account,
+      String accName,
+      String bank
   ) {
     this.user = user;
+    this.totCnt = totCnt;
+    this.totStock = totStock;
     this.code = code;
     this.title = title;
     this.startDate = startDate;
     this.endDate = endDate;
     this.isPublic = isPublic;
     this.category = category;
-    this.price = price;
     this.description = description;
     this.deliveryOption = deliveryOption;
     this.contact = contact;
     this.account = account;
+    this.accName = accName;
+    this.bank = bank;
   }
 
 
@@ -138,10 +147,11 @@ public class FormEntity extends BaseEntity {
     this.endDate = dto.getEndDate();
     this.isPublic = dto.isPublic();
     this.category = dto.getCategory();
-    this.price = dto.getPrice();
     this.description = dto.getDescription();
     this.deliveryOption = dto.getDeliveryOption();
     this.contact = dto.getContact();
     this.account = dto.getAccount();
+    this.accName = dto.getAccName();
+    this.bank = dto.getBank();
   }
 }
