@@ -61,8 +61,62 @@ public class FormFacadeService {
       }
     }
 
-    return formService.getForm(formId);
+    return formDTO;
   }
+
+
+
+
+  // 비공개 폼 단건 조회
+  public FormDTO getForm(Long id, String code) {
+    return formService.getForm(id, code);
+  }
+
+
+  public FormDTO updateForm(Long id, FormRequestDTO request, List<MultipartFile> files) {
+    UserEntity user = userService.getUser(); // 세션 사용자
+
+    FormDTO formDTO = formService.updateForm(id, request, user);
+
+    // 파일 처리
+    if (files != null && !files.isEmpty()) {
+      if (files.size() > 3) {
+        throw new FormFileLimitExceededException();
+      }
+      for (MultipartFile file : files) {
+        try {
+          FileRequestDTO meta = FileRequestDTO.builder()
+              .name(file.getOriginalFilename())
+              .description("업데이트된 첨부파일")
+              .build();
+
+          fileService.createFile(
+              formDTO.getId(),
+              meta,
+              file.getBytes(),
+              file.getContentType()
+          );
+        } catch (Exception e) {
+          throw new FileUploadFailedException(e.getMessage());
+        }
+      }
+    }
+
+    return formDTO; // 최종 조회 결과 반환
+  }
+
+
+
+
+  public void deleteForm(Long formId) {
+    // 현재 로그인한 사용자
+    UserEntity user = userService.getUser();
+
+    // 서비스단에서 작성자 검증 + 삭제
+    formService.deleteForm(formId, user);
+  }
+
+
 
 
 }

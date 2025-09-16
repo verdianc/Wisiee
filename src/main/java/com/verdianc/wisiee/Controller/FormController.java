@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,7 +31,7 @@ public class FormController {
 
   private final FormFacadeService formFacadeService;
 
-  @PostMapping(value = "/forms", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResDTO<FormDTO> createForm(
       @RequestPart("form") FormRequestDTO request,
       @RequestPart(value = "files", required = false) List<MultipartFile> files
@@ -39,8 +40,32 @@ public class FormController {
   }
 
 
+  // FormController.java
+  @GetMapping("/{id}")
+  public ResDTO<FormDTO> getForm(
+      @PathVariable Long id,
+      @RequestParam(required = false) String code
+  ) {
+    // code가 있으면 해당 값을, 없으면 null을 Facade로 전달
+    return new ResDTO<>(formFacadeService.getForm(id, code));
+  }
 
 
+  @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResDTO<FormDTO> updateForm(
+      @PathVariable Long id,
+      @RequestPart("form") FormRequestDTO request,
+      @RequestPart(value = "files", required = false) List<MultipartFile> files
+  ) {
+    return new ResDTO<>(formFacadeService.updateForm(id, request, files));
+  }
+
+
+  @DeleteMapping("/{id}")
+  public ResDTO<Void> deleteForm(@PathVariable Long id) {
+    formFacadeService.deleteForm(id);
+    return new ResDTO<>(null);
+  }
 
 
 }
