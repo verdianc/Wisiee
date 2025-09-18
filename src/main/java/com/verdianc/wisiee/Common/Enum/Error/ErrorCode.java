@@ -41,7 +41,7 @@ public enum ErrorCode {
     NICKNAME_ALREADY_EXISTS(5003, "이미 존재하는 닉네임입니다."),
     AliasConflict(5004, "이미 존재하는 별칭입니다."),
     AddressNotFound(5005, "주소록을 찾을 수 없습니다."),
-
+    DefaultAddressNotFoundException(5006, "기본 배송지가 없습니다."),
 
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");

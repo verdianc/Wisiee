@@ -19,7 +19,7 @@ public class AddressBookMapper {
                 .detailAddress(dto.getDetailAddress())
                 .phoneNumber(dto.getPhoneNumber())
                 .recipientNm(dto.getRecipientNm())
-                .defaultAddress(dto.isDefaultAddress())
+                .defaultAddressYn(dto.isDefaultAddress())
                 .user(user)
                 .build();
     }
@@ -34,7 +34,7 @@ public class AddressBookMapper {
                 .detailAddress(entity.getDetailAddress())
                 .phoneNumber(entity.getPhoneNumber())
                 .recipientNm(entity.getRecipientNm())
-                .defaultAddress(entity.isDefaultAddress())
+                .defaultAddress(entity.isDefaultAddressYn())
                 .build();
     }
 
@@ -61,7 +61,7 @@ public class AddressBookMapper {
                 .detailAddress(dto.getDetailAddress())
                 .recipientNm(dto.getRecipientNm())
                 .phoneNumber(dto.getPhoneNumber())
-                .defaultAddress(dto.isDefaultAddress())
+                .defaultAddressYn(dto.isDefaultAddress())
                 .build();
     }
 }

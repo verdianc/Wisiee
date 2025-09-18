@@ -2,6 +2,7 @@ package com.verdianc.wisiee.Service;
 
 import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdianc.wisiee.DTO.User.MyPageDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
@@ -10,6 +11,7 @@ import com.verdianc.wisiee.Entity.AddressBookEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
 import com.verdianc.wisiee.Exception.User.AddressNotFoundException;
 import com.verdianc.wisiee.Exception.User.AliasConflictException;
+import com.verdianc.wisiee.Exception.User.DefaultAddressNotFoundException;
 import com.verdianc.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdianc.wisiee.Exception.User.UserNotFound;
 import com.verdianc.wisiee.Mapper.AddressBookMapper;
@@ -166,7 +168,7 @@ public class UserServiceImpl implements UserService {
                 addressBookRepository.existsByUser_UserIdAndAlias(userId, dto.getAlias())) {
             throw new AliasConflictException(dto.getAlias());
         }
-        
+
         // 5. Builder로 기존 엔티티 기반 새 객체 생성
         AddressBookEntity updatedEntity = AddressBookMapper.buildUpdatedEntity(dto, entity);
 
@@ -192,6 +194,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void delAddressBook(Long id) {
         addressBookRepository.deleteById(id);
+    }
+
+    @Override
+    public AddressBookResponseDTO getMainAddress(Long userId) {
+        AddressBookEntity entity = addressBookRepository
+                .findByUser_UserIdAndDefaultAddressYnTrue(userId)
+                .orElseThrow(DefaultAddressNotFoundException::new);
+
+        return AddressBookMapper.toResponseDTO(entity);
     }
 
 

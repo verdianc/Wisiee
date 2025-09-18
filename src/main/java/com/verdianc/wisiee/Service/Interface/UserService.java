@@ -2,6 +2,7 @@ package com.verdianc.wisiee.Service.Interface;
 
 import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdianc.wisiee.DTO.User.MyPageDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
@@ -37,4 +38,5 @@ public interface UserService {
 
     void delAddressBook(Long id);
 
+    AddressBookResponseDTO getMainAddress(Long userId);
 }
