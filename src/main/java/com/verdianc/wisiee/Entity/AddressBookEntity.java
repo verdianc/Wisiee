@@ -52,15 +52,15 @@ public class AddressBookEntity {
     private String phoneNumber;
 
     //기본 여부
-    @Column(name = "is_default")
-    private boolean defaultAddress;
+    @Column(name = "default_address_yn")
+    private boolean defaultAddressYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     public void chgDefault(boolean defaultAddress) {
-        this.defaultAddress = defaultAddress;
+        this.defaultAddressYn = defaultAddress;
     }
 
 
