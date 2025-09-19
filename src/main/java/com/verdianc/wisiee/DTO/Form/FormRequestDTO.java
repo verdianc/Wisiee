@@ -4,16 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
 import com.verdianc.wisiee.DTO.File.FileRequestDTO;
+import com.verdianc.wisiee.DTO.Product.ProductRequestDTO;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
-import org.checkerframework.checker.units.qual.A;
 
 @Getter
 @Setter
@@ -66,6 +64,8 @@ public class FormRequestDTO {
 
   // 첨부 파일
   private List<FileRequestDTO> files;
+
+  private List<ProductRequestDTO> products;
 
 
 }

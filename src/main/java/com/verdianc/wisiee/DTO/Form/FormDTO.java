@@ -2,8 +2,10 @@ package com.verdianc.wisiee.DTO.Form;
 
 import com.verdianc.wisiee.Common.Enum.Category;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
+import com.verdianc.wisiee.DTO.Product.ProductDTO;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -63,6 +65,7 @@ public class FormDTO {
   //은행 이름
   private String bank;
 
+  private List<ProductDTO> products;
 
 
 }
