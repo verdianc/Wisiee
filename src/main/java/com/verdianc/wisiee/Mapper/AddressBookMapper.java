@@ -34,7 +34,7 @@ public class AddressBookMapper {
                 .detailAddress(entity.getDetailAddress())
                 .phoneNumber(entity.getPhoneNumber())
                 .recipientNm(entity.getRecipientNm())
-                .defaultAddress(entity.isDefaultAddressYn())
+                .defaultAddress(entity.getDefaultAddressYn())
                 .build();
     }
 
