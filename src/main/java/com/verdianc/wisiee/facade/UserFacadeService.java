@@ -2,6 +2,7 @@ package com.verdianc.wisiee.facade;
 
 import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
+import com.verdianc.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdianc.wisiee.DTO.User.OauthDTO;
 import com.verdianc.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdianc.wisiee.DTO.User.UserInfoUpdateDTO;
@@ -72,11 +73,16 @@ public class UserFacadeService {
         return userService.updateAddressBook(dto, userId);
     }
 
+    public void setDefaultAddress(Long addressId, Long userId) {
+        userService.setDefaultAddress(addressId, userId);
+    }
+
     public void delAddressBook(Long addressId) {
         userService.delAddressBook(addressId);
     }
 
-    public void setDefaultAddress(Long addressId, Long userId) {
-        userService.setDefaultAddress(addressId, userId);
+    public AddressBookResponseDTO getMainAddress(Long userId) {
+        return userService.getMainAddress(userId);
     }
+
 }
