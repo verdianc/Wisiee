@@ -14,6 +14,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import java.time.LocalDate;
@@ -100,8 +101,8 @@ public class FormEntity extends BaseEntity {
   private List<FileEntity> files = new ArrayList<>();
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
-  @OrderColumn(name = "sort_index")
-  private List<Product> fields = new ArrayList<>();
+  @OrderBy("id ASC")
+  private List<ProductEntity> fields = new ArrayList<>();
 
 
   @Builder
