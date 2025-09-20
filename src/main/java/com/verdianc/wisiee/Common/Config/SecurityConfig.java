@@ -1,6 +1,5 @@
 package com.verdianc.wisiee.Common.Config;
 
-import com.verdianc.wisiee.Oauth.CustomAuthorizationRequestResolver;
 import com.verdianc.wisiee.Oauth.CustomOAuth2UserService;
 import com.verdianc.wisiee.Oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -25,18 +24,10 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/oauth2/authorization/**", "/login/oauth2/code/**").permitAll()
+                        .requestMatchers("/**", "/wisiee/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
-                        .authorizationEndpoint(authorization -> authorization
-                                .authorizationRequestResolver(
-                                        new CustomAuthorizationRequestResolver(
-                                                clientRegistrationRepository,
-                                                "/oauth2/authorization"  // ✅ redirect-uri prefix 맞추기
-                                        )
-                                )
-                        )
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
                         )
