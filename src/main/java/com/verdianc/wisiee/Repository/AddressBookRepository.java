@@ -3,6 +3,7 @@ package com.verdianc.wisiee.Repository;
 import com.verdianc.wisiee.Entity.AddressBookEntity;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -20,4 +21,7 @@ public interface AddressBookRepository extends JpaRepository<AddressBookEntity, 
     @Modifying
     @Query("UPDATE AddressBookEntity a SET a.defaultAddress = false WHERE a.user.id = :userId AND a.id <> :addressId")
     void resetDefaultAddress(Long addressId, Long userId);
+
+    Optional<AddressBookEntity> findByUser_UserIdAndDefaultAddressYnTrue(Long userId);
+
 }
