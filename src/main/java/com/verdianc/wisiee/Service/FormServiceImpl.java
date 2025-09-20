@@ -8,6 +8,7 @@ import com.verdianc.wisiee.Exception.Form.*;
 import com.verdianc.wisiee.Mapper.FormMapper;
 import com.verdianc.wisiee.Repository.FormJpaRepository;
 import com.verdianc.wisiee.Service.Interface.FormService;
+import com.verdianc.wisiee.Service.Interface.ProductService;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class FormServiceImpl implements FormService {
 
   private final FormJpaRepository formJpaRepository;
   private final FormMapper formMapper;
+  private final ProductService productService;
 
 
   @Override

@@ -2,8 +2,11 @@ package com.verdianc.wisiee.Mapper;
 
 import com.verdianc.wisiee.DTO.Form.FormDTO;
 import com.verdianc.wisiee.DTO.Form.FormRequestDTO;
+import com.verdianc.wisiee.DTO.Product.ProductDTO;
 import com.verdianc.wisiee.Entity.FormEntity;
+import com.verdianc.wisiee.Entity.ProductEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
+import java.util.List;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -29,7 +32,7 @@ public class FormMapper {
   }
 
   public FormDTO toDTO(FormEntity entity) {
-    return FormDTO.builder()
+    FormDTO formDTO = FormDTO.builder()
         .id(entity.getId())
         .nickName(entity.getUser().getNickNm())
         .code(entity.getCode())
@@ -48,5 +51,24 @@ public class FormMapper {
         .accName(entity.getAccName())
         .bank(entity.getBank())
         .build();
+
+    // Product 엔티티 -> ProductDTO 변환
+    if (entity.getFields() != null) {
+      List<ProductDTO> products = entity.getFields().stream()
+          .map(p -> ProductDTO.builder()
+              .productId(p.getId())
+              .formId(entity.getId())
+              .productName(p.getProductName())
+              .productDescript(p.getProductDescript())
+              .price(p.getPrice())
+              .productCnt(p.getProductCnt())
+              .stock(p.getStock())
+              .build()
+          )
+          .toList();
+      formDTO.setProducts(products);
+    }
+
+    return formDTO;
   }
 }

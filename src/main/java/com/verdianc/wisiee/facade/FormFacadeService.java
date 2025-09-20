@@ -13,6 +13,7 @@ import com.verdianc.wisiee.Exception.Form.FormFileLimitExceededException;
 import com.verdianc.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdianc.wisiee.Service.Interface.FileService;
 import com.verdianc.wisiee.Service.Interface.FormService;
+import com.verdianc.wisiee.Service.Interface.ProductService;
 import com.verdianc.wisiee.Service.Interface.UserService;
 import java.util.*;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,9 @@ public class FormFacadeService {
   private final FormService formService;
   private final FileService fileService;
   private final UserService userService;
+  private final ProductService productService;
+
+
 
   public FormDTO createForm(FormRequestDTO request, List<MultipartFile> files) {
     // 1. 현재 로그인 유저 조회
@@ -37,7 +41,16 @@ public class FormFacadeService {
     FormDTO formDTO = formService.createForm(request, user);
     Long formId = formDTO.getId();
 
-    // 3. 파일 첨부
+    // 3. Product 초기값 저장
+    if (request.getProducts() != null && !request.getProducts().isEmpty()) {
+      request.getProducts().forEach(p -> {
+        p.setFormId(formId);
+        productService.createProduct(p);
+      });
+      formDTO.setProducts(productService.getProductsByFormId(formId));
+    }
+
+    // 4. 파일 첨부
     if (files != null && !files.isEmpty()) {
       if (files.size() > 3) {
         throw new FormFileLimitExceededException();
@@ -64,21 +77,34 @@ public class FormFacadeService {
     return formDTO;
   }
 
-
-
-
-  // 비공개 폼 단건 조회
   public FormDTO getForm(Long id, String code) {
-    return formService.getForm(id, code);
+    FormDTO formDTO = formService.getForm(id, code);
+    formDTO.setProducts(productService.getProductsByFormId(id));
+    return formDTO;
   }
 
-
   public FormDTO updateForm(Long id, FormRequestDTO request, List<MultipartFile> files) {
-    UserEntity user = userService.getUser(); // 세션 사용자
+    UserEntity user = userService.getUser();
 
+    // 1. Form 수정
     FormDTO formDTO = formService.updateForm(id, request, user);
 
-    // 파일 처리
+    // 2. Product 수정 (폼 단위에서 통째로 교체)
+    if (request.getProducts() != null) {
+      // 기존 product 전부 삭제
+      productService.deleteProductsByFormId(id);
+
+      // 새 product 저장
+      request.getProducts().forEach(p -> {
+        p.setFormId(id);
+        productService.createProduct(p);
+      });
+
+      // 최신 product 붙여주기
+      formDTO.setProducts(productService.getProductsByFormId(id));
+    }
+
+    // 3. 파일 처리
     if (files != null && !files.isEmpty()) {
       if (files.size() > 3) {
         throw new FormFileLimitExceededException();
@@ -102,21 +128,13 @@ public class FormFacadeService {
       }
     }
 
-    return formDTO; // 최종 조회 결과 반환
+    return formDTO;
   }
-
-
 
 
   public void deleteForm(Long formId) {
-    // 현재 로그인한 사용자
     UserEntity user = userService.getUser();
-
-    // 서비스단에서 작성자 검증 + 삭제
     formService.deleteForm(formId, user);
   }
-
-
-
 
 }
