@@ -53,7 +53,7 @@ public class AddressBookEntity {
 
     //기본 여부
     @Column(name = "default_address_yn")
-    private boolean defaultAddressYn;
+    private Boolean defaultAddressYn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

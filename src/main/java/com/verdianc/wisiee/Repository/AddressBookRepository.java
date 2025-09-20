@@ -19,7 +19,7 @@ public interface AddressBookRepository extends JpaRepository<AddressBookEntity, 
 
     @Transactional
     @Modifying
-    @Query("UPDATE AddressBookEntity a SET a.defaultAddress = false WHERE a.user.id = :userId AND a.id <> :addressId")
+    @Query("UPDATE AddressBookEntity a SET a.defaultAddressYn = false WHERE a.user.id = :userId AND a.id <> :addressId")
     void resetDefaultAddress(Long addressId, Long userId);
 
     Optional<AddressBookEntity> findByUser_UserIdAndDefaultAddressYnTrue(Long userId);
