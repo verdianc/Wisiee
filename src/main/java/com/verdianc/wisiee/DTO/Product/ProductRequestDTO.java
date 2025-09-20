@@ -7,6 +7,7 @@ import lombok.Setter;
 @Setter
 public class ProductRequestDTO {
 
+  private Long formId;
   private String productName;
   private String productDescript;
   private int price;

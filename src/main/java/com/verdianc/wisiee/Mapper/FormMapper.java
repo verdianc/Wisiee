@@ -4,7 +4,7 @@ import com.verdianc.wisiee.DTO.Form.FormDTO;
 import com.verdianc.wisiee.DTO.Form.FormRequestDTO;
 import com.verdianc.wisiee.DTO.Product.ProductDTO;
 import com.verdianc.wisiee.Entity.FormEntity;
-import com.verdianc.wisiee.Entity.Product;
+import com.verdianc.wisiee.Entity.ProductEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
 import java.util.List;
 import org.springframework.stereotype.Component;
@@ -14,8 +14,7 @@ public class FormMapper {
 
 
   public FormEntity toEntity(FormRequestDTO dto, UserEntity user) {
-    // 먼저 form 객체를 만든다.
-    FormEntity form = FormEntity.builder()
+    return FormEntity.builder()
         .user(user)
         .code(dto.getCode())
         .title(dto.getTitle())
@@ -30,26 +29,7 @@ public class FormMapper {
         .accName(dto.getAccName())
         .bank(dto.getBank())
         .build();
-
-    // ProductRequestDTO -> Product 엔티티 변환
-    if (dto.getProducts() != null) {
-      dto.getProducts().forEach(p -> {
-        Product product = Product.builder()
-            .form(form) // 이제 정상적으로 인식됨
-            .productName(p.getProductName())
-            .productDescript(p.getProductDescript())
-            .price(p.getPrice())
-            .productCnt(p.getProductCnt())
-            .stock(p.getProductCnt()) // 초기 재고 = 총 개수
-            .build();
-
-        form.getFields().add(product);
-      });
-    }
-
-    return form;
   }
-
 
   public FormDTO toDTO(FormEntity entity) {
     FormDTO formDTO = FormDTO.builder()
@@ -77,6 +57,7 @@ public class FormMapper {
       List<ProductDTO> products = entity.getFields().stream()
           .map(p -> ProductDTO.builder()
               .productId(p.getId())
+              .formId(entity.getId())
               .productName(p.getProductName())
               .productDescript(p.getProductDescript())
               .price(p.getPrice())
@@ -90,5 +71,4 @@ public class FormMapper {
 
     return formDTO;
   }
-
 }
