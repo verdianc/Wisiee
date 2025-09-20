@@ -1,6 +1,5 @@
 package com.verdianc.wisiee.DTO.Form;
 
-import com.verdianc.wisiee.Common.Enum.SelectOption;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
