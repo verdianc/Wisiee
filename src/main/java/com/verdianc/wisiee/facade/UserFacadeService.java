@@ -1,5 +1,6 @@
 package com.verdianc.wisiee.facade;
 
+import com.verdianc.wisiee.Common.Util.CommonUtil;
 import com.verdianc.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdianc.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdianc.wisiee.DTO.User.AddressBookResponseDTO;
@@ -21,11 +22,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserFacadeService {
 
+    private final CommonUtil commonUtil;
     private final UserService userService;
     private final S3Port s3Port;
 
     public OauthDTO getCurrentUser() {
         return userService.getCurrentUser();
+    }
+
+    public Long getUserId() {
+        return commonUtil.getUserId();
     }
 
     public void updateUserNickNm(UserInfoUpdateDTO userInfoUpdateDTO) {
