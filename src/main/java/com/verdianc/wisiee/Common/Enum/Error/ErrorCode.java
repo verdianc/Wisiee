@@ -43,6 +43,9 @@ public enum ErrorCode {
     AddressNotFound(5005, "주소록을 찾을 수 없습니다."),
     DefaultAddressNotFoundException(5006, "기본 배송지가 없습니다."),
 
+    //6000번대 : Order 관련 에러
+    PRODUCT_NOT_FOUND(6000, "상품을 찾을 수 없습니다"),
+
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
 
