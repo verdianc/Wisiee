@@ -10,7 +10,6 @@ public class OrderReqDTO {
     private Long userId;
     private String orderStatus;
     private List<OrderItemDTO> items;
-    private String alias;
     private String zipcode;
     private String address;
     private String detailAddress;

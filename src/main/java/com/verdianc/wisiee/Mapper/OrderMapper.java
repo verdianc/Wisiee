@@ -20,7 +20,6 @@ public class OrderMapper {
                 .orderDate(LocalDateTime.now())
                 .orderStatus(OrderStatus.valueOf(dto.getOrderStatus()))
                 .deliveryOption(DeliveryOption.valueOf(dto.getDeliveryOption()))
-                .alias(dto.getAlias())
                 .zipcode(dto.getZipcode())
                 .address(dto.getAddress())
                 .detailAddress(dto.getDetailAddress())
