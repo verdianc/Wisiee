@@ -26,5 +26,13 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
     int updateOrderStatus(@Param("orderId") Long orderId,
                           @Param("status") OrderStatus status);
 
+    @Query("select distinct o from OrderEntity o " +
+            "join fetch o.orderItemEntities oi " +
+            "join fetch oi.product p " +
+            "join fetch p.form f " +
+            "where o.user.id = :buyerId " +
+            "order by o.orderDate desc")
+    List<OrderEntity> findOrdersByBuyerId(@Param("buyerId") Long sellerId);
+
 
 }
