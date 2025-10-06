@@ -1,6 +1,7 @@
 package com.verdianc.wisiee.Service;
 
 import com.verdianc.wisiee.Common.Enum.OrderStatus;
+import com.verdianc.wisiee.DTO.Order.OrderItemListDTO;
 import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
@@ -70,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
                 quantity,                      // 총 수량
                 order.getOrderStatus().name(), // 주문 상태
                 order.getDeliveryOption().name(), // 배송 옵션
-                dto.getItems()                 // 주문 아이템 목록 (요청 DTO 기준)
+                (OrderItemListDTO) dto.getItems()                 // 주문 아이템 목록 (요청 DTO 기준)
         );
 
         return res;
