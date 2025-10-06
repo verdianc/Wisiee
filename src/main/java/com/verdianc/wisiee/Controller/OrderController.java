@@ -26,6 +26,13 @@ public class OrderController {
         return new ResDTO<>(orderFacadeService.createOrder(dto));
     }
 
+    @GetMapping("/orderList")
+    public ResDTO<OrderRespListDTO> getOrderList() {
+        Long userId = orderFacadeService.getUserId();
+        return new ResDTO<>(orderFacadeService.getOrderList(userId));
+    }
+
+
     @GetMapping("/soldOrderList")
     public ResDTO<OrderRespListDTO> getSoldOrderList() {
         Long userId = orderFacadeService.getUserId();

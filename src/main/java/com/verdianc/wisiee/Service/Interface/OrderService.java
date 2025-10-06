@@ -8,6 +8,8 @@ import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
 public interface OrderService {
     OrderRespDTO createOrder(OrderReqDTO dto);
 
+    OrderRespListDTO getOrderList(Long userId);
+
     OrderRespListDTO getSoldOrderList(Long userId);
 
     void updateOrderStatus(Long orderId, OrderStatus orderStatus);

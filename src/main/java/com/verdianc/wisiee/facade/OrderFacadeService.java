@@ -29,6 +29,10 @@ public class OrderFacadeService {
         return orderService.getSoldOrderList(userId);
     }
 
+    public OrderRespListDTO getOrderList(Long userId) {
+        return orderService.getOrderList(userId);
+    }
+
     public void updateOrderStatus(OrderReqDTO dto) {
         OrderStatus orderSTatus = OrderStatus.safeValueOf(dto.getOrderStatus()).orElseThrow(() -> new WrongOrderStatusException(dto.getOrderStatus()));
         orderService.updateOrderStatus(dto.getOrderId(), orderSTatus);

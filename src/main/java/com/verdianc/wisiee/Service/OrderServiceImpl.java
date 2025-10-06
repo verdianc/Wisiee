@@ -47,6 +47,7 @@ public class OrderServiceImpl implements OrderService {
             ProductEntity product = productJpaRepository.findById(itemDto.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException(itemDto.getProductId()));
 
+
             return OrderMapper.toItemEntity(itemDto, finalOrder, product);
         }).collect(Collectors.toList());
 
@@ -75,6 +76,12 @@ public class OrderServiceImpl implements OrderService {
         );
 
         return res;
+    }
+
+    @Override
+    public OrderRespListDTO getOrderList(Long userId) {
+        List<OrderEntity> soldOrderEntity = orderRepository.findOrdersByBuyerId(userId);
+        return OrderMapper.toOrderRespListDTO(soldOrderEntity);
     }
 
     @Override
