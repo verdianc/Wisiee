@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class OrderReqDTO {
+    private Long orderId;
     private Long userId;
     private String orderStatus;
     private List<OrderItemDTO> items;

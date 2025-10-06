@@ -1,7 +1,9 @@
 package com.verdianc.wisiee.Service;
 
+import com.verdianc.wisiee.Common.Enum.OrderStatus;
 import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespDTO;
+import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
 import com.verdianc.wisiee.Entity.OrderEntity;
 import com.verdianc.wisiee.Entity.OrderItemEntity;
 import com.verdianc.wisiee.Entity.ProductEntity;
@@ -72,5 +74,16 @@ public class OrderServiceImpl implements OrderService {
         );
 
         return res;
+    }
+
+    @Override
+    public OrderRespListDTO getSoldOrderList(Long userId) {
+        List<OrderEntity> soldOrderEntity = orderRepository.findOrdersBySellerId(userId);
+        return OrderMapper.toOrderRespListDTO(soldOrderEntity);
+    }
+
+    @Override
+    public void updateOrderStatus(Long orderId, OrderStatus orderStatus) {
+        orderRepository.updateOrderStatus(orderId, orderStatus);
     }
 }
