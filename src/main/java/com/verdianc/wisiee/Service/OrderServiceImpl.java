@@ -47,7 +47,8 @@ public class OrderServiceImpl implements OrderService {
             ProductEntity product = productJpaRepository.findById(itemDto.getProductId())
                     .orElseThrow(() -> new ProductNotFoundException(itemDto.getProductId()));
 
-
+            product.decreaseStock(itemDto.getQuantity());
+            productJpaRepository.save(product);
             return OrderMapper.toItemEntity(itemDto, finalOrder, product);
         }).collect(Collectors.toList());
 
@@ -72,7 +73,7 @@ public class OrderServiceImpl implements OrderService {
                 quantity,                      // 총 수량
                 order.getOrderStatus().name(), // 주문 상태
                 order.getDeliveryOption().name(), // 배송 옵션
-                (OrderItemListDTO) dto.getItems()                 // 주문 아이템 목록 (요청 DTO 기준)
+                new OrderItemListDTO(dto.getItems(), dto.getItems().size())            // 주문 아이템 목록 (요청 DTO 기준)
         );
 
         return res;
