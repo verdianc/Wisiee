@@ -16,7 +16,8 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "join fetch o.orderItemEntities oi " +
             "join fetch oi.product p " +
             "join fetch p.form f " +
-            "where f.user.id = :sellerId")
+            "where f.user.id = :sellerId" +
+            "order by o.orderDate desc")
     List<OrderEntity> findOrdersBySellerId(@Param("sellerId") Long sellerId);
 
     @Modifying
