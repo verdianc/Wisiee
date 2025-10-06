@@ -5,10 +5,12 @@ import com.verdianc.wisiee.Common.Enum.OrderStatus;
 import com.verdianc.wisiee.DTO.Order.OrderItemDTO;
 import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespDTO;
+import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
 import com.verdianc.wisiee.Entity.OrderEntity;
 import com.verdianc.wisiee.Entity.OrderItemEntity;
 import com.verdianc.wisiee.Entity.ProductEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.Exception.Order.WrongOrderStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +20,7 @@ public class OrderMapper {
         return OrderEntity.builder()
                 .user(user)
                 .orderDate(LocalDateTime.now())
-                .orderStatus(OrderStatus.valueOf(dto.getOrderStatus()))
+                .orderStatus(OrderStatus.safeValueOf(dto.getOrderStatus()).orElseThrow(() -> new WrongOrderStatusException(dto.getOrderStatus())))
                 .deliveryOption(DeliveryOption.valueOf(dto.getDeliveryOption()))
                 .zipcode(dto.getZipcode())
                 .address(dto.getAddress())
@@ -37,23 +39,29 @@ public class OrderMapper {
                 .build();
     }
 
-    public static OrderRespDTO toResponse(OrderEntity order, List<OrderItemEntity> items) {
-        OrderRespDTO res = new OrderRespDTO();
-        res.setOrderId(order.getId());
-        res.setUserId(order.getUser().getUserId());
-        res.setOrderDate(order.getOrderDate());
-        res.setTotalPrice(items.stream().mapToInt(OrderItemEntity::getOrderPrice).sum());
-        res.setQuantity(items.stream().mapToInt(OrderItemEntity::getQuantity).sum());
-        res.setOrderStatus(order.getOrderStatus().name());
-        res.setDeliveryOption(order.getDeliveryOption().name());
+    public static OrderRespDTO toOrderRespDTO(OrderEntity order) {
+        return new OrderRespDTO(
+                order.getId(),
+                order.getUser().getUserId(),
+                order.getOrderDate(),
+                order.getTotalPrice(),
+                order.getQuantity(),
+                order.getOrderStatus().name(),
+                order.getDeliveryOption().name(),
+                order.getOrderItemEntities().stream()
+                        .map(item -> new OrderItemDTO(
+                                item.getProduct().getId(),
+                                item.getQuantity(),
+                                item.getOrderPrice()
+                        ))
+                        .collect(Collectors.toList())
+        );
+    }
 
-        // 아이템 응답 DTO 변환 (필요하면 별도 Mapper)
-        res.setItems(items.stream().map(i -> new OrderItemDTO(
-                i.getProduct().getId(),
-                i.getQuantity(),
-                i.getOrderPrice()
-        )).collect(Collectors.toList()));
-
-        return res;
+    public static OrderRespListDTO toOrderRespListDTO(List<OrderEntity> orders) {
+        var dtoList = orders.stream()
+                .map(OrderMapper::toOrderRespDTO)
+                .collect(Collectors.toList());
+        return new OrderRespListDTO(dtoList, dtoList.size());
     }
 }

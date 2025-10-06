@@ -45,6 +45,7 @@ public enum ErrorCode {
 
     //6000번대 : Order 관련 에러
     PRODUCT_NOT_FOUND(6000, "상품을 찾을 수 없습니다"),
+    WRONG_ORDER_STATUS(6001, "잘못된 주문 상태"),
 
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
