@@ -1,7 +1,6 @@
 package com.verdianc.wisiee.DTO.Order;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,5 +18,5 @@ public class OrderRespDTO {
     private int quantity;
     private String orderStatus;
     private String deliveryOption;
-    private List<OrderItemDTO> items;
+    private OrderItemListDTO items;
 }

@@ -3,9 +3,11 @@ package com.verdianc.wisiee.Mapper;
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
 import com.verdianc.wisiee.Common.Enum.OrderStatus;
 import com.verdianc.wisiee.DTO.Order.OrderItemDTO;
+import com.verdianc.wisiee.DTO.Order.OrderItemListDTO;
 import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
+import com.verdianc.wisiee.DTO.Product.ProductDTO;
 import com.verdianc.wisiee.Entity.OrderEntity;
 import com.verdianc.wisiee.Entity.OrderItemEntity;
 import com.verdianc.wisiee.Entity.ProductEntity;
@@ -16,6 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class OrderMapper {
+
     public static OrderEntity toEntity(OrderReqDTO dto, UserEntity user) {
         return OrderEntity.builder()
                 .user(user)
@@ -40,6 +43,19 @@ public class OrderMapper {
     }
 
     public static OrderRespDTO toOrderRespDTO(OrderEntity order) {
+        List<OrderItemDTO> itemDTOS = (List<OrderItemDTO>) order.getOrderItemEntities().stream()
+                .map(item -> new OrderItemDTO(
+                        item.getProduct().getId(),
+                        item.getQuantity(),
+                        item.getOrderPrice(),
+                        item.getProduct().getProductName(),
+                        item.getProduct().getProductDescript(),
+                        item.getProduct().getForm().getId(),
+                        item.getProduct().getForm().getTitle(),
+                        item.getProduct().getForm().getUser().getNickNm()
+                ))
+                .toList();
+
         return new OrderRespDTO(
                 order.getId(),
                 order.getUser().getUserId(),
@@ -48,13 +64,8 @@ public class OrderMapper {
                 order.getQuantity(),
                 order.getOrderStatus().name(),
                 order.getDeliveryOption().name(),
-                order.getOrderItemEntities().stream()
-                        .map(item -> new OrderItemDTO(
-                                item.getProduct().getId(),
-                                item.getQuantity(),
-                                item.getOrderPrice()
-                        ))
-                        .collect(Collectors.toList())
+                new OrderItemListDTO(itemDTOS, itemDTOS.size())
+
         );
     }
 
@@ -63,5 +74,17 @@ public class OrderMapper {
                 .map(OrderMapper::toOrderRespDTO)
                 .collect(Collectors.toList());
         return new OrderRespListDTO(dtoList, dtoList.size());
+    }
+
+    public static ProductDTO toProductDTO(ProductEntity entity) {
+        return ProductDTO.builder()
+                .productId(entity.getId())
+                .formId(entity.getForm().getId())
+                .productName(entity.getProductName())
+                .productDescript(entity.getProductDescript())
+                .price(entity.getPrice())
+                .productCnt(entity.getProductCnt())
+                .stock(entity.getStock())
+                .build();
     }
 }
