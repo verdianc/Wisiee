@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-import jakarta.persistence.Transient;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -81,12 +80,6 @@ public class OrderEntity {
     //번호
     @Column(name = "phone_number")
     private String phoneNumber;
-
-    @Transient
-    private List<ProductEntity> product;
-
-    @Transient
-    private FormEntity form;
 
     public void setTotalInfo(int totalPrice, int quantity) {
         this.totalPrice = totalPrice;
