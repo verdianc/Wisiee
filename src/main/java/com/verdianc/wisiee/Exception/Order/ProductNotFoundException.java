@@ -6,7 +6,7 @@ import com.verdianc.wisiee.Exception.BaseException;
 public class ProductNotFoundException extends BaseException {
     public ProductNotFoundException(Long productId) {
         super(
-                ErrorCode.AddressNotFound,
+                ErrorCode.PRODUCT_NOT_FOUND,
                 "상품을 찾을 수 없습니다. productId=" + productId
         );
 

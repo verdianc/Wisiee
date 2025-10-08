@@ -2,6 +2,7 @@ package com.verdianc.wisiee.Entity;
 
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
 import com.verdianc.wisiee.Common.Enum.OrderStatus;
+import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderEntity {
+public class OrderEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -81,9 +82,26 @@ public class OrderEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "del_yn")
+    @Builder.Default
+    private boolean delYn = false;
+
     public void setTotalInfo(int totalPrice, int quantity) {
         this.totalPrice = totalPrice;
         this.quantity = quantity;
+    }
+
+    public void setDel() {
+        this.delYn = true;
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    public void modiAddress(OrderReqDTO order) {
+        this.zipcode = order.getZipcode();
+        this.address = order.getAddress();
+        this.detailAddress = order.getDetailAddress();
+        this.recipientNm = order.getRecipientNm();
+        this.phoneNumber = order.getPhoneNumber();
     }
 
 }

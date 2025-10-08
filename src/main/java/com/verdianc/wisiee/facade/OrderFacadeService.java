@@ -37,4 +37,12 @@ public class OrderFacadeService {
         OrderStatus orderSTatus = OrderStatus.safeValueOf(dto.getOrderStatus()).orElseThrow(() -> new WrongOrderStatusException(dto.getOrderStatus()));
         orderService.updateOrderStatus(dto.getOrderId(), orderSTatus);
     }
+
+    public void cancelOrder(OrderReqDTO dto) {
+        orderService.cancelOrder(dto);
+    }
+
+    public void updateAddress(OrderReqDTO dto) {
+        orderService.updateAddress(dto);
+    }
 }
