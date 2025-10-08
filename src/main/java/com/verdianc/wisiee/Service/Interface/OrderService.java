@@ -13,4 +13,8 @@ public interface OrderService {
     OrderRespListDTO getSoldOrderList(Long userId);
 
     void updateOrderStatus(Long orderId, OrderStatus orderStatus);
+
+    void cancelOrder(OrderReqDTO dto);
+
+    void updateAddress(OrderReqDTO dto);
 }

@@ -44,4 +44,20 @@ public class OrderController {
         orderFacadeService.updateOrderStatus(dto);
         return new ResDTO<>((Void) null);
     }
+
+    @PutMapping("/cancel")
+    public ResDTO<Void> cancelOrder(@RequestBody OrderReqDTO dto) {
+        Long userId = orderFacadeService.getUserId();
+        dto.setUserId(userId);
+        orderFacadeService.cancelOrder(dto);
+        return new ResDTO<>((Void) null);
+    }
+
+    @PutMapping("/updateAddress")
+    public ResDTO<Void> updateAddress(@RequestBody OrderReqDTO dto) {
+        Long userId = orderFacadeService.getUserId();
+        dto.setUserId(userId);
+        orderFacadeService.updateAddress(dto);
+        return new ResDTO<>((Void) null);
+    }
 }

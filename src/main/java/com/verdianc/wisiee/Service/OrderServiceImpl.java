@@ -9,6 +9,9 @@ import com.verdianc.wisiee.Entity.OrderEntity;
 import com.verdianc.wisiee.Entity.OrderItemEntity;
 import com.verdianc.wisiee.Entity.ProductEntity;
 import com.verdianc.wisiee.Entity.UserEntity;
+import com.verdianc.wisiee.Exception.Order.OrderAccessDeniedException;
+import com.verdianc.wisiee.Exception.Order.OrderCancellationNotAllowedException;
+import com.verdianc.wisiee.Exception.Order.OrderNotFoundException;
 import com.verdianc.wisiee.Exception.Order.ProductNotFoundException;
 import com.verdianc.wisiee.Exception.User.UserNotFound;
 import com.verdianc.wisiee.Mapper.OrderMapper;
@@ -17,7 +20,9 @@ import com.verdianc.wisiee.Repository.OrderRepository;
 import com.verdianc.wisiee.Repository.ProductJpaRepository;
 import com.verdianc.wisiee.Repository.UserRepository;
 import com.verdianc.wisiee.Service.Interface.OrderService;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -94,5 +99,44 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void updateOrderStatus(Long orderId, OrderStatus orderStatus) {
         orderRepository.updateOrderStatus(orderId, orderStatus);
+    }
+
+    @Override
+    public void cancelOrder(OrderReqDTO dto) {
+        //Order 상태 변경 확인
+        OrderEntity order = chkOrderModi(dto);
+        // 주문 상태 변경
+        order.setDel();
+        orderRepository.save(order);
+    }
+
+    @Override
+    public void updateAddress(OrderReqDTO dto) {
+        //배송지 변경 가능 확인
+        OrderEntity order = chkOrderModi(dto);
+        //배송지 변경
+        order.modiAddress(dto);
+
+        orderRepository.save(order);
+    }
+
+    private OrderEntity chkOrderModi(OrderReqDTO dto) {
+        //1.  기존 주문 조회
+        OrderEntity order = orderRepository.findByIdAndDelYnFalse(dto.getOrderId())
+                .orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
+
+        //2. 해당 Order 주문자와 접속자의 userId 동일 확인
+        if (!order.getUser().getUserId().equals(dto.getUserId())) {
+            throw new OrderAccessDeniedException(dto.getOrderId(), dto.getUserId());
+        }
+
+        //3. ORDER STATUS가 PREP인지 확인
+        Set<OrderStatus> allowed = EnumSet.of(OrderStatus.PAID, OrderStatus.PREP);
+        if (!allowed.contains(order.getOrderStatus())) {
+            throw new OrderCancellationNotAllowedException(dto.getOrderId());
+        }
+
+        return order;
+
     }
 }

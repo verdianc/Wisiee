@@ -4,6 +4,7 @@ import com.verdianc.wisiee.Common.Enum.OrderStatus;
 import com.verdianc.wisiee.Entity.OrderEntity;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -34,5 +35,6 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "order by o.orderDate desc")
     List<OrderEntity> findOrdersByBuyerId(@Param("buyerId") Long sellerId);
 
+    Optional<OrderEntity> findByIdAndDelYnFalse(Long id);
 
 }

@@ -39,13 +39,16 @@ public enum ErrorCode {
     USER_NOT_FOUND(5001, "존재하지 않는 사용자 입니다."),
     NICKNAME_CNT_EXCEEDED(5002, "닉네임 변경 횟수가 초과되었습니다."),
     NICKNAME_ALREADY_EXISTS(5003, "이미 존재하는 닉네임입니다."),
-    AliasConflict(5004, "이미 존재하는 별칭입니다."),
-    AddressNotFound(5005, "주소록을 찾을 수 없습니다."),
-    DefaultAddressNotFoundException(5006, "기본 배송지가 없습니다."),
+    ALIAS_CONFLICT(5004, "이미 존재하는 별칭입니다."),
+    ADDRESS_NOT_FOUND(5005, "주소록을 찾을 수 없습니다."),
+    DEFAULT_ADDRESS_NOT_FOUND_EXCEPTION(5006, "기본 배송지가 없습니다."),
 
     //6000번대 : Order 관련 에러
     PRODUCT_NOT_FOUND(6000, "상품을 찾을 수 없습니다"),
     WRONG_ORDER_STATUS(6001, "잘못된 주문 상태"),
+    ORDER_NOT_FAOUND(6002, "주문을 찾을 수 없습니다."),
+    ORDER_ACCESS_DENIED_EXCEPTION(6003, "주문자와 취소자가 상이합니다."),
+    ORDER_CANCELLATION_NOT_ALLOWED_EXCEPTION(6004, "주문이 배송준비까지 진행되어 주문 변경 및 취소 불가합니다."),
 
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
