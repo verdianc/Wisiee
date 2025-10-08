@@ -7,7 +7,6 @@ import com.verdianc.wisiee.DTO.Order.OrderItemListDTO;
 import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespDTO;
 import com.verdianc.wisiee.DTO.Order.OrderRespListDTO;
-import com.verdianc.wisiee.DTO.Product.ProductDTO;
 import com.verdianc.wisiee.Entity.OrderEntity;
 import com.verdianc.wisiee.Entity.OrderItemEntity;
 import com.verdianc.wisiee.Entity.ProductEntity;
@@ -74,17 +73,5 @@ public class OrderMapper {
                 .map(OrderMapper::toOrderRespDTO)
                 .collect(Collectors.toList());
         return new OrderRespListDTO(dtoList, dtoList.size());
-    }
-
-    public static ProductDTO toProductDTO(ProductEntity entity) {
-        return ProductDTO.builder()
-                .productId(entity.getId())
-                .formId(entity.getForm().getId())
-                .productName(entity.getProductName())
-                .productDescript(entity.getProductDescript())
-                .price(entity.getPrice())
-                .productCnt(entity.getProductCnt())
-                .stock(entity.getStock())
-                .build();
     }
 }
