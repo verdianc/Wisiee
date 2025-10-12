@@ -68,7 +68,7 @@ public class UserController {
             @RequestPart(value = "files", required = false) MultipartFile file,
             @RequestPart("user") UserInfoUpdateDTO dto) throws IOException {
 
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         dto.setUserId(userId);
         userFacadeService.updateUserInfo(dto);
 
@@ -84,7 +84,7 @@ public class UserController {
     //사용자 탈퇴
     @DeleteMapping("/user")
     public ResDTO<Void> delUser() {
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         userFacadeService.deleteUser(userId);
         return new ResDTO<Void>((Void) null);
     }
@@ -92,26 +92,26 @@ public class UserController {
     //주소록 등록 및 수정
     @PostMapping("/addressBook")
     public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto) {
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.createAddressBook(dto, userId));
     }
 
     //주소록 조회
     @GetMapping("/addressBook")
     public ResDTO<AddressBookListResponseDTO> getAddressBook() {
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         return new ResDTO<AddressBookListResponseDTO>(userFacadeService.getAddressBook(userId));
     }
 
     @PutMapping("/addressBook")
     public ResDTO<AddressBookRequestDTO> updateAddressBook(@RequestBody AddressBookRequestDTO dto) {
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.updateAddressBook(dto, userId));
     }
 
     @PutMapping("/addressBook/default/{id}")
     public ResDTO<Void> setDefaultAddress(@PathVariable("id") Long addressId) {
-        Long userId = userFacadeService.getCurrentUser().getUserId();
+        Long userId = userFacadeService.getUserId();
         userFacadeService.setDefaultAddress(addressId, userId);
         return new ResDTO<>((Void) null);
     }

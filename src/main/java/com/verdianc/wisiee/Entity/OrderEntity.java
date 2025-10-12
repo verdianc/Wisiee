@@ -2,9 +2,12 @@ package com.verdianc.wisiee.Entity;
 
 import com.verdianc.wisiee.Common.Enum.DeliveryOption;
 import com.verdianc.wisiee.Common.Enum.OrderStatus;
+import com.verdianc.wisiee.DTO.Order.OrderReqDTO;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,67 +23,85 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderEntity {
+public class OrderEntity extends BaseEntity {
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-  // 어떤 product인지랑, 재고, 주소록, 유저 정보, 배송옵션(폼에서 가져오기)
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
-  private UserEntity user;
+    // 어떤 product인지랑, 재고, 주소록, 유저 정보, 배송옵션(폼에서 가져오기)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private UserEntity user;
 
-  // 주문 상품 - orderItemEntity
-  @OneToMany(mappedBy = "order_item", cascade = CascadeType.ALL, orphanRemoval = true)
-  @OrderBy("id ASC")
-  private List<OrderItemEntity> orderItemEntities = new ArrayList<>();
-
-
-  // 주문 날짜, 시간까지 포함해서
-  private LocalDateTime orderDate;
-
-  // 주문 총 금액
-  private int totalPrice;
-
-  // 주문 총 개수
-  private int quantity;
-
-  // 배송 상태 enum
-  private OrderStatus orderStatus;
-
-  // 배송 옵션 enum
-  private DeliveryOption deliveryOption;
+    // 주문 상품 - orderItemEntity
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
+    @Builder.Default
+    private List<OrderItemEntity> orderItemEntities = new ArrayList<>();
 
 
-  // 배송지
-  // "집", "회사", "부모님댁" 별칭
-  private String alias;
+    // 주문 날짜, 시간까지 포함해서
+    private LocalDateTime orderDate;
 
-  // 우편번호
-  private String zipcode;
+    // 주문 총 금액
+    private int totalPrice;
 
-  // 기본 주소 (도로명/지번)
-  private String address;
+    // 주문 총 개수
+    private int quantity;
 
-  // 상세 주소 (동/호, 건물명 등)
-  @Column(name = "detail_address")
-  private String detailAddress;
+    // 배송 상태 enum
+    @Enumerated(EnumType.STRING)
+    private OrderStatus orderStatus;
 
-  // 수신인명
-  @Column(name = "recipient_name")
-  private String recipientNm;
+    // 배송 옵션 enum
+    @Enumerated(EnumType.STRING)
+    private DeliveryOption deliveryOption;
 
-  //번호
-  @Column(name = "phone_number")
-  private String phoneNumber;
+    // 우편번호
+    private String zipcode;
 
+    // 기본 주소 (도로명/지번)
+    private String address;
+
+    // 상세 주소 (동/호, 건물명 등)
+    @Column(name = "detail_address")
+    private String detailAddress;
+
+    // 수신인명
+    @Column(name = "recipient_name")
+    private String recipientNm;
+
+    //번호
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
+    @Column(name = "del_yn")
+    @Builder.Default
+    private boolean delYn = false;
+
+    public void setTotalInfo(int totalPrice, int quantity) {
+        this.totalPrice = totalPrice;
+        this.quantity = quantity;
+    }
+
+    public void setDel() {
+        this.delYn = true;
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    public void modiAddress(OrderReqDTO order) {
+        this.zipcode = order.getZipcode();
+        this.address = order.getAddress();
+        this.detailAddress = order.getDetailAddress();
+        this.recipientNm = order.getRecipientNm();
+        this.phoneNumber = order.getPhoneNumber();
+    }
 
 }
