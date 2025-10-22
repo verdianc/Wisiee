@@ -1,0 +1,22 @@
+package com.verdiance.wisiee.Service.Interface;
+
+
+import com.verdiance.wisiee.DTO.Product.ProductDTO;
+import com.verdiance.wisiee.DTO.Product.ProductRequestDTO;
+import java.util.List;
+
+public interface ProductService {
+
+  ProductDTO createProduct(ProductRequestDTO productRequestDTO);
+
+  void deleteProductsByFormId(Long formId);
+
+  ProductDTO updateProduct(Long productId, ProductDTO productDTO);
+
+  void deleteProduct(Long productId);
+
+  ProductDTO getProduct(Long productId);
+
+  List<ProductDTO> getProductsByFormId(Long formId);
+
+}
