@@ -24,7 +24,10 @@ public class SecurityConfig {
 
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/wisiee/**").permitAll()
+                        .requestMatchers("/**", "/wisiee/**", "/wisiee/docs",
+                            "/wisiee/swagger-ui/**",
+                            "/wisiee/v3/api-docs/**",
+                            "/wisiee/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
