@@ -1,0 +1,11 @@
+${AnsiColor.BRIGHT_RED}
+__        __  ___   ____   ___  _____  _____
+\ \      / / |_ _| / ___| |_ _|| ____|| ____|
+ \ \ /\ / /   | |  \___ \  | | |  _|  |  _|
+  \ V  V /    | |   ___) | | | | |___ | |___
+   \_/\_/    |___| |____/ |___||_____||_____|
+${AnsiColor.BRIGHT_GREEN}
+        W   I   S   I   E   E
+${AnsiColor.BRIGHT_RED}
+        🚀  S Y S T E M   B O O T   L A U N C H E D  🚀
+${AnsiColor.DEFAULT}
