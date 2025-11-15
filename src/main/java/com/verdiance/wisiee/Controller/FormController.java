@@ -3,7 +3,7 @@ package com.verdiance.wisiee.Controller;
 import com.verdiance.wisiee.DTO.Form.FormDTO;
 import com.verdiance.wisiee.DTO.Form.FormRequestDTO;
 import com.verdiance.wisiee.DTO.ResDTO;
-import com.verdiance.wisiee.facade.FormFacadeService;
+import com.verdiance.wisiee.Facade.FormFacadeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;

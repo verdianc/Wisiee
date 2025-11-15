@@ -6,7 +6,7 @@ import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
-import com.verdiance.wisiee.facade.UserFacadeService;
+import com.verdiance.wisiee.Facade.UserFacadeService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
