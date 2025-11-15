@@ -1,4 +1,3 @@
-
 services:
   wisiee-storage:
     image: minio/minio:latest
@@ -13,4 +12,40 @@ services:
       - ./data:/data
     command: server /data --console-address ":9001"
     restart: unless-stopped
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb-verdiance
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: "root"
+      MARIADB_DATABASE: verdiance
+      MARIADB_USER: verdiance
+      MARIADB_PASSWORD: "alswjd0204#"
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data_verdiance:/var/lib/mysql
+    networks:
+      - verdiance_network
+  backend:
+    build:
+      context: . # 현재 프로젝트 경로
+      dockerfile: Dockerfile
+    container_name: spring-verdiance
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mariadb://mariadb:3306/verdiance
+      SPRING_DATASOURCE_USERNAME: verdiance
+      SPRING_DATASOURCE_PASSWORD: alswjd0204#
+      SPRING_PROFILES_ACTIVE: local
+    depends_on:
+      - mariadb
+    networks:
+      - verdiance_network
 
+volumes:
+  mariadb_data_verdiance:
+
+networks:
+  verdiance_network: { }
