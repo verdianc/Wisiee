@@ -12,7 +12,10 @@ services:
       - ./data:/data
     command: server /data --console-address ":9001"
     restart: unless-stopped
-  mariadb:
+
+
+
+  wisiee-mariadb:
     image: mariadb:latest
     container_name: mariadb-verdiance
     restart: always
@@ -43,6 +46,13 @@ services:
       - mariadb
     networks:
       - verdiance_network
+
+
+
+  // TODO : rabbitmq컨테이너 띄우기
+  wisiee-rabbitmq:
+
+
 
 volumes:
   mariadb_data_verdiance:
