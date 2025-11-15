@@ -25,6 +25,7 @@ public class FormController {
 
   private final FormFacadeService formFacadeService;
 
+  // 폼생성
   @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResDTO<FormDTO> createForm(
       @RequestPart("form") FormRequestDTO request,
@@ -35,6 +36,7 @@ public class FormController {
 
 
 
+  // 폼 조회
   @GetMapping("/{id}")
   public ResDTO<FormDTO> getForm(
       @PathVariable Long id,
@@ -45,6 +47,7 @@ public class FormController {
   }
 
 
+  // 폼 수정
   @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResDTO<FormDTO> updateForm(
       @PathVariable Long id,
@@ -55,6 +58,7 @@ public class FormController {
   }
 
 
+  // 폼 삭제
   @DeleteMapping("/{id}")
   public ResDTO<Void> deleteForm(@PathVariable Long id) {
     formFacadeService.deleteForm(id);

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
+    // TODO : queryDSL 변환 or facade로 쪼개기 고려하기
     @Query("select distinct o from OrderEntity o " +
             "join fetch o.orderItemEntities oi " +
             "join fetch oi.product p " +
