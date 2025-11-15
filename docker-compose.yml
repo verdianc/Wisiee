@@ -1,4 +1,17 @@
 services:
+  wisiee-storage:
+    image: minio/minio:latest
+    container_name: wisiee-storage
+    ports:
+      - "9000:9000"   # MinIO API
+      - "9001:9001"   # MinIO Web Console
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - ./data:/data
+    command: server /data --console-address ":9001"
+    restart: unless-stopped
   mariadb:
     image: mariadb:latest
     container_name: mariadb-verdiance
