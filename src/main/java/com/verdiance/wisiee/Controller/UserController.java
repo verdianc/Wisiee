@@ -109,6 +109,7 @@ public class UserController {
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.updateAddressBook(dto, userId));
     }
 
+    // 기본 배송지 변경
     @PutMapping("/addressBook/default/{id}")
     public ResDTO<Void> setDefaultAddress(@PathVariable("id") Long addressId) {
         Long userId = userFacadeService.getUserId();
