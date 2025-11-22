@@ -22,6 +22,7 @@ import lombok.NoArgsConstructor;
 )
 @NoArgsConstructor
 @AllArgsConstructor
+// TODO : Entity 전체에 Builder 지양
 @Builder
 @Getter
 public class AddressBookEntity {
