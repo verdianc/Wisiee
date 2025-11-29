@@ -1,0 +1,1277 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080/wisiee
+  description: Generated server url
+paths:
+  /api/user/profile:
+    put:
+      tags:
+      - user-controller
+      operationId: updateUserProfileImage
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                files:
+                  type: string
+                  format: binary
+                user:
+                  $ref: "#/components/schemas/UserInfoUpdateDTO"
+              required:
+              - user
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/user/profile/nickname:
+    put:
+      tags:
+      - user-controller
+      operationId: updateUserNickNm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserInfoUpdateDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/user/addressBook:
+    get:
+      tags:
+      - user-controller
+      operationId: getAddressBook
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOAddressBookListResponseDTO"
+    put:
+      tags:
+      - user-controller
+      operationId: updateAddressBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressBookRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOAddressBookRequestDTO"
+    post:
+      tags:
+      - user-controller
+      operationId: createAddressBook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddressBookRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOAddressBookRequestDTO"
+  /api/user/addressBook/default/{id}:
+    put:
+      tags:
+      - user-controller
+      operationId: setDefaultAddress
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/qna/{id}/question:
+    put:
+      tags:
+      - qna-controller
+      operationId: updateQuestion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "#/components/schemas/QuestionRequestDTO"
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - data
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOQuestionDTO"
+  /api/qna/answer/{answerId}:
+    put:
+      tags:
+      - qna-controller
+      operationId: updateAnswer
+      parameters:
+      - name: answerId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnswerRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOAnswerDTO"
+  /api/orders/updateAddress:
+    put:
+      tags:
+      - order-controller
+      operationId: updateAddress
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderReqDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/orders/orderStatus:
+    put:
+      tags:
+      - order-controller
+      operationId: updateOrderStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderReqDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/orders/cancel:
+    put:
+      tags:
+      - order-controller
+      operationId: cancelOrder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderReqDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/form/{id}:
+    get:
+      tags:
+      - form-controller
+      operationId: getForm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: code
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOFormDTO"
+    put:
+      tags:
+      - form-controller
+      operationId: updateForm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                form:
+                  $ref: "#/components/schemas/FormRequestDTO"
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - form
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOFormDTO"
+    delete:
+      tags:
+      - form-controller
+      operationId: deleteForm
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/user/chkExistNickNm:
+    post:
+      tags:
+      - user-controller
+      operationId: chkExistNickNm
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserChkExistNickNmDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOUserChkExistNickNmDTO"
+  /api/qna/{id}/close:
+    post:
+      tags:
+      - qna-controller
+      operationId: closeQuestionByUser
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/qna/{id}/answer:
+    post:
+      tags:
+      - qna-controller
+      operationId: registerAnswer
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: fromAdmin
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnswerRequestDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOAnswerDTO"
+  /api/qna/{id}/admin/close:
+    post:
+      tags:
+      - qna-controller
+      operationId: closeQuestionByAdmin
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/qna/question:
+    post:
+      tags:
+      - qna-controller
+      operationId: createQuestion
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  $ref: "#/components/schemas/QuestionRequestDTO"
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - data
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOQuestionDTO"
+  /api/orders:
+    post:
+      tags:
+      - order-controller
+      operationId: create
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderReqDTO"
+        required: true
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOOrderRespDTO"
+  /api/form:
+    post:
+      tags:
+      - form-controller
+      operationId: createForm
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                form:
+                  $ref: "#/components/schemas/FormRequestDTO"
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+              required:
+              - form
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOFormDTO"
+  /api/user/login/success:
+    get:
+      tags:
+      - user-controller
+      operationId: loginSuccess
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOOauthDTO"
+  /api/qna/{id}:
+    get:
+      tags:
+      - qna-controller
+      operationId: getQuestionDetail
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOQuestionDTO"
+    delete:
+      tags:
+      - qna-controller
+      operationId: deleteQuestion
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/qna/search:
+    get:
+      tags:
+      - qna-controller
+      operationId: search
+      parameters:
+      - name: title
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: page
+        in: query
+        required: false
+        schema:
+          type: integer
+          format: int32
+          default: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOPageQuestionDTO"
+  /api/orders/soldOrderList:
+    get:
+      tags:
+      - order-controller
+      operationId: getSoldOrderList
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOOrderRespListDTO"
+  /api/orders/orderList:
+    get:
+      tags:
+      - order-controller
+      operationId: getOrderList
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOOrderRespListDTO"
+  /api/user/user:
+    delete:
+      tags:
+      - user-controller
+      operationId: delUser
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+  /api/user/addressBook/{id}:
+    delete:
+      tags:
+      - user-controller
+      operationId: delAddressBook
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        "200":
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/ResDTOVoid"
+components:
+  schemas:
+    UserInfoUpdateDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        nickNm:
+          type: string
+        email:
+          type: string
+        fileData:
+          type: string
+          format: byte
+        contentType:
+          type: string
+        file:
+          type: string
+          format: binary
+          writeOnly: true
+        nickNmOpt:
+          type: string
+    ResDTOVoid:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data: {}
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    AddressBookRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        alias:
+          type: string
+        zipcode:
+          type: string
+        address:
+          type: string
+        detailAddress:
+          type: string
+        recipientNm:
+          type: string
+        phoneNumber:
+          type: string
+        defaultAddress:
+          type: boolean
+        limitExceeded:
+          type: boolean
+    ResDTOAddressBookRequestDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/AddressBookRequestDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    FileRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+    QuestionRequestDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+          enum:
+          - GOODS_EXCHANGE
+          - GOODS_PROXY_PURCHASE
+          - GOODS_SALE
+          - ALBUM_GOODS_GROUP_BUY
+          - ETC
+          - ACCOUNT
+          - ADD
+          - PLATFORM_SERVICE
+          - ORDER_AND_PAYMENT
+          - FAQ
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileRequestDTO"
+    AnswerDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        questionId:
+          type: integer
+          format: int64
+        content:
+          type: string
+        senderId:
+          type: integer
+          format: int64
+        senderNickNm:
+          type: string
+        fromAdmin:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+    FileDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        bucket:
+          type: string
+        objectKey:
+          type: string
+        versionId:
+          type: string
+        size:
+          type: integer
+          format: int64
+        name:
+          type: string
+        description:
+          type: string
+        formId:
+          type: integer
+          format: int64
+    QuestionDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nickName:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        category:
+          type: string
+          enum:
+          - GOODS_EXCHANGE
+          - GOODS_PROXY_PURCHASE
+          - GOODS_SALE
+          - ALBUM_GOODS_GROUP_BUY
+          - ETC
+          - ACCOUNT
+          - ADD
+          - PLATFORM_SERVICE
+          - ORDER_AND_PAYMENT
+          - FAQ
+        closed:
+          type: boolean
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileDTO"
+        answers:
+          type: array
+          items:
+            $ref: "#/components/schemas/AnswerDTO"
+    ResDTOQuestionDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/QuestionDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    AnswerRequestDTO:
+      type: object
+      properties:
+        questionId:
+          type: integer
+          format: int64
+        answer:
+          type: string
+    ResDTOAnswerDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/AnswerDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    OrderItemDTO:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        quantity:
+          type: integer
+          format: int32
+        orderPrice:
+          type: integer
+          format: int32
+        productName:
+          type: string
+        productDescript:
+          type: string
+        formId:
+          type: integer
+          format: int64
+        formNm:
+          type: string
+        createUser:
+          type: string
+    OrderReqDTO:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        orderStatus:
+          type: string
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+        zipcode:
+          type: string
+        address:
+          type: string
+        detailAddress:
+          type: string
+        recipientNm:
+          type: string
+        phoneNumber:
+          type: string
+        deliveryOption:
+          type: string
+    FormRequestDTO:
+      type: object
+      properties:
+        title:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        category:
+          type: string
+          enum:
+          - GOODS_EXCHANGE
+          - GOODS_PROXY_PURCHASE
+          - GOODS_SALE
+          - ALBUM_GOODS_GROUP_BUY
+          - ETC
+          - ACCOUNT
+          - ADD
+          - PLATFORM_SERVICE
+          - ORDER_AND_PAYMENT
+          - FAQ
+        price:
+          type: integer
+          format: int32
+        description:
+          type: string
+        deliveryOption:
+          type: string
+          enum:
+          - CONVENIENCE_STORE
+          - POST_OFFICE
+          - DIRECT_TRADE
+        contact:
+          type: string
+        account:
+          type: string
+        accName:
+          type: string
+        bank:
+          type: string
+        files:
+          type: array
+          items:
+            $ref: "#/components/schemas/FileRequestDTO"
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductRequestDTO"
+        code:
+          type: string
+        isPublic:
+          type: boolean
+    ProductRequestDTO:
+      type: object
+      properties:
+        formId:
+          type: integer
+          format: int64
+        productName:
+          type: string
+        productDescript:
+          type: string
+        price:
+          type: integer
+          format: int32
+        productCnt:
+          type: integer
+          format: int32
+    FormDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        nickName:
+          type: string
+        totCnt:
+          type: integer
+          format: int32
+        totStock:
+          type: integer
+          format: int32
+        code:
+          type: string
+        title:
+          type: string
+        startDate:
+          type: string
+          format: date
+        endDate:
+          type: string
+          format: date
+        category:
+          type: string
+          enum:
+          - GOODS_EXCHANGE
+          - GOODS_PROXY_PURCHASE
+          - GOODS_SALE
+          - ALBUM_GOODS_GROUP_BUY
+          - ETC
+          - ACCOUNT
+          - ADD
+          - PLATFORM_SERVICE
+          - ORDER_AND_PAYMENT
+          - FAQ
+        description:
+          type: string
+        deliveryOption:
+          type: string
+          enum:
+          - CONVENIENCE_STORE
+          - POST_OFFICE
+          - DIRECT_TRADE
+        contact:
+          type: string
+        account:
+          type: string
+        accName:
+          type: string
+        bank:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: "#/components/schemas/ProductDTO"
+        public:
+          type: boolean
+        soldOut:
+          type: boolean
+    ProductDTO:
+      type: object
+      properties:
+        productId:
+          type: integer
+          format: int64
+        formId:
+          type: integer
+          format: int64
+        productName:
+          type: string
+        productDescript:
+          type: string
+        price:
+          type: integer
+          format: int32
+        productCnt:
+          type: integer
+          format: int32
+        stock:
+          type: integer
+          format: int32
+    ResDTOFormDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/FormDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    UserChkExistNickNmDTO:
+      type: object
+      properties:
+        nickNm:
+          type: string
+        existRslt:
+          type: boolean
+    ResDTOUserChkExistNickNmDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/UserChkExistNickNmDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    OrderItemListDTO:
+      type: object
+      properties:
+        orderItemDTOList:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderItemDTO"
+        cnt:
+          type: integer
+          format: int32
+    OrderRespDTO:
+      type: object
+      properties:
+        orderId:
+          type: integer
+          format: int64
+        userId:
+          type: integer
+          format: int64
+        orderDate:
+          type: string
+          format: date-time
+        totalPrice:
+          type: integer
+          format: int32
+        quantity:
+          type: integer
+          format: int32
+        orderStatus:
+          type: string
+        deliveryOption:
+          type: string
+        items:
+          $ref: "#/components/schemas/OrderItemListDTO"
+    ResDTOOrderRespDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/OrderRespDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    OauthDTO:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        nickNm:
+          type: string
+        email:
+          type: string
+    ResDTOOauthDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/OauthDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    AddressBookListResponseDTO:
+      type: object
+      properties:
+        addressBooks:
+          type: array
+          items:
+            $ref: "#/components/schemas/AddressBookResponseDTO"
+        count:
+          type: integer
+          format: int32
+        limitExceeded:
+          type: boolean
+    AddressBookResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        alias:
+          type: string
+        zipcode:
+          type: string
+        address:
+          type: string
+        detailAddress:
+          type: string
+        recipientNm:
+          type: string
+        phoneNumber:
+          type: string
+        defaultAddress:
+          type: boolean
+    ResDTOAddressBookListResponseDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/AddressBookListResponseDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    PageQuestionDTO:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        first:
+          type: boolean
+        last:
+          type: boolean
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionDTO"
+        number:
+          type: integer
+          format: int32
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          $ref: "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          $ref: "#/components/schemas/SortObject"
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    ResDTOPageQuestionDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/PageQuestionDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
+    SortObject:
+      type: object
+      properties:
+        empty:
+          type: boolean
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+    OrderRespListDTO:
+      type: object
+      properties:
+        orderRespDTOList:
+          type: array
+          items:
+            $ref: "#/components/schemas/OrderRespDTO"
+        orderCnt:
+          type: integer
+          format: int32
+    ResDTOOrderRespListDTO:
+      type: object
+      properties:
+        success:
+          type: boolean
+        data:
+          $ref: "#/components/schemas/OrderRespListDTO"
+        errorCode:
+          type: integer
+          format: int32
+        errorMessage:
+          type: string
+        timestamp:
+          type: integer
+          format: int64
