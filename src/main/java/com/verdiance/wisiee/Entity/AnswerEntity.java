@@ -10,29 +10,43 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@RequiredArgsConstructor
-public class AnswerEntity {
+@NoArgsConstructor
+public class AnswerEntity extends BaseEntity {
 
   @Id
-  @Column(name="answer_id")
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name="answer_id")
   private Long id;
 
-  // 답변
+  @Column(columnDefinition = "TEXT")
   private String answer;
 
-  @OneToOne
-  @JoinColumn(name = "question_id") // DB 테이블에 inquiry_id 외래 키 컬럼 생성
-  private QuestionEntity questionEntity;
-
-  // 게시글 작성자(사용자)
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false) // FK 이름 user_id
-  private UserEntity user;
+  @JoinColumn(name = "question_id", nullable = false)
+  private QuestionEntity question;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private UserEntity user;   // 관리자/운영자
 
+  // ==== 생성자 ====
+  public AnswerEntity(String answer, QuestionEntity question, UserEntity user, boolean fromAdmin) {
+    this.answer = answer;
+    this.question = question;
+    this.user = user;
+    this.fromAdmin = fromAdmin;
+  }
+
+  private boolean fromAdmin;
+
+  // ==== update ====
+  public void update(String newAnswer) {
+    if (newAnswer != null) {
+      this.answer = newAnswer;
+    }
+  }
 }

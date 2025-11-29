@@ -1,9 +1,12 @@
 package com.verdiance.wisiee.Controller;
 
+import com.verdiance.wisiee.DTO.Qna.*;
+import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.Facade.QnaFacadeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.domain.Page;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/qna")
@@ -12,20 +15,115 @@ public class QnaController {
 
   private final QnaFacadeService qnaFacadeService;
 
-  //1. 사용자가 작성한 게시글 목록 조회
+  // 1. 문의 등록
 
-  //2. Admin 권한 관리자의 답변 등록
+  @PostMapping("/question")
+  public ResDTO<QuestionDTO> createQuestion(
+      @RequestPart("data") QuestionRequestDTO dto,
+      @RequestPart(value = "files", required = false)
+      java.util.List<MultipartFile> files
+  ) {
+    QuestionDTO result = qnaFacadeService.createQuestion(dto, files);
+    return new ResDTO<>(result);
+  }
 
-  //3. 문의글 수정
 
-  //4. 문의글 삭제
 
-  //5. 제목으로 검색
+  // 2. 문의 수정
 
-  //6. 페이지네이션 ?
+  @PutMapping("/{id}/question")
+  public ResDTO<QuestionDTO> updateQuestion(
+      @PathVariable Long id,
+      @RequestPart("data") QuestionRequestDTO dto,
+      @RequestPart(value = "files", required = false)
+      java.util.List<MultipartFile> files
+  ) {
+    dto.setId(id);
+    QuestionDTO result = qnaFacadeService.updateQuestion(dto, files);
+    return new ResDTO<>(result);
+  }
 
-  //7. Admin 권한 관리자의 문의 종료
 
-  //8. 문의글 전체 리스트 조회
 
+  // 3. 문의 삭제
+
+  @DeleteMapping("/{id}")
+  public ResDTO<Void> deleteQuestion(@PathVariable Long id) {
+
+    qnaFacadeService.deleteQuestion(id);
+    return new ResDTO<>(null);
+  }
+
+
+
+  // 4. 답변 등록
+
+  @PostMapping("/{id}/answer")
+  public ResDTO<AnswerDTO> registerAnswer(
+      @PathVariable Long id,
+      @RequestBody AnswerRequestDTO dto,
+      @RequestParam(defaultValue = "false") boolean fromAdmin
+  ) {
+    dto.setQuestionId(id);
+    AnswerDTO result = qnaFacadeService.registerAnswer(dto, fromAdmin);
+    return new ResDTO<>(result);
+  }
+
+
+
+  // 5. 답변 수정
+
+  @PutMapping("/answer/{answerId}")
+  public ResDTO<AnswerDTO> updateAnswer(
+      @PathVariable Long answerId,
+      @RequestBody AnswerRequestDTO dto
+  ) {
+    AnswerDTO result = qnaFacadeService.updateAnswer(answerId, dto);
+    return new ResDTO<>(result);
+  }
+
+
+
+  // 6. 질문자가 문의 종료
+
+  @PostMapping("/{id}/close")
+  public ResDTO<Void> closeQuestionByUser(@PathVariable Long id) {
+
+    qnaFacadeService.closeQuestionByUser(id);
+    return new ResDTO<>(null);
+  }
+
+
+
+  // 7. 관리자가 문의 종료
+
+  @PostMapping("/{id}/admin/close")
+  public ResDTO<Void> closeQuestionByAdmin(@PathVariable Long id) {
+
+    qnaFacadeService.closeQuestionByAdmin(id);
+    return new ResDTO<>(null);
+  }
+
+
+
+  // 8. 문의 상세 조회
+
+  @GetMapping("/{id}")
+  public ResDTO<QuestionDTO> getQuestionDetail(@PathVariable Long id) {
+
+    QuestionDTO result = qnaFacadeService.getQuestionDetail(id);
+    return new ResDTO<>(result);
+  }
+
+
+
+  // 9. 검색
+
+  @GetMapping("/search")
+  public ResDTO<Page<QuestionDTO>> search(
+      @RequestParam String title,
+      @RequestParam(defaultValue = "0") int page
+  ) {
+    return new ResDTO<>(qnaFacadeService.searchByTitle(title, page));
+  }
 }
