@@ -29,7 +29,7 @@ public class QnaController {
 
 
   // 2. 문의 수정
-  @PutMapping("/questions/{id}")
+  @PutMapping("/questions/{questionId}")
   public ResDTO<QuestionDTO> updateQuestion(
       @PathVariable Long id,
       @RequestPart("data") QuestionRequestDTO dto,
@@ -44,7 +44,7 @@ public class QnaController {
 
 
   // 3. 문의 삭제
-  @DeleteMapping("/questions/{id}")
+  @DeleteMapping("/questions/{questionId}")
   public ResDTO<Void> deleteQuestion(@PathVariable Long id) {
 
     qnaFacadeService.deleteQuestion(id);
@@ -54,7 +54,7 @@ public class QnaController {
 
 
   // 4. 답변 등록
-  @PostMapping("/answers/{id}")
+  @PostMapping("/answers/{answerId}")
   public ResDTO<AnswerDTO> registerAnswer(
       @PathVariable Long id,
       @RequestBody AnswerRequestDTO dto,
@@ -68,7 +68,7 @@ public class QnaController {
 
 
   // 5. 답변 수정
-  @PutMapping("/answers/{id}")
+  @PutMapping("/answers/{answerId}")
   public ResDTO<AnswerDTO> updateAnswer(
       @PathVariable Long answerId,
       @RequestBody AnswerRequestDTO dto
