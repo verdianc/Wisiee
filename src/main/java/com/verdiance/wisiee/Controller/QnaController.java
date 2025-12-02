@@ -16,8 +16,7 @@ public class QnaController {
   private final QnaFacadeService qnaFacadeService;
 
   // 1. 문의 등록
-
-  @PostMapping("/question")
+  @PostMapping("/questions")
   public ResDTO<QuestionDTO> createQuestion(
       @RequestPart("data") QuestionRequestDTO dto,
       @RequestPart(value = "files", required = false)
@@ -30,8 +29,7 @@ public class QnaController {
 
 
   // 2. 문의 수정
-
-  @PutMapping("/{id}/question")
+  @PutMapping("/questions/{id}")
   public ResDTO<QuestionDTO> updateQuestion(
       @PathVariable Long id,
       @RequestPart("data") QuestionRequestDTO dto,
@@ -46,8 +44,7 @@ public class QnaController {
 
 
   // 3. 문의 삭제
-
-  @DeleteMapping("/{id}")
+  @DeleteMapping("/questions/{id}")
   public ResDTO<Void> deleteQuestion(@PathVariable Long id) {
 
     qnaFacadeService.deleteQuestion(id);
@@ -57,8 +54,7 @@ public class QnaController {
 
 
   // 4. 답변 등록
-
-  @PostMapping("/{id}/answer")
+  @PostMapping("/answers/{id}")
   public ResDTO<AnswerDTO> registerAnswer(
       @PathVariable Long id,
       @RequestBody AnswerRequestDTO dto,
@@ -72,8 +68,7 @@ public class QnaController {
 
 
   // 5. 답변 수정
-
-  @PutMapping("/answer/{answerId}")
+  @PutMapping("/answers/{id}")
   public ResDTO<AnswerDTO> updateAnswer(
       @PathVariable Long answerId,
       @RequestBody AnswerRequestDTO dto
@@ -85,8 +80,7 @@ public class QnaController {
 
 
   // 6. 질문자가 문의 종료
-
-  @PostMapping("/{id}/close")
+  @PostMapping("/close/{id}")
   public ResDTO<Void> closeQuestionByUser(@PathVariable Long id) {
 
     qnaFacadeService.closeQuestionByUser(id);
@@ -96,8 +90,7 @@ public class QnaController {
 
 
   // 7. 관리자가 문의 종료
-
-  @PostMapping("/{id}/admin/close")
+  @PostMapping("/admin/close/{id}")
   public ResDTO<Void> closeQuestionByAdmin(@PathVariable Long id) {
 
     qnaFacadeService.closeQuestionByAdmin(id);
@@ -107,7 +100,6 @@ public class QnaController {
 
 
   // 8. 문의 상세 조회
-
   @GetMapping("/{id}")
   public ResDTO<QuestionDTO> getQuestionDetail(@PathVariable Long id) {
 
@@ -118,7 +110,6 @@ public class QnaController {
 
 
   // 9. 검색
-
   @GetMapping("/search")
   public ResDTO<Page<QuestionDTO>> search(
       @RequestParam String title,
