@@ -53,8 +53,8 @@ public class QnaController {
 
 
 
-  // 4. 답변 등록
-  @PostMapping("/answers/{answerId}")
+  // 4. 답변 등록 TODO : 답변 등록 버그 수정하기
+  @PostMapping("/answers/{questionId}")
   public ResDTO<AnswerDTO> registerAnswer(
       @PathVariable Long id,
       @RequestBody AnswerRequestDTO dto,

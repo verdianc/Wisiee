@@ -34,6 +34,7 @@ public class UserController {
     }
 
 
+    // TODO : 닉네임 변경 예외처리 하기
     @PutMapping("/profile/nickname")
     public ResDTO<Void> updateUserNickNm(@RequestBody UserInfoUpdateDTO userInfoUpdateDTO) {
         userFacadeService.updateUserNickNm(userInfoUpdateDTO);
@@ -62,7 +63,7 @@ public class UserController {
 //    return new ResDTO<>(imageUrl);
 //  }
 
-    //사용자 정보 수정
+    //사용자 정보 수정 TODO : profile image 업데이트 확인
     @PutMapping("/profile")
     public ResDTO<Void> updateUserProfileImage(
             @RequestPart(value = "files", required = false) MultipartFile file,
