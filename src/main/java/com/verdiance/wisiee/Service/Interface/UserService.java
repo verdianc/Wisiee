@@ -17,9 +17,6 @@ public interface UserService {
 
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto);
 
-    //NickNm Update
-    void updateUserNickNm(UserInfoUpdateDTO updateUserInfo);
-
     void updateUserProfileImage(Long userId, String url);
 
     MyPageDTO getMyPage();
