@@ -9,6 +9,7 @@ import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdiance.wisiee.Entity.AddressBookEntity;
 import com.verdiance.wisiee.Entity.UserEntity;
+import com.verdiance.wisiee.Exception.Common.ResourceUpdateFailedException;
 import com.verdiance.wisiee.Exception.User.AddressNotFoundException;
 import com.verdiance.wisiee.Exception.User.AliasConflictException;
 import com.verdiance.wisiee.Exception.User.DefaultAddressNotFoundException;
@@ -33,20 +34,7 @@ public class UserServiceImpl implements UserService {
     private final AddressBookRepository addressBookRepository;
     private final HttpSession httpSession;
 
-    @Override
-    @Transactional
-    public void updateUserNickNm(UserInfoUpdateDTO updateUserInfo) {
-        Long userId = (Long) httpSession.getAttribute("userId");
-        if (userId==null) {
-            throw new SessionUserNotFoundException();
-        }
 
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFound(userId));
-
-        // 도메인 로직 호출
-        user.changeNickName(updateUserInfo.getNickNm());
-    }
 
     @Override
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto) {
@@ -55,7 +43,6 @@ public class UserServiceImpl implements UserService {
         }
         return dto;
     }
-
 
     @Override
     public UserEntity getUser() {
@@ -103,16 +90,30 @@ public class UserServiceImpl implements UserService {
                 .build();
     }
 
+
+
     @Override
     @Transactional
     public void updateUserProfile(UserInfoUpdateDTO dto) {
-        UserEntity user = userRepository.findById(dto.getUserId())
-                .orElseThrow(() -> new UserNotFound(dto.getUserId()));
 
-        // 엔티티 내 메서드로 값 업데이트
-        user.changeNickName(dto.getNickNm());
-        userRepository.save(user);
+        UserEntity user = userRepository.findById(dto.getUserId())
+            .orElseThrow(() -> new UserNotFound(dto.getUserId()));
+
+        if (dto.getNickNm() != null && !dto.getNickNm().isBlank()) {
+
+            // 1) 중복 체크
+            if (userRepository.existsByNickNm(dto.getNickNm())) {
+                throw new ResourceUpdateFailedException("이미 사용 중인 닉네임입니다.");
+            }
+
+            // 2) 닉네임 변경 제한 (60일 정책)
+            user.validateNicknameChangeAllowed();
+
+            // 3) 변경 및 변경 날짜 기록
+            user.changeNickName(dto.getNickNm());
+        }
     }
+
 
     // TODO : 사용자 폼 리스트 조회 메소드 추가
 
