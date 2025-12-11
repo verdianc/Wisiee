@@ -7,6 +7,7 @@ import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
+import com.verdiance.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdiance.wisiee.Exception.File.FileUploadFailedException;
 import com.verdiance.wisiee.Infrastructure.S3.S3Port;
 import com.verdiance.wisiee.Service.Interface.UserService;
@@ -34,9 +35,6 @@ public class UserFacadeService {
         return commonUtil.getUserId();
     }
 
-    public void updateUserNickNm(UserInfoUpdateDTO userInfoUpdateDTO) {
-        userService.updateUserNickNm(userInfoUpdateDTO);
-    }
 
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto) {
         return userService.chkExistNickNm(dto);
@@ -44,16 +42,23 @@ public class UserFacadeService {
 
 
     // 프로필 이미지 업데이트
-    public String updateUserProfileImage(UserInfoUpdateDTO dto) {
+    public String updateUserProfileImage(UserProfileImageDTO dto) {
         String objectKey = "profile/" + UUID.randomUUID();
+
         try {
-            S3Port.PutResult put = s3Port.put(objectKey, dto.getFileData(), dto.getContentType(), Map.of());
+            S3Port.PutResult put = s3Port.put(
+                objectKey,
+                dto.getFileData(),
+                dto.getContentType(),
+                Map.of()
+            );
+
             String url = s3Port.presignGet(objectKey, put.versionId(), Duration.ofDays(7));
 
-            // 👇 엔티티 직접 안 건드리고 서비스에 위임
             userService.updateUserProfileImage(dto.getUserId(), url);
 
             return url;
+
         } catch (Exception e) {
             throw new FileUploadFailedException("프로필 이미지 업로드 실패: " + e.getMessage());
         }

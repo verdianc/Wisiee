@@ -6,9 +6,12 @@ import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
+import com.verdiance.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdiance.wisiee.Facade.UserFacadeService;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +27,9 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
+
 
     private final UserFacadeService userFacadeService;
 
@@ -34,49 +39,35 @@ public class UserController {
     }
 
 
-    @PutMapping("/profile/nickname")
-    public ResDTO<Void> updateUserNickNm(@RequestBody UserInfoUpdateDTO userInfoUpdateDTO) {
-        userFacadeService.updateUserNickNm(userInfoUpdateDTO);
-        return new ResDTO<>((Void) null);
-    }
 
     //닉네임 중복 확인
-    @PostMapping("/chkExistNickNm")
+    @PostMapping("/check-nickname")
     public ResDTO<UserChkExistNickNmDTO> chkExistNickNm(@RequestBody UserChkExistNickNmDTO dto) {
         return new ResDTO<UserChkExistNickNmDTO>(userFacadeService.chkExistNickNm(dto));
     }
 
 
-//  @PutMapping("/profile-image")
-//  public ResDTO<String> updateUserProfileImage(
-//      @RequestPart("file") MultipartFile file) throws IOException {
-//
-//    Long userId = userFacadeService.getCurrentUser().getUserId();
-//
-//    UserProfileImageDTO dto = new UserProfileImageDTO();
-//    dto.setUserId(userId);
-//    dto.setFileData(file.getBytes());
-//    dto.setContentType(file.getContentType());
-//
-//    String imageUrl = userFacadeService.updateUserProfileImage(dto);
-//    return new ResDTO<>(imageUrl);
-//  }
 
-    //사용자 정보 수정
+    @PostMapping("/profile-image")
+    public ResDTO<String> updateUserProfileImage(
+        @RequestPart("file") MultipartFile file) throws IOException {
+
+        Long userId = userFacadeService.getUserId();
+        UserProfileImageDTO dto = UserProfileImageDTO.fromMultipart(userId, file);
+
+        String imageUrl = userFacadeService.updateUserProfileImage(dto);
+        return new ResDTO<>(imageUrl);
+    }
+
+
+
     @PutMapping("/profile")
-    public ResDTO<Void> updateUserProfileImage(
-            @RequestPart(value = "files", required = false) MultipartFile file,
-            @RequestPart("user") UserInfoUpdateDTO dto) throws IOException {
+    public ResDTO<Void> updateUserProfile(@RequestBody UserInfoUpdateDTO dto) {
 
         Long userId = userFacadeService.getUserId();
         dto.setUserId(userId);
+
         userFacadeService.updateUserInfo(dto);
-
-        if (file!=null && !file.isEmpty()) {
-            dto.setFile(file);
-            String imageUrl = userFacadeService.updateUserProfileImage(dto);
-        }
-
 
         return new ResDTO<>((Void) null);
     }

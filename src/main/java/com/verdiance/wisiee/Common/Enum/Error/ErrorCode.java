@@ -50,6 +50,15 @@ public enum ErrorCode {
     ORDER_ACCESS_DENIED_EXCEPTION(6003, "주문자와 취소자가 상이합니다."),
     ORDER_CANCELLATION_NOT_ALLOWED_EXCEPTION(6004, "주문이 배송준비까지 진행되어 주문 변경 및 취소 불가합니다."),
 
+
+    // 7000: Common Resource Error
+    RESOURCE_NOT_FOUND(7000, "요청한 리소스를 찾을 수 없습니다."),
+    RESOURCE_CREATE_FAILED(7001, "리소스 생성에 실패했습니다."),
+    RESOURCE_UPDATE_FAILED(7002, "리소스 수정에 실패했습니다."),
+    RESOURCE_DELETE_FAILED(7003, "리소스 삭제에 실패했습니다."),
+    RESOURCE_ACCESS_DENIED(7004, "해당 리소스에 대한 접근 권한이 없습니다."),
+
+
     // 9000번대: 서버 공통 에러
     INTERNAL_SERVER_ERROR(9000, "서버 내부 오류가 발생했습니다.");
 
