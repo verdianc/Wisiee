@@ -49,4 +49,15 @@ public class AnswerEntity extends BaseEntity {
       this.answer = newAnswer;
     }
   }
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "admin_id")
+  private AdminEntity admin;
+
+  public AnswerEntity(String answer, QuestionEntity question, AdminEntity admin) {
+    this.answer = answer;
+    this.question = question;
+    this.admin = admin;
+    this.fromAdmin = true;
+  }
 }

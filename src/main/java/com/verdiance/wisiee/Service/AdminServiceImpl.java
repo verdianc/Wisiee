@@ -1,11 +1,14 @@
 package com.verdiance.wisiee.Service;
 
+import com.verdiance.wisiee.DTO.Qna.AnswerDTO;
+import com.verdiance.wisiee.DTO.Qna.AnswerRequestDTO;
 import com.verdiance.wisiee.DTO.User.AdminLoginRequestDTO;
 import com.verdiance.wisiee.Entity.AdminEntity;
 import com.verdiance.wisiee.Exception.Common.ResourceAccessDeniedException;
 import com.verdiance.wisiee.Exception.Common.ResourceNotFoundException;
 import com.verdiance.wisiee.Repository.AdminRepository;
 import com.verdiance.wisiee.Service.Interface.AdminService;
+import com.verdiance.wisiee.Service.Interface.AnswerServie;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ public class AdminServiceImpl implements AdminService {
 
   private final AdminRepository adminRepository;
   private final HttpSession session;
+  private final AnswerServie answerService;
 
   private static final String SESSION_KEY = "adminId";
 
@@ -53,5 +57,15 @@ public class AdminServiceImpl implements AdminService {
             new ResourceNotFoundException("관리자 정보를 찾을 수 없습니다.")
         );
   }
+
+  @Override
+  @Transactional
+  public AnswerDTO registerAdminAnswer(AnswerRequestDTO dto) {
+
+    AdminEntity admin = getCurrentAdmin(); // 세션에서 조회
+
+    return answerService.registerAnswerByAdmin(dto, admin);
+  }
+
 
 }
