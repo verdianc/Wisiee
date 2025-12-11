@@ -15,19 +15,4 @@ public class UserInfoUpdateDTO {
     private Long userId;
     private String nickNm;
     private String email;
-    private byte[] fileData;
-    private String contentType;
-
-    // Optional getter
-    public Optional<String> getNickNmOpt() {
-        return Optional.ofNullable(nickNm);
-    }
-
-
-    public void setFile(MultipartFile file) throws IOException {
-        if (file!=null && !file.isEmpty()) {
-            this.fileData = file.getBytes();
-            this.contentType = file.getContentType();
-        }
-    }
 }
