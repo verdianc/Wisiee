@@ -71,6 +71,7 @@ public class AnswerServiceImpl implements AnswerServie {
   }
 
 
+  // TODO : Try catch로 다감싸서 예외는 Exception(e)로만 .
   @Override
   @Transactional
   public AnswerDTO updateAnswer(Long answerId, AnswerRequestDTO dto, UserEntity sender) {
@@ -100,6 +101,7 @@ public class AnswerServiceImpl implements AnswerServie {
   }
 
 
+  // TODO : Try catch로 다감싸서 예외는 Exception(e)로만 .
   @Override
   @Transactional
   public void closeAnswerByQuestioner(Long questionId, UserEntity questioner) {
