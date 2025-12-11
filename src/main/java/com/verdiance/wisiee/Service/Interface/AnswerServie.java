@@ -1,6 +1,7 @@
 package com.verdiance.wisiee.Service.Interface;
 
 import com.verdiance.wisiee.DTO.Qna.*;
+import com.verdiance.wisiee.Entity.AdminEntity;
 import com.verdiance.wisiee.Entity.UserEntity;
 import java.util.List;
 
@@ -18,5 +19,8 @@ public interface AnswerServie {
 
   // 질문자가 문의 종료하기
   void closeAnswerByQuestioner(Long questionId, UserEntity questioner);
+
+  // 관리자가 답변하기
+  AnswerDTO registerAnswerByAdmin(AnswerRequestDTO dto, AdminEntity admin);
 
 } 

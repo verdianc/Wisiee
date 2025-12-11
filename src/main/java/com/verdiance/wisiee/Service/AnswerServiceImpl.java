@@ -1,6 +1,7 @@
 package com.verdiance.wisiee.Service;
 
 import com.verdiance.wisiee.DTO.Qna.*;
+import com.verdiance.wisiee.Entity.AdminEntity;
 import com.verdiance.wisiee.Entity.AnswerEntity;
 import com.verdiance.wisiee.Entity.QuestionEntity;
 import com.verdiance.wisiee.Entity.UserEntity;
@@ -119,6 +120,23 @@ public class AnswerServiceImpl implements AnswerServie {
       throw new ResourceUpdateFailedException("문의 종료 실패: " + e.getMessage());
     }
   }
+
+  @Override
+  @Transactional
+  public AnswerDTO registerAnswerByAdmin(AnswerRequestDTO dto, AdminEntity admin) {
+
+    QuestionEntity q = questionRepository.findById(dto.getQuestionId())
+        .orElseThrow(() -> new ResourceNotFoundException("Question 찾을 수 없습니다."));
+
+    if (q.isClosed()) throw new ResourceAccessDeniedException("이미 종료된 문의입니다.");
+
+    AnswerEntity answer = new AnswerEntity(dto.getAnswer(), q, admin);
+
+    AnswerEntity saved = answerRepository.save(answer);
+
+    return AnswerDTO.from(saved);
+  }
+
 }
 
 

@@ -32,15 +32,15 @@ public class AdminController {
   }
 
 
-//  @PostMapping("/answers/{questionId}")
-//  public ResDTO<AnswerDTO> registerAdminAnswer(
-//      @PathVariable Long questionId,
-//      @RequestBody AnswerRequestDTO dto
-//  ) {
-//    dto.setQuestionId(questionId);
-//    return new ResDTO<>(qnaFacadeService.registerAdminAnswer(dto));
-//  }
-
+  @PostMapping("/answers/{questionId}")
+  public ResDTO<AnswerDTO> registerAdminAnswer(
+      @PathVariable Long questionId,
+      @RequestBody AnswerRequestDTO dto
+  ) {
+    dto.setQuestionId(questionId);
+    AnswerDTO result = adminService.registerAdminAnswer(dto);
+    return new ResDTO<>(result);
+  }
 
 
   // 5. 답변 수정
