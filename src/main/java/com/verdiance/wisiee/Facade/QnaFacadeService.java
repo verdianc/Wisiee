@@ -123,12 +123,12 @@ public class QnaFacadeService {
   // 7. 질문 상세 조회 (제목으로만 검색)
   public QuestionDTO getQuestionDetail(Long questionId) {
 
-    QuestionDTO q = questionService.getQuestion(questionId);
+    QuestionDTO question = questionService.getQuestion(questionId);
 
-    q.setFiles(fileService.getFileList(questionId));
-    q.setAnswers(answerService.getAnswers(questionId));
+    question.setFiles(fileService.getFileList(questionId));
+    question.setAnswers(answerService.getAnswers(questionId));
 
-    return q;
+    return question;
   }
 
 

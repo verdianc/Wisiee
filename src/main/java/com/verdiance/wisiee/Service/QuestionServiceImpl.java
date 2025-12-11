@@ -72,6 +72,7 @@ public class QuestionServiceImpl implements QuestionService {
   }
 
 
+  // TODO : Try catch로 다감싸서 예외는 Exception(e)로만 .
   @Override
   @Transactional
   public void deleteQna(QuestionRequestDTO request, UserEntity user) {
@@ -81,6 +82,7 @@ public class QuestionServiceImpl implements QuestionService {
             new ResourceNotFoundException("Question 찾을 수 없습니다. ID=" + request.getId())
         );
 
+    // TODO : 클린하게 바꾸기
     if (!entity.getUser().getUserId().equals(user.getUserId())) {
       throw new ResourceAccessDeniedException("해당 문의를 삭제할 권한이 없습니다.");
     }
@@ -103,6 +105,8 @@ public class QuestionServiceImpl implements QuestionService {
         );
   }
 
+
+  // TODO : Try catch로 다감싸서 예외는 Exception(e)로만 .
   @Override
   @Transactional
   public void closeByAdmin(Long questionId, UserEntity admin) {

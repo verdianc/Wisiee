@@ -50,8 +50,8 @@ public class UserController {
 
     @PostMapping("/profile-image")
     public ResDTO<String> updateUserProfileImage(
+        // TODO : 파일 커스텀 예외 처리하기
         @RequestPart("file") MultipartFile file) throws IOException {
-
         Long userId = userFacadeService.getUserId();
         UserProfileImageDTO dto = UserProfileImageDTO.fromMultipart(userId, file);
 
