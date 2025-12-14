@@ -8,6 +8,9 @@ import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdiance.wisiee.Entity.UserEntity;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.security.core.Authentication;
 
 public interface UserService {
 
@@ -36,4 +39,6 @@ public interface UserService {
     void delAddressBook(Long id);
 
     AddressBookResponseDTO getMainAddress(Long userId);
+
+    void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication);
 }
