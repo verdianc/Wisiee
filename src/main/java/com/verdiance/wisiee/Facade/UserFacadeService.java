@@ -11,11 +11,14 @@ import com.verdiance.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdiance.wisiee.Exception.File.FileUploadFailedException;
 import com.verdiance.wisiee.Infrastructure.S3.S3Port;
 import com.verdiance.wisiee.Service.Interface.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +32,10 @@ public class UserFacadeService {
 
     public OauthDTO getCurrentUser() {
         return userService.getCurrentUser();
+    }
+
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        userService.logout(request, response, authentication);
     }
 
     public Long getUserId() {
@@ -47,10 +54,10 @@ public class UserFacadeService {
 
         try {
             S3Port.PutResult put = s3Port.put(
-                objectKey,
-                dto.getFileData(),
-                dto.getContentType(),
-                Map.of()
+                    objectKey,
+                    dto.getFileData(),
+                    dto.getContentType(),
+                    Map.of()
             );
 
             String url = s3Port.presignGet(objectKey, put.versionId(), Duration.ofDays(7));
