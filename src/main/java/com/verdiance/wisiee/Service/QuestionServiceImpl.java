@@ -27,22 +27,21 @@ public class QuestionServiceImpl implements QuestionService {
   @Transactional
   public QuestionDTO postQna(QuestionRequestDTO request, UserEntity user) {
 
-    try {
-      QuestionEntity entity = new QuestionEntity(
-          user,
-          request.getTitle(),
-          request.getContent(),
-          request.getCategory()
-      );
-
-      QuestionEntity saved = questionRepository.save(entity);
-      return QuestionDTO.from(saved);
-
-    } catch (Exception e) {
-      log.error("문의글 생성 실패: {}", e.getMessage(), e);
-      throw new ResourceCreateFailedException("Question 생성 실패: " + e.getMessage());
+    if (request == null || user == null) {
+      throw new ResourceNotFoundException("잘못된 요청입니다.");
     }
+
+    QuestionEntity entity = new QuestionEntity(
+        user,
+        request.getTitle(),
+        request.getContent(),
+        request.getCategory()
+    );
+
+    QuestionEntity saved = questionRepository.save(entity);
+    return QuestionDTO.from(saved);
   }
+
 
 
   @Override
@@ -62,14 +61,11 @@ public class QuestionServiceImpl implements QuestionService {
       throw new ResourceAccessDeniedException("종료된 문의는 수정할 수 없습니다.");
     }
 
-    try {
-      entity.update(request);
-      return QuestionDTO.from(entity);
-
-    } catch (Exception e) {
-      throw new ResourceUpdateFailedException("Question 수정 실패: " + e.getMessage());
-    }
+    entity.update(request);
+    return QuestionDTO.from(entity);
   }
+
+
 
 
   @Override
@@ -85,13 +81,9 @@ public class QuestionServiceImpl implements QuestionService {
       throw new ResourceAccessDeniedException("해당 문의를 삭제할 권한이 없습니다.");
     }
 
-    try {
-      questionRepository.delete(entity);
-
-    } catch (Exception e) {
-      throw new ResourceDeleteFailedException("Question 삭제 실패: " + e.getMessage());
-    }
+    questionRepository.delete(entity);
   }
+
 
 
   @Override
@@ -103,29 +95,21 @@ public class QuestionServiceImpl implements QuestionService {
         );
   }
 
+
   @Override
   @Transactional
   public void closeByAdmin(Long questionId, UserEntity admin) {
 
-    // 1) 문의글 조회
     QuestionEntity q = questionRepository.findById(questionId)
         .orElseThrow(() ->
             new ResourceNotFoundException("Question 찾을 수 없습니다. ID=" + questionId)
         );
 
-    // 2) 이미 종료된 문의면 무시
     if (q.isClosed()) return;
 
-    // 3) 관리자 권한 체크 (원하면 추가)
-    // if (!admin.isAdmin()) throw new ResourceAccessDeniedException("관리자 권한이 필요합니다.");
-
-    // 4) 종료 처리
-    try {
-      q.close();
-    } catch (Exception e) {
-      throw new ResourceUpdateFailedException("문의 종료 실패: " + e.getMessage());
-    }
+    q.close();
   }
+
 
 
   // 페이지네이션
