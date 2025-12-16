@@ -7,6 +7,7 @@ import com.verdiance.wisiee.DTO.Order.OrderItemListDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
+import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdiance.wisiee.Entity.OrderEntity;
 import com.verdiance.wisiee.Entity.OrderItemEntity;
 import com.verdiance.wisiee.Entity.ProductEntity;
@@ -59,6 +60,7 @@ public class OrderMapper {
                 order.getId(),
                 order.getUser().getUserId(),
                 order.getOrderDate(),
+                new AddressBookResponseDTO(order.getZipcode(), order.getAddress(), order.getDetailAddress(), order.getRecipientNm(), order.getPhoneNumber()),
                 order.getTotalPrice(),
                 order.getQuantity(),
                 order.getOrderStatus().name(),

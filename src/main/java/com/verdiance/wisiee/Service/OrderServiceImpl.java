@@ -5,6 +5,7 @@ import com.verdiance.wisiee.DTO.Order.OrderItemListDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
+import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdiance.wisiee.Entity.OrderEntity;
 import com.verdiance.wisiee.Entity.OrderItemEntity;
 import com.verdiance.wisiee.Entity.ProductEntity;
@@ -74,6 +75,7 @@ public class OrderServiceImpl implements OrderService {
                 order.getId(),                 // 주문 ID
                 user.getUserId(),              // 사용자 ID
                 order.getOrderDate(),          // 주문 일시
+                new AddressBookResponseDTO(order.getZipcode(), order.getAddress(), order.getDetailAddress(), order.getRecipientNm(), order.getPhoneNumber()),
                 totalPrice,                    // 총 금액
                 quantity,                      // 총 수량
                 order.getOrderStatus().name(), // 주문 상태

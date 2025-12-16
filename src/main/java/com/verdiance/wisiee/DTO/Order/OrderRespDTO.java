@@ -1,5 +1,6 @@
 package com.verdiance.wisiee.DTO.Order;
 
+import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,6 +15,7 @@ public class OrderRespDTO {
     private Long orderId;
     private Long userId;
     private LocalDateTime orderDate;
+    private AddressBookResponseDTO addressDto;
     private int totalPrice;
     private int quantity;
     private String orderStatus;
