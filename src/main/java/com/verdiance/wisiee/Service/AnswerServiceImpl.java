@@ -38,22 +38,18 @@ public class AnswerServiceImpl implements AnswerServie {
       throw new ResourceAccessDeniedException("이미 종료된 문의에는 답변을 남길 수 없습니다.");
     }
 
-    try {
-      AnswerEntity answer = new AnswerEntity(
-          dto.getAnswer(),
-          q,
-          sender,
-          fromAdmin
-      );
+    AnswerEntity answer = new AnswerEntity(
+        dto.getAnswer(),
+        q,
+        sender,
+        fromAdmin
+    );
 
-      AnswerEntity saved = answerRepository.save(answer);
-      return AnswerDTO.from(saved);
-
-    } catch (Exception e) {
-      log.error("답변 생성 실패: {}", e.getMessage(), e);
-      throw new ResourceCreateFailedException("Answer 생성 실패: " + e.getMessage());
-    }
+    AnswerEntity saved = answerRepository.save(answer);
+    return AnswerDTO.from(saved);
   }
+
+
 
 
   @Override
@@ -84,20 +80,15 @@ public class AnswerServiceImpl implements AnswerServie {
       throw new ResourceAccessDeniedException("이미 종료된 문의는 수정할 수 없습니다.");
     }
 
-    // 권한 체크 (관리자만 수정 가능)
     if (!ans.isFromAdmin()) {
       throw new ResourceAccessDeniedException("사용자가 남긴 메시지는 수정할 수 없습니다.");
     }
 
-    try {
-      ans.update(dto.getAnswer());
-      return AnswerDTO.from(ans);
-
-    } catch (Exception e) {
-      log.error("답변 수정 실패: {}", e.getMessage(), e);
-      throw new ResourceUpdateFailedException("Answer 수정 실패: " + e.getMessage());
-    }
+    ans.update(dto.getAnswer());
+    return AnswerDTO.from(ans);
   }
+
+
 
 
   @Override
@@ -113,13 +104,9 @@ public class AnswerServiceImpl implements AnswerServie {
       throw new ResourceAccessDeniedException("해당 문의를 종료할 권한이 없습니다.");
     }
 
-    try {
-      q.close();
-
-    } catch (Exception e) {
-      throw new ResourceUpdateFailedException("문의 종료 실패: " + e.getMessage());
-    }
+    q.close();
   }
+
 
   @Override
   @Transactional

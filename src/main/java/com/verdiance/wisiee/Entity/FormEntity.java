@@ -42,7 +42,7 @@ public class FormEntity extends BaseEntity {
   @JoinColumn(name = "user_id", nullable = false) // FK 이름 user_id
   private UserEntity user;
 
-  // 입장 코드https://pointy-need-ff7.notion.site/React-1-0217f9ab47bb495cac9fe2d19bbd5dd
+  // 입장 코드
   private String code;
 
   // 폼 제목
