@@ -33,7 +33,7 @@ public enum ErrorCode {
     USER_ID_NOT_FOUND(4001, "User ID를 찾을 수 없습니다."),
     REFRESH_TOKEN_NOT_FOUND(4002, "REFRESH TOKEN이 없습니다."),
     REFRESH_ACCESS_TOKEN_FAIL(4003, "ACCESS TOKEN REFRESH에 실패하였습니다."),
-
+    LOGOUT_FAIL(4004, "Logout에 실패하였습니다."),
     //5000번대: User 관련 에러
     SESSION_USER_NOT_FOUND(5000, "세션에 사용자 정보가 없습니다."),
     USER_NOT_FOUND(5001, "존재하지 않는 사용자 입니다."),
