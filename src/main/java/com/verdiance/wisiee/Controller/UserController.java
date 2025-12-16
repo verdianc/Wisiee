@@ -8,10 +8,12 @@ import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
 import com.verdiance.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdiance.wisiee.Facade.UserFacadeService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,14 +40,17 @@ public class UserController {
         return new ResDTO<>(userFacadeService.getCurrentUser());
     }
 
-
+    @PostMapping("/logout")
+    public ResDTO<Void> logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        userFacadeService.logout(request, response, authentication);
+        return new ResDTO<>((Void) null);
+    }
 
     //닉네임 중복 확인
     @PostMapping("/check-nickname")
     public ResDTO<UserChkExistNickNmDTO> chkExistNickNm(@RequestBody UserChkExistNickNmDTO dto) {
         return new ResDTO<UserChkExistNickNmDTO>(userFacadeService.chkExistNickNm(dto));
     }
-
 
 
     @PostMapping("/profile-image")
@@ -58,7 +63,6 @@ public class UserController {
         String imageUrl = userFacadeService.updateUserProfileImage(dto);
         return new ResDTO<>(imageUrl);
     }
-
 
 
     @PutMapping("/profile")

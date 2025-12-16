@@ -16,13 +16,21 @@ import com.verdiance.wisiee.Exception.User.DefaultAddressNotFoundException;
 import com.verdiance.wisiee.Exception.User.SessionUserNotFoundException;
 import com.verdiance.wisiee.Exception.User.UserNotFound;
 import com.verdiance.wisiee.Mapper.AddressBookMapper;
+import com.verdiance.wisiee.Oauth.GoogleRevocationService;
 import com.verdiance.wisiee.Repository.AddressBookRepository;
 import com.verdiance.wisiee.Repository.UserRepository;
 import com.verdiance.wisiee.Service.Interface.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,8 +41,8 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressBookRepository addressBookRepository;
     private final HttpSession httpSession;
-
-
+    private final GoogleRevocationService googleRevocationService;
+    private final OAuth2AuthorizedClientRepository authorizedClientRepository;
 
     @Override
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto) {
@@ -91,15 +99,14 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     @Transactional
     public void updateUserProfile(UserInfoUpdateDTO dto) {
 
         UserEntity user = userRepository.findById(dto.getUserId())
-            .orElseThrow(() -> new UserNotFound(dto.getUserId()));
+                .orElseThrow(() -> new UserNotFound(dto.getUserId()));
 
-        if (dto.getNickNm() != null && !dto.getNickNm().isBlank()) {
+        if (dto.getNickNm()!=null && !dto.getNickNm().isBlank()) {
 
             // 1) 중복 체크
             if (userRepository.existsByNickNm(dto.getNickNm())) {
@@ -206,6 +213,33 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(DefaultAddressNotFoundException::new);
 
         return AddressBookMapper.toResponseDTO(entity);
+    }
+
+    @Override
+    public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
+        // 1. Google 토큰 취소 (구글한테 "이 토큰 이제 못 쓰게 해" 라고 요청)
+        if (authentication instanceof OAuth2AuthenticationToken oauthToken) {
+            OAuth2AuthorizedClient authorizedClient = authorizedClientRepository.loadAuthorizedClient(
+                    oauthToken.getAuthorizedClientRegistrationId(),
+                    authentication,
+                    request
+            );
+
+            if (authorizedClient!=null) {
+                String token = authorizedClient.getRefreshToken()!=null ?
+                        authorizedClient.getRefreshToken().getTokenValue():
+                        authorizedClient.getAccessToken().getTokenValue();
+
+                // 서비스에서 구글 API 호출
+                googleRevocationService.revokeToken(token);
+            }
+        }
+
+        // 2. 내 서버 세션 삭제 (Spring Security 기능 활용)
+        if (authentication!=null) {
+            new SecurityContextLogoutHandler().logout(request, response, authentication);
+        }
+
     }
 
 
