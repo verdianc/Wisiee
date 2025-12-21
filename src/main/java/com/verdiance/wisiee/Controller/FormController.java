@@ -66,4 +66,12 @@ public class FormController {
   }
 
 
+
+  // 내가 작성한 폼 리스트 조회
+  @GetMapping
+  public ResDTO<List<FormDTO>> getMyForms() {
+    return new ResDTO<>(formFacadeService.getMyForms());
+  }
+
+
 }

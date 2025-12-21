@@ -22,4 +22,7 @@ public interface FormService {
   // 삭제
   void deleteForm(Long id, UserEntity user);
 
+  // 작성한 폼 목록
+  List<FormDTO> getFormsByUser(UserEntity user);
+
 }
