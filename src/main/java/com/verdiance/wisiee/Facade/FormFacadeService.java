@@ -131,4 +131,10 @@ public class FormFacadeService {
         formService.deleteForm(formId, user);
     }
 
+    public List<FormDTO> getMyForms() {
+        UserEntity user = userService.getUser();
+        return formService.getFormsByUser(user);
+    }
+
+
 }
