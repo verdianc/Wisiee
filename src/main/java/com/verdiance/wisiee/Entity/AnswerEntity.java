@@ -30,7 +30,7 @@ public class AnswerEntity extends BaseEntity {
   private QuestionEntity question;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "user_id", nullable = false)
+  @JoinColumn(name = "user_id")
   private UserEntity user;   // 관리자/운영자
 
   // ==== 생성자 ====
