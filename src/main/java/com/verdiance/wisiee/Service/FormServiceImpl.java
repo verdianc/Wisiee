@@ -145,4 +145,13 @@ public class FormServiceImpl implements FormService {
         }
     }
 
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<FormDTO> getFormsByUser(UserEntity user) {
+
+        return formJpaRepository.findByUser(user).stream()
+            .map(formMapper::toDTO)
+            .toList();
+    }
 }
