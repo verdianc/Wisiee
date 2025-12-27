@@ -115,6 +115,7 @@ public class FormEntity extends BaseEntity {
       LocalDate startDate,
       LocalDate endDate,
       boolean isPublic,
+      boolean isSoldOut,
       Category category,
       String description,
       DeliveryOption deliveryOption,
@@ -138,6 +139,7 @@ public class FormEntity extends BaseEntity {
     this.account = account;
     this.accName = accName;
     this.bank = bank;
+    this.isSoldOut = isSoldOut;
   }
 
 
