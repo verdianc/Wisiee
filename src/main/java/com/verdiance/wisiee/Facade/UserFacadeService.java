@@ -4,6 +4,7 @@ import com.verdiance.wisiee.Common.Util.CommonUtil;
 import com.verdiance.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
+import com.verdiance.wisiee.DTO.User.MyPageDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
@@ -103,4 +104,8 @@ public class UserFacadeService {
         return userService.getMainAddress(userId);
     }
 
+
+    public MyPageDTO getMyPage() {
+        return userService.getMyPage();
+    }
 }

@@ -3,6 +3,7 @@ package com.verdiance.wisiee.Controller;
 import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
+import com.verdiance.wisiee.DTO.User.MyPageDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
 import com.verdiance.wisiee.DTO.User.UserInfoUpdateDTO;
@@ -27,7 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {
@@ -116,6 +117,11 @@ public class UserController {
     public ResDTO<Void> delAddressBook(@PathVariable("id") Long addressId) {
         userFacadeService.delAddressBook(addressId);
         return new ResDTO<Void>((Void) null);
+    }
+
+    @GetMapping("/mypage")
+    public ResDTO<MyPageDTO> getMyPage() {
+        return new ResDTO<>(userFacadeService.getMyPage());
     }
 
 }
