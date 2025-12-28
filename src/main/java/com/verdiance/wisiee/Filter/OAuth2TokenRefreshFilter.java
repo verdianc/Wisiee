@@ -26,7 +26,7 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         Long userId = (Long) httpSession.getAttribute("userId");
-        if (userId!=null && !isAccessTokenExpired()) {
+        if (userId!=null && isAccessTokenExpired()) {
 
             //만료시, refresh token 조회
             String refreshToken = userRepository.findRefreshTokenByUserId(userId).orElse(null);
@@ -41,6 +41,7 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
                 //access token update
                 httpSession.setAttribute("accessToken", newAccessToken);
             } catch (Exception e) {
+                logger.error("토큰 갱신 실패: ", e);
                 handleException(response);
                 return;
             }
@@ -55,7 +56,7 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
         Long expiresAt = (Long) httpSession.getAttribute("accessTokenExpiresAt");
         return expiresAt!=null && System.currentTimeMillis() > (expiresAt - 60_000);
     }
-    
+
     private void handleException(HttpServletResponse response) throws IOException {
         try {
             httpSession.invalidate();
