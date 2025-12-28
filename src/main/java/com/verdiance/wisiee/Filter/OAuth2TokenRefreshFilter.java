@@ -26,16 +26,26 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         Long userId = (Long) httpSession.getAttribute("userId");
-        if (userId!=null) {
-            //토큰 만료 여부 확인
-            if (isAccessTokenExpired()) {
-                //만료시, refresh token 조회
-                String refreshToken = userRepository.findRefreshTokenByUserId(userId).orElse(null);
+        if (userId!=null && !isAccessTokenExpired()) {
+
+            //만료시, refresh token 조회
+            String refreshToken = userRepository.findRefreshTokenByUserId(userId).orElse(null);
+            if (refreshToken==null) {
+                handleException(response);
+                return;
+            }
+
+            try {
                 //refresh token으로 access token 업데이트
                 String newAccessToken = oAuth2TokenService.refreshAccessToken(refreshToken);
                 //access token update
                 httpSession.setAttribute("accessToken", newAccessToken);
+            } catch (Exception e) {
+                handleException(response);
+                return;
             }
+
+
         }
 
         filterChain.doFilter(request, response);
@@ -44,5 +54,14 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
     private boolean isAccessTokenExpired() {
         Long expiresAt = (Long) httpSession.getAttribute("accessTokenExpiresAt");
         return expiresAt!=null && System.currentTimeMillis() > (expiresAt - 60_000);
+    }
+    
+    private void handleException(HttpServletResponse response) throws IOException {
+        try {
+            httpSession.invalidate();
+        } catch (IllegalStateException e) {
+            // 이미 만료된 경우 무시
+        }
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     }
 }
