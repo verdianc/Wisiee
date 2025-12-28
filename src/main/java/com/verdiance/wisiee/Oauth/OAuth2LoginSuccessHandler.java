@@ -27,7 +27,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final UserRepository userRepository;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
-    @Value("${spring.config.sandRedirect}")    // MinIO=true, AWS는 false여도 동작
+    @Value("${app.config.sendRedirect}")    // MinIO=true, AWS는 false여도 동작
     private String sandRedirect;
 
 

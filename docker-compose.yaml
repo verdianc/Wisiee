@@ -27,8 +27,22 @@ services:
     volumes:
       - wisiee-minio-data:/data
 
+  minio-init:
+    image: minio/mc:latest
+    container_name: wisiee-minio-init
+    depends_on:
+      - minio
+    entrypoint: >
+      /bin/sh -c "
+      sleep 5;
+      mc alias set myminio http://minio:9000 minioadmin minioadmin;
+      mc mb --ignore-existing myminio/wisiee;
+      mc policy set public myminio/wisiee;
+      exit 0;
+      "
+
   wisiee:
-    image: wisiee-app:latest
+    image: wisiee-app:v0.0.1
     container_name: wisiee-app
     restart: always
     depends_on:

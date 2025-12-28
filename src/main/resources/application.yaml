@@ -22,41 +22,43 @@ spring:
   application:
     name: wisiee
   datasource:
-    url:
-    username:
-    password:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     hibernate:
       ddl-auto: update
-
-
-
 
   security:
     oauth2:
       client:
         registration:
           google:
-            client-id:
-            client-secret:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
             redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+
         provider:
           google:
-            authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
-            token-uri: https://oauth2.googleapis.com/token
-            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            authorization-uri: ${GOOGLE_AUTH_URI}
+            token-uri: ${GOOGLE_TOKEN_URI}
+            user-info-uri: ${GOOGLE_USER_INFO_URI}
             user-name-attribute: sub
-  config:
-    sandRedirect: "/wisiee/api/user/login/success"
 
+app:
+  oauth:
+    google:
+      revoke-uri: ${GOOGLE_LOGOUT_URI}
+  config:
+    sendRedirect: "/wisiee/api/users/login/success"
 
 s3:
-  region:
-  endpoint:
-  access-key:
-  secret-key:
-  path-style:
-  bucket:
+  region: ${S3_REGION}
+  endpoint: ${S3_ENDPOINT}
+  access-key: ${S3_ACCESS_KEY}
+  secret-key: ${S3_SECRET_KEY}
+  bucket: ${S3_BUCKET}
+  path-style: ${S3_PATH_STYLE}
