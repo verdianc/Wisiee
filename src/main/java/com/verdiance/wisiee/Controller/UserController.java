@@ -56,8 +56,8 @@ public class UserController {
 
     @PostMapping("/profile-image")
     public ResDTO<String> updateUserProfileImage(
-        // TODO : 파일 커스텀 예외 처리하기
-        @RequestPart("file") MultipartFile file) throws IOException {
+            // TODO : 파일 커스텀 예외 처리하기
+            @RequestPart("file") MultipartFile file) throws IOException {
         Long userId = userFacadeService.getUserId();
         UserProfileImageDTO dto = UserProfileImageDTO.fromMultipart(userId, file);
 
@@ -79,9 +79,10 @@ public class UserController {
 
     //사용자 탈퇴
     @DeleteMapping("/user")
-    public ResDTO<Void> delUser() {
+    public ResDTO<Void> delUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         Long userId = userFacadeService.getUserId();
         userFacadeService.deleteUser(userId);
+        userFacadeService.logout(request, response, authentication);
         return new ResDTO<Void>((Void) null);
     }
 
