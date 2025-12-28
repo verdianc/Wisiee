@@ -3,6 +3,7 @@ package com.verdiance.wisiee.Controller;
 import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
+import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
 import com.verdiance.wisiee.DTO.User.MyPageDTO;
 import com.verdiance.wisiee.DTO.User.OauthDTO;
 import com.verdiance.wisiee.DTO.User.UserChkExistNickNmDTO;
@@ -123,6 +124,12 @@ public class UserController {
     @GetMapping("/mypage")
     public ResDTO<MyPageDTO> getMyPage() {
         return new ResDTO<>(userFacadeService.getMyPage());
+    }
+
+    @GetMapping("/addressBook/default")
+    public ResDTO<AddressBookResponseDTO> getMainAddress() {
+        Long userId = userFacadeService.getUserId();
+        return new ResDTO<AddressBookResponseDTO>(userFacadeService.getMainAddress(userId));
     }
 
 }

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class GoogleRevocationService {
 
-    @Value("${spring.security.oauth2.client.provider.google.logout-uri}")
+    @Value("${app.oauth.google.revoke-uri}")
     private String logoutUri;
 
     
