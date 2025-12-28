@@ -80,9 +80,10 @@ public class UserController {
 
     //사용자 탈퇴
     @DeleteMapping("/user")
-    public ResDTO<Void> delUser() {
+    public ResDTO<Void> delUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         Long userId = userFacadeService.getUserId();
         userFacadeService.deleteUser(userId);
+        userFacadeService.logout(request, response, authentication);
         return new ResDTO<Void>((Void) null);
     }
 
