@@ -1,5 +1,6 @@
 package com.verdiance.wisiee.Common.Config;
 
+import com.verdiance.wisiee.Oauth.CustomAuthorizationRequestResolver;
 import com.verdiance.wisiee.Oauth.CustomOAuth2UserService;
 import com.verdiance.wisiee.Oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -25,14 +26,17 @@ public class SecurityConfig {
         http.csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**", "/wisiee/**", "/wisiee/docs",
-                            "/wisiee/swagger-ui/**",
-                            "/wisiee/v3/api-docs/**",
-                            "/wisiee/api-docs/**").permitAll()
+                                "/wisiee/swagger-ui/**",
+                                "/wisiee/v3/api-docs/**",
+                                "/wisiee/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService)
+                        )
+                        .authorizationEndpoint(authorization -> authorization
+                                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization"))
                         )
                         .successHandler(oAuth2LoginSuccessHandler)
                 );
