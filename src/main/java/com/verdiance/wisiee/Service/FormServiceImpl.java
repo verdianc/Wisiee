@@ -14,11 +14,13 @@ import com.verdiance.wisiee.Mapper.FormMapper;
 import com.verdiance.wisiee.Repository.FormJpaRepository;
 import com.verdiance.wisiee.Service.Interface.FormService;
 import com.verdiance.wisiee.Service.Interface.ProductService;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -102,6 +104,11 @@ public class FormServiceImpl implements FormService {
             if (code==null || !entity.getCode().equals(code)) {
                 throw new CodeRequiredException();
             }
+        }
+
+        // 마감 기한 플래그 변경 시 조회 금지
+        if (entity.getEndDate() != null && LocalDate.now().isAfter(entity.getEndDate())) {
+            throw new FormNotFoundException(entity.getId());
         }
 
         return formMapper.toDTO(entity);
