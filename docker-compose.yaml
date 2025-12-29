@@ -9,7 +9,7 @@ services:
       MARIADB_PASSWORD: wisiee
       MARIADB_ROOT_PASSWORD: wisiee
     ports:
-      - "13306:13306"
+      - "13306:3306"
     volumes:
       - wisiee-db-data:/var/lib/mysql
 
