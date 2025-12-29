@@ -2,10 +2,14 @@ server:
   servlet:
     context-path: /wisiee
   port: 8080
+  forward-headers-strategy: framework
   error:
     include-stacktrace: never
-  log:
-    debug
+  logging:
+    level:
+      root: INFO
+      com.verdiance.wisiee: DEBUG
+
 
 springdoc:
   api-docs:
@@ -22,9 +26,10 @@ spring:
   application:
     name: wisiee
   datasource:
-    url: ${DB_URL}
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
