@@ -3,20 +3,27 @@ services:
     image: mariadb:10.11
     container_name: wisiee-db
     restart: always
+    mem_limit: 512m
     environment:
       MARIADB_DATABASE: wisiee
       MARIADB_USER: wisiee
       MARIADB_PASSWORD: wisiee
       MARIADB_ROOT_PASSWORD: wisiee
     ports:
-      - "13306:3306"
+      - "13306:3306"   # 로컬 테스트용
     volumes:
       - wisiee-db-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   minio:
     image: minio/minio:latest
     container_name: wisiee-minio
     restart: always
+    mem_limit: 384m
     command: server /data --console-address ":9001"
     environment:
       MINIO_ROOT_USER: minioadmin
@@ -32,12 +39,13 @@ services:
     container_name: wisiee-minio-init
     depends_on:
       - minio
+    restart: "no"
     entrypoint: >
       /bin/sh -c "
       sleep 5;
       mc alias set myminio http://minio:9000 minioadmin minioadmin;
       mc mb --ignore-existing myminio/wisiee;
-      mc policy set public myminio/wisiee;
+      mc anonymous set public myminio/wisiee;
       exit 0;
       "
 
@@ -45,13 +53,18 @@ services:
     image: wisiee-app:v0.0.1
     container_name: wisiee-app
     restart: always
+    mem_limit: 768m
     depends_on:
-      - mariadb
-      - minio
+      mariadb:
+        condition: service_healthy
+      minio:
+        condition: service_started
     ports:
       - "8080:8080"
     env_file:
       - .env
+    environment:
+      JAVA_OPTS: "-Xms256m -Xmx512m"
 
 volumes:
   wisiee-db-data:
