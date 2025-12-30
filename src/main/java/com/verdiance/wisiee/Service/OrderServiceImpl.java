@@ -1,7 +1,7 @@
 package com.verdiance.wisiee.Service;
 
 import com.verdiance.wisiee.Common.Enum.OrderStatus;
-import com.verdiance.wisiee.DTO.Order.OrderItemListDTO;
+import com.verdiance.wisiee.DTO.Order.OrderPageRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,16 +72,8 @@ public class OrderServiceImpl implements OrderService {
         orderItemRepository.saveAll(items);
 
         // 응답 DTO 변환
-        OrderRespDTO res = new OrderRespDTO(
-                order.getId(),                 // 주문 ID
-                user.getUserId(),              // 사용자 ID
-                order.getOrderDate(),          // 주문 일시
-                totalPrice,                    // 총 금액
-                quantity,                      // 총 수량
-                order.getOrderStatus().name(), // 주문 상태
-                order.getDeliveryOption().name(), // 배송 옵션
-                new OrderItemListDTO(dto.getItems(), dto.getItems().size())            // 주문 아이템 목록 (요청 DTO 기준)
-        );
+        OrderRespDTO res = OrderMapper.toOrderRespDTO(order);            // 주문 아이템 목록 (요청 DTO 기준)
+
 
         return res;
     }
@@ -91,9 +85,9 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderRespListDTO getSoldOrderList(Long userId) {
-        List<OrderEntity> soldOrderEntity = orderRepository.findOrdersBySellerId(userId);
-        return OrderMapper.toOrderRespListDTO(soldOrderEntity);
+    public OrderPageRespDTO getSoldOrderList(Long userId, Pageable pageable) {
+        Page<OrderEntity> soldOrderEntity = orderRepository.findOrdersBySellerId(userId, pageable);
+        return OrderMapper.toOrderSliceRespDTO(soldOrderEntity);
     }
 
     @Override
@@ -118,6 +112,13 @@ public class OrderServiceImpl implements OrderService {
         order.modiAddress(dto);
 
         orderRepository.save(order);
+    }
+
+    @Override
+    public OrderPageRespDTO getOrdersByFormId(Long userId, Long formId, Pageable pageable) {
+        Page<OrderEntity> orderEntities = orderRepository.findOrdersByFormIdAndSellerId(formId, userId, pageable);
+
+        return OrderMapper.toOrderSliceRespDTO(orderEntities);
     }
 
     private OrderEntity chkOrderModi(OrderReqDTO dto) {

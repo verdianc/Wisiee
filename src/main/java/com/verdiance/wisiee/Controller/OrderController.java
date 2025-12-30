@@ -1,16 +1,21 @@
 package com.verdiance.wisiee.Controller;
 
+import com.verdiance.wisiee.DTO.Order.OrderPageRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
 import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.Facade.OrderFacadeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -32,14 +37,6 @@ public class OrderController {
     public ResDTO<OrderRespListDTO> getOrderList() {
         Long userId = orderFacadeService.getUserId();
         return new ResDTO<>(orderFacadeService.getOrderList(userId));
-    }
-
-
-    // 판매자가에게 온 주문리스트 조회
-    @GetMapping("/soldOrderList")
-    public ResDTO<OrderRespListDTO> getSoldOrderList() {
-        Long userId = orderFacadeService.getUserId();
-        return new ResDTO<>(orderFacadeService.getSoldOrderList(userId));
     }
 
 
@@ -67,5 +64,27 @@ public class OrderController {
         dto.setUserId(userId);
         orderFacadeService.updateAddress(dto);
         return new ResDTO<>((Void) null);
+    }
+
+    /**
+     * 주문 목록 조회 (통합형)
+     * 1. formId가 있으면 -> 특정 폼의 주문만 조회
+     * 2. formId가 없으면 -> 판매자의 모든 주문 조회
+     */
+    @GetMapping
+    public ResDTO<OrderPageRespDTO> getOrders(
+            @RequestParam(required = false) Long formId, // ★ 여기가 핵심 (필수 아님)
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
+    ) {
+        Long userId = orderFacadeService.getUserId();
+        OrderPageRespDTO result;
+
+        if (formId!=null) {
+            result = orderFacadeService.getOrdersByFormId(userId, formId, pageable);
+        } else {
+            result = orderFacadeService.getSoldOrderList(userId, pageable);
+        }
+
+        return new ResDTO<>(result);
     }
 }
