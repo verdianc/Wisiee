@@ -19,4 +19,9 @@ public class OrderRespDTO {
     private String orderStatus;
     private String deliveryOption;
     private OrderItemListDTO items;
+    private String recipientName;   // 수령인 (recipientNm)
+    private String phoneNumber;     // 연락처
+    private String zipcode;         // 우편번호
+    private String address;         // 주소
+    private String detailAddress;
 }
