@@ -28,6 +28,7 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    default_batch_fetch_size: 100
 
   security:
     oauth2:
