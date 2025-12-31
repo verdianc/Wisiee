@@ -26,6 +26,10 @@ public class ResDTO<T> {
     this.timestamp = System.currentTimeMillis();
   }
 
+  public static <T> ResDTO<T> success(T data) {
+    return new ResDTO<>(data);
+  }
+
   // 실패 응답
   public ResDTO(ErrorCode errorCode) {
     this.success = false;

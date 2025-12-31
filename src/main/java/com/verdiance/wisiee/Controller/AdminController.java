@@ -31,12 +31,12 @@ public class AdminController {
   private final QnaFacadeService qnaFacadeService;
   private final FaqService faqService;
 
-
   @PostMapping("/login")
   public ResDTO<Void> login(@RequestBody AdminLoginRequestDTO dto) {
     adminService.login(dto);
-    return new ResDTO<>(null);
+    return ResDTO.success(null);
   }
+
 
 
   @PostMapping("/answers/{questionId}")
