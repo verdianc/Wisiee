@@ -124,6 +124,17 @@ public class AdminController {
   }
 
 
+  /**
+   * 관리자 문의글 목록 조회 (페이지당 10개)
+   */
+  @GetMapping("/questions")
+  public ResDTO<Page<QuestionDTO>> getAllQuestionsForAdmin(
+      @RequestParam(defaultValue = "0") int page
+  ) {
+    Page<QuestionDTO> result = qnaFacadeService.getAllQuestionsForAdmin(page);
+    return new ResDTO<>(result);
+  }
+
 
 
 

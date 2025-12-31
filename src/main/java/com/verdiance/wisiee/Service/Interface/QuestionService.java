@@ -21,4 +21,6 @@ public interface QuestionService {
 
   Page<QuestionDTO> getQuestionsByUser(UserEntity user, int page);
 
+  Page<QuestionDTO> getAllQuestions(int page);
+
 }
