@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.core.Local;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -117,12 +119,11 @@ public class FormServiceImpl implements FormService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<FormDTO> getFormList() {
-        return formJpaRepository.findAll()
-                .stream()
-                .map(formMapper::toDTO)
-                .collect(Collectors.toList());
+    public Page<FormDTO> getFormList(Pageable pageable) {
+        return formJpaRepository.findAll(pageable)
+            .map(formMapper::toDTO);
     }
+
 
 
     @Override

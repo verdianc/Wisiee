@@ -4,6 +4,8 @@ import com.verdiance.wisiee.DTO.Form.FormDTO;
 import com.verdiance.wisiee.DTO.Form.FormRequestDTO;
 import com.verdiance.wisiee.Entity.UserEntity;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface FormService {
 
@@ -14,7 +16,7 @@ public interface FormService {
 
 
   // 전체 리스트 조회
-  List<FormDTO> getFormList();
+  Page<FormDTO> getFormList(Pageable pageable);
 
   // 수정
   FormDTO updateForm(Long id, FormRequestDTO request, UserEntity user);

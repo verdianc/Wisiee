@@ -6,6 +6,8 @@ import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.Facade.FormFacadeService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +46,17 @@ public class FormController {
   ) {
     // code가 있으면 해당 값을, 없으면 null을 Facade로 전달
     return new ResDTO<>(formFacadeService.getForm(id, code));
+  }
+
+
+  // 폼 전체 조회
+  @GetMapping("/forms")
+  public ResDTO<Page<FormDTO>> getForms(
+      @RequestParam(defaultValue = "0") int page
+  ) {
+    Page<FormDTO> result =
+        formFacadeService.getAllForms(PageRequest.of(page, 10));
+    return new ResDTO<>(result);
   }
 
 
