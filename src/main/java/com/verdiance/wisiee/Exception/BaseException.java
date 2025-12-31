@@ -9,8 +9,12 @@ public class BaseException extends RuntimeException {
 
   private final ErrorCode errorCode;
 
-  protected BaseException(ErrorCode errorCode, String message) {
+  public BaseException(ErrorCode errorCode, String message) {
     super(message);
+    if (errorCode == null) {
+      throw new IllegalArgumentException("ErrorCode must not be null");
+    }
     this.errorCode = errorCode;
   }
+
 }

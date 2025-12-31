@@ -1,7 +1,7 @@
 package com.verdiance.wisiee.DTO.Qna;
 
 import com.verdiance.wisiee.Entity.AnswerEntity;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class AnswerDTO {
   private Long senderId;
   private String senderNickNm;
   private boolean fromAdmin;
-  private LocalDateTime createdAt;
+  private LocalDate createdAt;
 
   public static AnswerDTO from(AnswerEntity e) {
     return AnswerDTO.builder()

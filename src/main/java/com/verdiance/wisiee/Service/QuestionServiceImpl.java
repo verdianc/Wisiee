@@ -125,4 +125,52 @@ public class QuestionServiceImpl implements QuestionService {
     return result.map(QuestionDTO::from);
   }
 
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<QuestionDTO> getQuestionsByUser(UserEntity user, int page) {
+
+    Pageable pageable = PageRequest.of(
+        page,
+        5,
+        Sort.by(Sort.Direction.DESC, "createdAt")
+    );
+
+    return questionRepository
+        .findByUser(user, pageable)
+        .map(entity -> QuestionDTO.builder()
+            .id(entity.getId())
+            .title(entity.getTitle())
+            .category(entity.getCategory())
+            .closed(entity.isClosed())
+            .createdAt(entity.getCreatedAt())
+            .build()
+        );
+  }
+
+
+  @Override
+  @Transactional(readOnly = true)
+  public Page<QuestionDTO> getAllQuestions(int page) {
+
+    Pageable pageable = PageRequest.of(
+        page,
+        10,
+        Sort.by(Sort.Direction.DESC, "createdAt")
+    );
+
+    return questionRepository
+        .findAll(pageable)
+        .map(entity -> QuestionDTO.builder()
+            .id(entity.getId())
+            .title(entity.getTitle())
+            .category(entity.getCategory())
+            .closed(entity.isClosed())
+            .createdAt(entity.getCreatedAt())
+            .build()
+        );
+  }
+
+
+
 }

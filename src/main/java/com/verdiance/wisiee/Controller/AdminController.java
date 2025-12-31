@@ -31,12 +31,12 @@ public class AdminController {
   private final QnaFacadeService qnaFacadeService;
   private final FaqService faqService;
 
-
   @PostMapping("/login")
   public ResDTO<Void> login(@RequestBody AdminLoginRequestDTO dto) {
     adminService.login(dto);
-    return new ResDTO<>(null);
+    return ResDTO.success(null);
   }
+
 
 
   @PostMapping("/answers/{questionId}")
@@ -123,6 +123,17 @@ public class AdminController {
     return new ResDTO<>(null);
   }
 
+
+  /**
+   * 관리자 문의글 목록 조회 (페이지당 10개)
+   */
+  @GetMapping("/questions")
+  public ResDTO<Page<QuestionDTO>> getAllQuestionsForAdmin(
+      @RequestParam(defaultValue = "0") int page
+  ) {
+    Page<QuestionDTO> result = qnaFacadeService.getAllQuestionsForAdmin(page);
+    return new ResDTO<>(result);
+  }
 
 
 

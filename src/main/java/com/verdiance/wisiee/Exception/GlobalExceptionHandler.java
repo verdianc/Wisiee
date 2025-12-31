@@ -16,46 +16,66 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 폼 생성 관련 예외 처리
-    @ExceptionHandler(CodeRequiredException.class)
-    public ResponseEntity<ResDTO> handleCodeRequiredException(CodeRequiredException e) {
-        log.error("[CodeRequiredException] {}", e.getMessage());
-        return ResponseEntity
+
+        // ===============================
+        // 400 - 폼 코드 누락
+        // ===============================
+        @ExceptionHandler(CodeRequiredException.class)
+        public ResponseEntity<ResDTO<Void>> handleCodeRequiredException(CodeRequiredException e) {
+            log.error("[CodeRequiredException] {}", e.getMessage());
+            return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(ResDTO.fail(ErrorCode.CODE_REQUIRED, e.getMessage()));
-    }
+        }
 
-    // 세션 관련 예외 처리
-    @ExceptionHandler(SessionUserNotFoundException.class)
-    public ResponseEntity<ResDTO> handleSessionUserNotFoundException(SessionUserNotFoundException e) {
-        log.error("[SessionUserNotFoundException] {}", e.getMessage());
-        return ResponseEntity
-                .status(HttpStatus.UNAUTHORIZED) // 401 Unauthorized
+        // ===============================
+        // 401 - 세션 없음
+        // ===============================
+        @ExceptionHandler(SessionUserNotFoundException.class)
+        public ResponseEntity<ResDTO<Void>> handleSessionUserNotFoundException(SessionUserNotFoundException e) {
+            log.error("[SessionUserNotFoundException] {}", e.getMessage());
+            return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
                 .body(ResDTO.fail(ErrorCode.SESSION_USER_NOT_FOUND, "로그인이 필요합니다."));
-    }
+        }
 
-    // 그 외 BaseException을 상속받는 예외 처리
-    @ExceptionHandler(BaseException.class)
-    public ResponseEntity<ResDTO> handleBaseException(BaseException e) {
-        log.error("[BaseException] code={}, message={}", e.getErrorCode().getCode(), e.getMessage());
-        return ResponseEntity
+        // ===============================
+        // 공통 BaseException 처리 (🔥 핵심)
+        // ===============================
+        @ExceptionHandler(BaseException.class)
+        public ResponseEntity<ResDTO<Void>> handleBaseException(BaseException e) {
+            ErrorCode errorCode = e.getErrorCode() != null
+                ? e.getErrorCode()
+                : ErrorCode.INTERNAL_SERVER_ERROR;
+
+            log.error("[BaseException] code={}, message={}",
+                errorCode.getCode(), e.getMessage());
+
+            return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(ResDTO.fail(e.getErrorCode(), e.getMessage()));
-    }
+                .body(ResDTO.fail(errorCode, e.getMessage()));
+        }
 
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Void> handleNoResourceFound(NoResourceFoundException e) {
-        log.debug("[NoResourceFoundException] {}", e.getMessage());
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-    }
+        // ===============================
+        // 404 - 리소스 없음
+        // ===============================
+        @ExceptionHandler(NoResourceFoundException.class)
+        public ResponseEntity<Void> handleNoResourceFound(NoResourceFoundException e) {
+            log.debug("[NoResourceFoundException] {}", e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
 
-
-    // 예상치 못한 시스템 오류 처리
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ResDTO> handleException(Exception e) {
-        log.error("[UnknownException] {}", e.getMessage(), e);
-        return ResponseEntity
+        // ===============================
+        // 500 - 알 수 없는 서버 오류
+        // ===============================
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ResDTO<Void>> handleException(Exception e) {
+            log.error("[UnknownException]", e);
+            return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ResDTO.fail(ErrorCode.INTERNAL_SERVER_ERROR, "서버 내부 오류가 발생했습니다."));
-    }
+                .body(ResDTO.fail(
+                    ErrorCode.INTERNAL_SERVER_ERROR,
+                    "서버 내부 오류가 발생했습니다."
+                ));
+        }
 }

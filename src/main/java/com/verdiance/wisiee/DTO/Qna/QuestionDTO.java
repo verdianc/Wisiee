@@ -4,6 +4,8 @@ import com.verdiance.wisiee.Common.Enum.Category;
 import com.verdiance.wisiee.DTO.File.FileDTO;
 import com.verdiance.wisiee.DTO.File.FileRequestDTO;
 import com.verdiance.wisiee.Entity.QuestionEntity;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -26,6 +28,7 @@ public class QuestionDTO {
   private boolean closed;
   private List<FileDTO> files;
   private List<AnswerDTO> answers;
+  private LocalDate createdAt;
 
   public static QuestionDTO from(QuestionEntity e) {
     return QuestionDTO.builder()
@@ -35,6 +38,7 @@ public class QuestionDTO {
         .content(e.getContent())
         .category(e.getCategory())
         .closed(e.isClosed())
+        .createdAt(e.getCreatedAt())
         .build();
   }
 }

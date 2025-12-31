@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 // TODO : Entity 전체에 Builder 지양
 @Builder
 @Getter
-public class AddressBookEntity {
+public class AddressBookEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

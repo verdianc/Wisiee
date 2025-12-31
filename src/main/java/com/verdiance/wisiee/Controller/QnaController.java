@@ -117,4 +117,14 @@ public class QnaController {
   ) {
     return new ResDTO<>(qnaFacadeService.searchByTitle(title, page));
   }
+
+
+  // 10. user id로 자신이 쓴 모든 문의글 리스트(페이지네이션 5개씩)
+  @GetMapping("/my-question")
+  public ResDTO<Page<QuestionDTO>> getMyQuestions(
+      @RequestParam(defaultValue = "0") int page
+  ) {
+    return new ResDTO<>(qnaFacadeService.getMyQuestions(page));
+  }
+
 }

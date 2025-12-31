@@ -169,6 +169,16 @@ public class QnaFacadeService {
   }
 
 
+  public Page<QuestionDTO> getMyQuestions(int page) {
+    return questionService.getQuestionsByUser(currentUser(), page);
+  }
+
+  // 관리자용 전체 문의글 조회
+  public Page<QuestionDTO> getAllQuestionsForAdmin(int page) {
+    return questionService.getAllQuestions(page);
+  }
+
+
 
 
 }
