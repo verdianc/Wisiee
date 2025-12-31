@@ -3,6 +3,7 @@ package com.verdiance.wisiee.Common.Config;
 import com.verdiance.wisiee.Oauth.CustomAuthorizationRequestResolver;
 import com.verdiance.wisiee.Oauth.CustomOAuth2UserService;
 import com.verdiance.wisiee.Oauth.OAuth2LoginSuccessHandler;
+import java.util.Collections;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +11,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +27,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/**", "/wisiee/**", "/wisiee/docs",
                                 "/wisiee/swagger-ui/**",
@@ -42,6 +47,29 @@ public class SecurityConfig {
                 );
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // allowedOrigins("*") 대신 이걸 써야 쿠키/인증정보를 받을 수 있음
+        configuration.setAllowedOriginPatterns(Collections.singletonList("*"));
+
+        // 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE, OPTIONS 등)
+        configuration.setAllowedMethods(Collections.singletonList("*"));
+
+        // 모든 헤더 허용
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+
+        // 쿠키, 인증 정보 허용
+        configuration.setAllowCredentials(true);
+
+        // 설정 등록
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 }
 
