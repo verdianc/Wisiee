@@ -1,6 +1,12 @@
 server:
   servlet:
     context-path: /wisiee
+  session:
+    cookie:
+      name: WISIEE_SESSION
+      same-site: none
+      secure: true
+      http-only: true
   port: 8080
   forward-headers-strategy: framework
   error:
