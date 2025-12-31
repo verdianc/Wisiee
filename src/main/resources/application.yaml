@@ -3,7 +3,7 @@ server:
     context-path: /wisiee
   session:
     cookie:
-      name: WISIEE_SESSION
+      name: JSESSIONID
       same-site: none
       secure: true
       http-only: true
