@@ -4,6 +4,7 @@ import com.verdiance.wisiee.Common.Enum.DeliveryOption;
 import com.verdiance.wisiee.Common.Enum.OrderStatus;
 import com.verdiance.wisiee.DTO.Order.OrderItemDTO;
 import com.verdiance.wisiee.DTO.Order.OrderItemListDTO;
+import com.verdiance.wisiee.DTO.Order.OrderPageRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
@@ -15,6 +16,7 @@ import com.verdiance.wisiee.Exception.Order.WrongOrderStatusException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 
 public class OrderMapper {
 
@@ -63,15 +65,39 @@ public class OrderMapper {
                 order.getQuantity(),
                 order.getOrderStatus().name(),
                 order.getDeliveryOption().name(),
-                new OrderItemListDTO(itemDTOS, itemDTOS.size())
+                new OrderItemListDTO(itemDTOS, itemDTOS.size()),
+                order.getRecipientNm(),
+                order.getPhoneNumber(),
+                order.getZipcode(),
+                order.getAddress(),
+                order.getDetailAddress()
 
         );
     }
 
     public static OrderRespListDTO toOrderRespListDTO(List<OrderEntity> orders) {
+
         var dtoList = orders.stream()
+
+                .map(OrderMapper::toOrderRespDTO)
+
+                .collect(Collectors.toList());
+
+        return new OrderRespListDTO(dtoList, dtoList.size());
+
+    }
+
+    public static OrderPageRespDTO toOrderSliceRespDTO(Page<OrderEntity> orderPage) {
+
+        List<OrderRespDTO> dtoList = orderPage.stream()
                 .map(OrderMapper::toOrderRespDTO)
                 .collect(Collectors.toList());
-        return new OrderRespListDTO(dtoList, dtoList.size());
+
+        return new OrderPageRespDTO(
+                dtoList,
+                orderPage.hasNext(),
+                orderPage.getNumber(),
+                orderPage.getTotalElements()
+        );
     }
 }
