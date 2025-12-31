@@ -3,7 +3,7 @@ package com.verdiance.wisiee.Entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,10 +18,10 @@ public abstract class BaseEntity {
 
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
-    protected LocalDateTime createdAt;
+    protected LocalDate createdAt;
 
     @LastModifiedDate
     @Column(name = "updated_at", nullable = true, insertable = false)
-    protected LocalDateTime updatedAt;
+    protected LocalDate updatedAt;
 
 }

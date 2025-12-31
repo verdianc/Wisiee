@@ -169,6 +169,11 @@ public class QnaFacadeService {
   }
 
 
+  public Page<QuestionDTO> getMyQuestions(int page) {
+    return questionService.getQuestionsByUser(currentUser(), page);
+  }
+
+
 
 
 }

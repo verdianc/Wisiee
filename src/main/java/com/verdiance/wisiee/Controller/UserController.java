@@ -67,6 +67,9 @@ public class UserController {
     }
 
 
+    // TODO : 프로필 이미지 삭제
+
+
     @PutMapping("/profile")
     public ResDTO<Void> updateUserProfile(@RequestBody UserInfoUpdateDTO dto) {
 

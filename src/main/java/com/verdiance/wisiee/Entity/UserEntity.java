@@ -10,7 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -68,7 +68,7 @@ public class UserEntity extends BaseEntity {
     private List<AddressBookEntity> addressBooks = new ArrayList<>();
 
     @Column(name = "nickname_updated_at")
-    private LocalDateTime nicknameUpdatedAt;
+    private LocalDate nicknameUpdatedAt;
 
 
     public void changeProfileImage(String newUrl) {
@@ -82,9 +82,9 @@ public class UserEntity extends BaseEntity {
             return;
         }
 
-        LocalDateTime availableDate = this.nicknameUpdatedAt.plusDays(60);
+        LocalDate availableDate = this.nicknameUpdatedAt.plusDays(60);
 
-        if (LocalDateTime.now().isBefore(availableDate)) {
+        if (LocalDate.now().isBefore(availableDate)) {
             throw new ResourceUpdateFailedException(
                 "닉네임은 최초 변경 후 60일이 지나야 변경 가능합니다."
             );
@@ -95,7 +95,7 @@ public class UserEntity extends BaseEntity {
     // 닉네임 변경 처리
     public void changeNickName(String newNickNm) {
         this.nickNm = newNickNm;
-        this.nicknameUpdatedAt = LocalDateTime.now(); // 변경 일시 기록
+        this.nicknameUpdatedAt = LocalDate.now(); // 변경 일시 기록
     }
 
 

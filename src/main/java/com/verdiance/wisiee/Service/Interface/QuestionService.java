@@ -19,4 +19,6 @@ public interface QuestionService {
 
   Page<QuestionDTO> searchByTitle(String title, int page);
 
+  Page<QuestionDTO> getQuestionsByUser(UserEntity user, int page);
+
 }
