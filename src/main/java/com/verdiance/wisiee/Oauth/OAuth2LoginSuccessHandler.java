@@ -18,7 +18,6 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @Component
 @RequiredArgsConstructor
@@ -90,21 +89,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 5. 세션 저장 (백엔드용)
         httpSession.setAttribute("userId", user.getUserId());
 
-        // =========================================================================
-        // [핵심] 리다이렉트 URL 생성 (기존 파라미터 보존 + 토큰 추가)
-        // 입력된 sandRedirect가 "http://localhost:5173/profile?content=ProfileEditContent" 라면
-        // 결과는 "...?content=ProfileEditContent&accessToken=...&userId=..." 가 됩니다.
-        // =========================================================================
+        // response.sendRedirect(targetUrl); 바로 윗줄에 추가
+        String sessionid = httpSession.getId();
+        // SameSite=None과 Secure를 직접 명시해야만 localhost와 wisiee.store 간에 세션이 공유됩니다.
+        String cookieHeader = String.format("JSESSIONID=%s; Path=/; HttpOnly; SameSite=None; Secure", sessionid);
+        response.setHeader("Set-Cookie", cookieHeader);
 
-        String targetUrl = UriComponentsBuilder.fromUriString(sandRedirect)
-                .queryParam("accessToken", accessToken)
-                .queryParam("userId", user.getUserId())
-                .build()
-                .toUriString();
-
-        System.out.println("Redirecting to: " + targetUrl);
-
-        // 6. 이동
-        response.sendRedirect(targetUrl);
+        response.sendRedirect(sandRedirect);
     }
 }
