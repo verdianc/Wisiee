@@ -12,6 +12,7 @@ import com.verdiance.wisiee.DTO.User.UserProfileImageDTO;
 import com.verdiance.wisiee.Facade.UserFacadeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,8 +100,9 @@ public class UserController {
 
     //주소록 조회
     @GetMapping("/addressBook")
-    public ResDTO<AddressBookListResponseDTO> getAddressBook() {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<AddressBookListResponseDTO> getAddressBook(HttpSession session) {
+        log.debug(session.getId());
+        Long userId = (Long) session.getAttribute("userId");
         return new ResDTO<AddressBookListResponseDTO>(userFacadeService.getAddressBook(userId));
     }
 
