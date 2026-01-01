@@ -24,7 +24,7 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
-
+        HttpSession httpSession = request.getSession();
         Long userId = (Long) httpSession.getAttribute("userId");
         if (userId!=null && isAccessTokenExpired()) {
 

@@ -36,10 +36,10 @@ public class SecurityConfig {
                 )
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/**", "/wisiee/**", "/wisiee/docs",
-                                "/wisiee/swagger-ui/**",
-                                "/wisiee/v3/api-docs/**",
-                                "/wisiee/api-docs/**").permitAll()
+                        .requestMatchers("/**", "/docs",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2Login(oauth2 -> oauth2
@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)
                         )
                         .authorizationEndpoint(authorization -> authorization
-                                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/wisiee/oauth2/authorization"))
+                                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization"))
                         )
                         .successHandler(oAuth2LoginSuccessHandler)
                 );
