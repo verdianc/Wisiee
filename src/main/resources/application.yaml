@@ -65,7 +65,7 @@ app:
     google:
       revoke-uri: ${GOOGLE_LOGOUT_URI}
   config:
-    sendRedirect: "https://localhost:5173/profile?content=ProfileEditContent"
+    sendRedirect: "http://localhost:5173/profile?content=ProfileEditContent"
 
 s3:
   region: ${S3_REGION}
