@@ -8,7 +8,7 @@ server:
         secure: true
         http-only: true
   port: 8080
-  forward-headers-strategy: framework
+  forward-headers-strategy: native
   error:
     include-stacktrace: never
   logging:
