@@ -62,7 +62,7 @@ services:
     ports:
       - "8080:8080"
     env_file:
-      - .env
+      - /home/ubuntu/Wisiee/.env
     environment:
       JAVA_OPTS: "-Xms256m -Xmx512m"
 
