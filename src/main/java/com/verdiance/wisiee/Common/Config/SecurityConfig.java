@@ -47,7 +47,7 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService)
                         )
                         .authorizationEndpoint(authorization -> authorization
-                                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/oauth2/authorization"))
+                                .authorizationRequestResolver(new CustomAuthorizationRequestResolver(clientRegistrationRepository, "/wisiee/oauth2/authorization"))
                         )
                         .successHandler(oAuth2LoginSuccessHandler)
                 );
