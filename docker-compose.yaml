@@ -1,6 +1,7 @@
 services:
   mariadb:
     image: mariadb:10.11
+    container_name: wisiee-db
     restart: always
     mem_limit: 512m
     environment:
@@ -20,6 +21,7 @@ services:
 
   minio:
     image: minio/minio:latest
+    container_name: wisiee-minio
     restart: always
     mem_limit: 384m
     command: server /data --console-address ":9001"
@@ -34,6 +36,7 @@ services:
 
   minio-init:
     image: minio/mc:latest
+    container_name: wisiee-minio-init
     depends_on:
       - minio
     restart: "no"
@@ -48,6 +51,7 @@ services:
 
   wisiee:
     image: wisiee-app:v0.0.1
+    container_name: wisiee-minio-init
     restart: always
     mem_limit: 768m
     depends_on:
