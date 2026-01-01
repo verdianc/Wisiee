@@ -51,7 +51,7 @@ services:
 
   wisiee:
     image: wisiee-app:v0.0.1
-    container_name: wisiee-minio
+    container_name: wisiee-app
     restart: always
     mem_limit: 768m
     depends_on:
