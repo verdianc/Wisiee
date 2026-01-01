@@ -90,12 +90,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 5. 세션 저장 (백엔드용)
         httpSession.setAttribute("userId", user.getUserId());
 
-        // response.sendRedirect(targetUrl); 바로 윗줄에 추가
-        String sessionid = httpSession.getId();
-        // SameSite=None과 Secure를 직접 명시해야만 localhost와 wisiee.store 간에 세션이 공유됩니다.
-        String cookieHeader = String.format("JSESSIONID=%s; Path=/; HttpOnly; SameSite=None; Secure", sessionid);
-        response.setHeader("Set-Cookie", cookieHeader);
-
         response.sendRedirect(sandRedirect);
     }
 }
