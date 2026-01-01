@@ -1,6 +1,5 @@
 server:
   servlet:
-    context-path: /wisiee
     session:
       cookie:
         name: JSESSIONID
