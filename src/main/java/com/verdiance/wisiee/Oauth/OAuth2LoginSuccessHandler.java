@@ -23,7 +23,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
-    private final HttpSession httpSession;
     private final UserRepository userRepository;
     private final OAuth2AuthorizedClientService authorizedClientService;
 
@@ -64,6 +63,8 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         String accessToken = "";
         String refreshToken = null;
+
+        HttpSession httpSession = request.getSession(true);
 
         if (client!=null) {
             httpSession.setAttribute("accessTokenExpiresAt", client.getAccessToken().getExpiresAt().toEpochMilli());
