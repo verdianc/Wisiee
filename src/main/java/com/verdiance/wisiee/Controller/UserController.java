@@ -94,7 +94,12 @@ public class UserController {
     //주소록 등록 및 수정
     @PostMapping("/addressBook")
     public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto, HttpSession session) {
-//        Long userId = userFacadeService.getUserId();
+        log.info("Current Session ID: {}", session.getId());
+
+        // 2. 세션에 들어있는 모든 데이터 이름을 다 찍어보세요.
+        java.util.Collections.list(session.getAttributeNames())
+                .forEach(name -> log.info("세션 내부 키 확인: {} = {}", name, session.getAttribute(name)));
+
         Long userId = (Long) session.getAttribute("userId");
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.createAddressBook(dto, userId));
     }
