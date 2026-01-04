@@ -7,7 +7,7 @@ server:
         secure: true
         http-only: true
   port: 8080
-  forward-headers-strategy: native
+  forward-headers-strategy: framework
   error:
     include-stacktrace: never
   logging:
@@ -25,6 +25,9 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
     display-request-duration: true
+  server:
+    url: https://wisiee.store
+    description: Production Server
 
 
 spring:
