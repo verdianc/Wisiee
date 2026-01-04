@@ -93,8 +93,9 @@ public class UserController {
 
     //주소록 등록 및 수정
     @PostMapping("/addressBook")
-    public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto) {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto, HttpSession session) {
+//        Long userId = userFacadeService.getUserId();
+        Long userId = (Long) session.getAttribute("userId");
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.createAddressBook(dto, userId));
     }
 
