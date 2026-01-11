@@ -65,7 +65,8 @@ public class SecurityConfig {
         // 1. 프론트엔드 주소 허용 (쿠키를 쓰려면 "*" 사용 불가, 반드시 명시해야 함)
         configuration.setAllowedOrigins(Arrays.asList(
                 "https://localhost:5173",  // 로컬 개발 환경
-                "https://wisiee.com"    // 배포 환경
+                "https://wisiee.com",
+                "https://www.wisiee.com"// 배포 환경
         ));
 
         // 2. 모든 HTTP 메서드 허용 (GET, POST, PUT, DELETE 등)
