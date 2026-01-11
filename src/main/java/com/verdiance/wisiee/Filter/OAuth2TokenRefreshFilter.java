@@ -18,7 +18,6 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
 
     private final UserRepository userRepository;
     private final OAuth2TokenServiceimpl oAuth2TokenService;
-    private final HttpSession httpSession;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -26,12 +25,12 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
         HttpSession httpSession = request.getSession();
         Long userId = (Long) httpSession.getAttribute("userId");
-        if (userId!=null && isAccessTokenExpired()) {
+        if (userId!=null && isAccessTokenExpired(httpSession)) {
 
             //만료시, refresh token 조회
             String refreshToken = userRepository.findRefreshTokenByUserId(userId).orElse(null);
             if (refreshToken==null) {
-                handleException(response);
+                handleException(response, httpSession);
                 return;
             }
 
@@ -42,7 +41,7 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
                 httpSession.setAttribute("accessToken", newAccessToken);
             } catch (Exception e) {
                 logger.error("토큰 갱신 실패: ", e);
-                handleException(response);
+                handleException(response, httpSession);
                 return;
             }
 
@@ -52,12 +51,12 @@ public class OAuth2TokenRefreshFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 
-    private boolean isAccessTokenExpired() {
+    private boolean isAccessTokenExpired(HttpSession httpSession) {
         Long expiresAt = (Long) httpSession.getAttribute("accessTokenExpiresAt");
         return expiresAt!=null && System.currentTimeMillis() > (expiresAt - 60_000);
     }
 
-    private void handleException(HttpServletResponse response) throws IOException {
+    private void handleException(HttpServletResponse response, HttpSession httpSession) throws IOException {
         try {
             httpSession.invalidate();
         } catch (IllegalStateException e) {

@@ -14,6 +14,7 @@ import com.verdiance.wisiee.Infrastructure.S3.S3Port;
 import com.verdiance.wisiee.Service.Interface.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
@@ -39,8 +40,8 @@ public class UserFacadeService {
         userService.logout(request, response, authentication);
     }
 
-    public Long getUserId() {
-        return commonUtil.getUserId();
+    public Long getUserId(HttpSession session) {
+        return commonUtil.getUserId(session);
     }
 
 
