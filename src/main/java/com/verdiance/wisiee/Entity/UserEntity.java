@@ -42,10 +42,6 @@ public class UserEntity extends BaseEntity {
     @Column(name = "provider_name", nullable = false)
     private String providerNm;
 
-    // 닉네임 변경 횟수
-    @Column(name = "nick_change_count", nullable = false)
-    private int nickChangeCount = 0;
-
     //소셜 로그인 provider에서 제공하는 providerId
     //신규 사용지 <-> 기존 사용자 구분키 위해
     @Column(name = "provider_id", nullable = false)

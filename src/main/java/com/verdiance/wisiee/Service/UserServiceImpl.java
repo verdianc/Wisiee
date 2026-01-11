@@ -93,7 +93,6 @@ public class UserServiceImpl implements UserService {
                 .email(user.getEmail())
                 .profileImgUrl(user.getProfileImgUrl())
                 .formCount(formCount)
-                .nickChangeLeft(3 - user.getNickChangeCount())
                 .createdAt(user.getCreatedAt())
                 .build();
     }
