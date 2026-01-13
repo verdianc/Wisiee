@@ -8,10 +8,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class CommonUtil {
-    private final HttpSession httpSession;
 
-    public Long getUserId() {
-        Long userId = (Long) httpSession.getAttribute("userId");
+
+    public Long getUserId(HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
         if (userId==null) {
             throw new SessionUserNotFoundException();
         }

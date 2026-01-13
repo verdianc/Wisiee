@@ -64,7 +64,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         String accessToken = "";
         String refreshToken = null;
 
-        HttpSession httpSession = request.getSession(true);
+        HttpSession httpSession = request.getSession();
 
         if (client!=null) {
             httpSession.setAttribute("accessTokenExpiresAt", client.getAccessToken().getExpiresAt().toEpochMilli());

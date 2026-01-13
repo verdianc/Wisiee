@@ -59,8 +59,8 @@ public class UserController {
     @PostMapping("/profile-image")
     public ResDTO<String> updateUserProfileImage(
             // TODO : 파일 커스텀 예외 처리하기
-            @RequestPart("file") MultipartFile file) throws IOException {
-        Long userId = userFacadeService.getUserId();
+            @RequestPart("file") MultipartFile file, HttpSession session) throws IOException {
+        Long userId = userFacadeService.getUserId(session);
         UserProfileImageDTO dto = UserProfileImageDTO.fromMultipart(userId, file);
 
         String imageUrl = userFacadeService.updateUserProfileImage(dto);
@@ -72,9 +72,9 @@ public class UserController {
 
 
     @PutMapping("/profile")
-    public ResDTO<Void> updateUserProfile(@RequestBody UserInfoUpdateDTO dto) {
+    public ResDTO<Void> updateUserProfile(@RequestBody UserInfoUpdateDTO dto, HttpSession session) {
 
-        Long userId = userFacadeService.getUserId();
+        Long userId = userFacadeService.getUserId(session);
         dto.setUserId(userId);
 
         userFacadeService.updateUserInfo(dto);
@@ -84,8 +84,8 @@ public class UserController {
 
     //사용자 탈퇴
     @DeleteMapping("/user")
-    public ResDTO<Void> delUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<Void> delUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication, HttpSession session) {
+        Long userId = userFacadeService.getUserId(session);
         userFacadeService.deleteUser(userId);
         userFacadeService.logout(request, response, authentication);
         return new ResDTO<Void>((Void) null);
@@ -93,29 +93,29 @@ public class UserController {
 
     //주소록 등록 및 수정
     @PostMapping("/addressBook")
-    public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto) {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<AddressBookRequestDTO> createAddressBook(@RequestBody AddressBookRequestDTO dto, HttpSession session) {
+        Long userId = (Long) session.getAttribute("userId");
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.createAddressBook(dto, userId));
     }
 
     //주소록 조회
     @GetMapping("/addressBook")
     public ResDTO<AddressBookListResponseDTO> getAddressBook(HttpSession session) {
-        log.debug(session.getId());
+
         Long userId = (Long) session.getAttribute("userId");
         return new ResDTO<AddressBookListResponseDTO>(userFacadeService.getAddressBook(userId));
     }
 
     @PutMapping("/addressBook")
-    public ResDTO<AddressBookRequestDTO> updateAddressBook(@RequestBody AddressBookRequestDTO dto) {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<AddressBookRequestDTO> updateAddressBook(@RequestBody AddressBookRequestDTO dto, HttpSession session) {
+        Long userId = userFacadeService.getUserId(session);
         return new ResDTO<AddressBookRequestDTO>(userFacadeService.updateAddressBook(dto, userId));
     }
 
     // 기본 배송지 변경
     @PutMapping("/addressBook/default/{id}")
-    public ResDTO<Void> setDefaultAddress(@PathVariable("id") Long addressId) {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<Void> setDefaultAddress(@PathVariable("id") Long addressId, HttpSession session) {
+        Long userId = userFacadeService.getUserId(session);
         userFacadeService.setDefaultAddress(addressId, userId);
         return new ResDTO<>((Void) null);
     }
@@ -132,8 +132,8 @@ public class UserController {
     }
 
     @GetMapping("/addressBook/default")
-    public ResDTO<AddressBookResponseDTO> getMainAddress() {
-        Long userId = userFacadeService.getUserId();
+    public ResDTO<AddressBookResponseDTO> getMainAddress(HttpSession session) {
+        Long userId = userFacadeService.getUserId(session);
         return new ResDTO<AddressBookResponseDTO>(userFacadeService.getMainAddress(userId));
     }
 
