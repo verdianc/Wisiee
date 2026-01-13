@@ -30,6 +30,11 @@ public class ResDTO<T> {
     return new ResDTO<>(data);
   }
 
+
+  public static ResDTO<Void> success() {
+    return new ResDTO<>(null);
+  }
+
   // 실패 응답
   public ResDTO(ErrorCode errorCode) {
     this.success = false;

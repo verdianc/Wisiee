@@ -75,7 +75,7 @@ public class FormController {
   @DeleteMapping("/{id}")
   public ResDTO<Void> deleteForm(@PathVariable Long id) {
     formFacadeService.deleteForm(id);
-    return new ResDTO<>(null);
+    return ResDTO.success();
   }
 
 

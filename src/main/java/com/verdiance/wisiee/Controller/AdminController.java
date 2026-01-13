@@ -65,7 +65,7 @@ public class AdminController {
   public ResDTO<Void> closeQuestionByAdmin(@PathVariable Long id) {
 
     qnaFacadeService.closeQuestionByAdmin(id);
-    return new ResDTO<>(null);
+    return ResDTO.success();
   }
 
 
@@ -120,7 +120,7 @@ public class AdminController {
   @DeleteMapping("/faqs/{faqId}")
   public ResDTO<Void> deleteFaq(@PathVariable Long faqId) {
     faqService.deleteFaq(faqId);
-    return new ResDTO<>(null);
+    return ResDTO.success();
   }
 
 
