@@ -8,7 +8,8 @@ public enum OrderStatus {
     PREP,       // 상품 준비중
     SHIPPED,    // 발송
     TRANSIT,    // 배송중
-    DONE,   // 배송 완료
+    DONE, // 배송 완료
+    ORDERED,
     CANCELED; //주문 취소
 
     public static Optional<OrderStatus> safeValueOf(String orderStatusStr) {
