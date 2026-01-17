@@ -31,7 +31,7 @@ public class QnaController {
   // 2. 문의 수정
   @PutMapping("/questions/{questionId}")
   public ResDTO<QuestionDTO> updateQuestion(
-      @PathVariable Long id,
+      @PathVariable("questionId") Long id,
       @RequestPart("data") QuestionRequestDTO dto,
       @RequestPart(value = "files", required = false)
       java.util.List<MultipartFile> files
@@ -40,7 +40,6 @@ public class QnaController {
     QuestionDTO result = qnaFacadeService.updateQuestion(dto, files);
     return new ResDTO<>(result);
   }
-
 
 
   // 3. 문의 삭제
