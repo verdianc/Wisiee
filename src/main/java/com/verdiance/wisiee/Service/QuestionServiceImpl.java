@@ -120,8 +120,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     Pageable pageable = PageRequest.of(page, 5, Sort.by(Sort.Direction.DESC, "createdAt"));
 
-    Page<QuestionEntity> result = questionRepository
-        .findByTitleContainingIgnoreCase(title, pageable);
+    Page<QuestionEntity> result = questionRepository.findByTitleContainingIgnoreCaseAndIsFaqTrue(title, pageable);
 
     return result.map(QuestionDTO::from);
   }
