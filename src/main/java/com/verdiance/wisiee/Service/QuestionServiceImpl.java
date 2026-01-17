@@ -6,6 +6,7 @@ import com.verdiance.wisiee.Entity.UserEntity;
 import com.verdiance.wisiee.Exception.Common.*;
 import com.verdiance.wisiee.Repository.QuestionRepository;
 import com.verdiance.wisiee.Service.Interface.QuestionService;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -143,6 +144,7 @@ public class QuestionServiceImpl implements QuestionService {
             .title(entity.getTitle())
             .category(entity.getCategory())
             .content(entity.getContent())
+            .nickName(entity.getUser().getNickNm())
             .closed(entity.isClosed())
             .createdAt(entity.getCreatedAt())
             .build()
@@ -170,6 +172,9 @@ public class QuestionServiceImpl implements QuestionService {
             .category(entity.getCategory())
             .closed(entity.isClosed())
             .createdAt(entity.getCreatedAt())
+            .answers(entity.getAnswers().stream()
+                .map(AnswerDTO::from)
+                .collect(Collectors.toList()))
             .build()
         );
   }
