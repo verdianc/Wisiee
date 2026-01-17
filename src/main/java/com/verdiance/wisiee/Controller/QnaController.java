@@ -70,12 +70,13 @@ public class QnaController {
   // 5. 답변 수정
   @PutMapping("/answers/{answerId}")
   public ResDTO<AnswerDTO> updateAnswer(
-      @PathVariable Long answerId,
+      @PathVariable("answerId") Long answerId,
       @RequestBody AnswerRequestDTO dto
   ) {
     AnswerDTO result = qnaFacadeService.updateAnswer(answerId, dto);
     return new ResDTO<>(result);
   }
+
 
 
 
