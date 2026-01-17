@@ -26,4 +26,6 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> 
   // 기존 메서드
   Page<QuestionEntity> findByUser(UserEntity user, Pageable pageable);
 
+
+  Page<QuestionEntity> findByIsFaqTrue(Pageable pageable);
 }

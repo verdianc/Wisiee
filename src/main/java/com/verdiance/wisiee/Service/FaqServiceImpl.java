@@ -66,9 +66,18 @@ public class FaqServiceImpl implements FaqService {
   @Override
   @Transactional(readOnly = true)
   public Page<FaqDTO> getFaqsByCategory(Category category, Pageable pageable) {
-    return questionRepository
-        .findByCategoryAndIsFaqTrue(category, pageable)
-        .map(this::toDto);
+
+    Page<QuestionEntity> entities;
+
+    if (category == null) {
+
+      entities = questionRepository.findByIsFaqTrue(pageable);
+    } else {
+
+      entities = questionRepository.findByCategoryAndIsFaqTrue(category, pageable);
+    }
+
+    return entities.map(this::toDto);
   }
 
   /**
