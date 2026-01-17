@@ -58,6 +58,7 @@ public class OrderEntity extends BaseEntity {
 
     // 배송 상태 enum
     @Enumerated(EnumType.STRING)
+    @Column(name = "order_status", length = 20)
     private OrderStatus orderStatus;
 
     // 배송 옵션 enum

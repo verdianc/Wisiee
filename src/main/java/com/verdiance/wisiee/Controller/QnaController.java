@@ -44,7 +44,7 @@ public class QnaController {
 
 
   // 3. 문의 삭제
-  @DeleteMapping("/questions/{questionId}")
+  @DeleteMapping("/questions/{id}")
   public ResDTO<Void> deleteQuestion(@PathVariable Long id) {
 
     qnaFacadeService.deleteQuestion(id);

@@ -24,15 +24,25 @@ public class AnswerDTO {
   private boolean fromAdmin;
   private LocalDate createdAt;
 
+
   public static AnswerDTO from(AnswerEntity e) {
-    return AnswerDTO.builder()
+    AnswerDTOBuilder builder = AnswerDTO.builder()
         .id(e.getId())
         .questionId(e.getQuestion().getId())
         .content(e.getAnswer())
-        .senderId(e.getUser().getUserId())
-        .senderNickNm(e.getUser().getNickNm())
         .fromAdmin(e.isFromAdmin())
-        .createdAt(e.getCreatedAt())
-        .build();
+        .createdAt(e.getCreatedAt());
+
+    if (e.isFromAdmin() && e.getAdmin() != null) {
+      builder.senderId(e.getAdmin().getAdminId())
+          .senderNickNm(e.getAdmin().getUsername());
+    }
+
+    else if (e.getUser() != null) {
+      builder.senderId(e.getUser().getUserId())
+          .senderNickNm(e.getUser().getNickNm());
+    }
+
+    return builder.build();
   }
 }

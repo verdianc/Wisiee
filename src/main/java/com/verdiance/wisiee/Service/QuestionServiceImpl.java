@@ -142,6 +142,7 @@ public class QuestionServiceImpl implements QuestionService {
             .id(entity.getId())
             .title(entity.getTitle())
             .category(entity.getCategory())
+            .content(entity.getContent())
             .closed(entity.isClosed())
             .createdAt(entity.getCreatedAt())
             .build()
