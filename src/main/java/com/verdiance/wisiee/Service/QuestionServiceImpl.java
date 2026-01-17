@@ -165,6 +165,8 @@ public class QuestionServiceImpl implements QuestionService {
         .map(entity -> QuestionDTO.builder()
             .id(entity.getId())
             .title(entity.getTitle())
+            .content(entity.getContent())
+            .nickName(entity.getUser().getNickNm())
             .category(entity.getCategory())
             .closed(entity.isClosed())
             .createdAt(entity.getCreatedAt())
