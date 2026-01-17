@@ -35,21 +35,30 @@ public class ResDTO<T> {
     return new ResDTO<>(null);
   }
 
-  // 실패 응답
+
+  // 실패 응답 (ErrorCode 하나만 받을 때)
   public ResDTO(ErrorCode errorCode) {
     this.success = false;
     this.data = null;
-    this.errorCode = errorCode.getCode();
-    this.errorMessage = errorCode.getMessage();
+    // null이면 9000번 에러를 기본으로 사용
+    ErrorCode temp = (errorCode != null) ? errorCode : ErrorCode.INTERNAL_SERVER_ERROR;
+    this.errorCode = temp.getCode();
+    this.errorMessage = temp.getMessage();
     this.timestamp = System.currentTimeMillis();
   }
 
-  // 실패 응답
+  // 실패 응답 (ErrorCode랑 직접 쓴 메세지랑 같이 받을 때)
   public ResDTO(ErrorCode errorCode, String customMessage) {
     this.success = false;
     this.data = null;
-    this.errorCode = errorCode.getCode();
-    this.errorMessage = customMessage;
+    // null이면 9000번 에러 기본값 사용
+    if (errorCode != null) {
+      this.errorCode = errorCode.getCode();
+      this.errorMessage = (customMessage != null) ? customMessage : errorCode.getMessage();
+    } else {
+      this.errorCode = ErrorCode.INTERNAL_SERVER_ERROR.getCode();
+      this.errorMessage = (customMessage != null) ? customMessage : ErrorCode.INTERNAL_SERVER_ERROR.getMessage();
+    }
     this.timestamp = System.currentTimeMillis();
   }
 
