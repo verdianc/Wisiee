@@ -146,6 +146,9 @@ public class QuestionServiceImpl implements QuestionService {
             .content(entity.getContent())
             .nickName(entity.getUser().getNickNm())
             .closed(entity.isClosed())
+            .answers(entity.getAnswers().stream()
+                .map(AnswerDTO::from)
+                .collect(Collectors.toList()))
             .createdAt(entity.getCreatedAt())
             .build()
         );
