@@ -88,7 +88,7 @@ public class AdminController {
    */
   @GetMapping("/faqs")
   public ResDTO<Page<FaqDTO>> getFaqsByCategory(
-      @RequestParam Category category,
+      @RequestParam(required = false) Category category,
       @RequestParam(defaultValue = "0") int page
   ) {
     Page<FaqDTO> result = faqService.getFaqsByCategory(
