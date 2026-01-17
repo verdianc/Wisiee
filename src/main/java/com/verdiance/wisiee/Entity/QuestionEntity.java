@@ -49,12 +49,24 @@ public class QuestionEntity extends BaseEntity {
 
   private boolean closed;
 
+  private boolean isFaq;
+
   public QuestionEntity(UserEntity user, String title, String content, Category category) {
     this.user = user;
     this.title = title;
     this.content = content;
     this.category = category;
     this.closed = false;
+    this.isFaq = false;
+  }
+
+  public QuestionEntity(String title, String content, Category category, boolean isFaq) {
+    this.user = null;
+    this.title = title;
+    this.content = content;
+    this.category = category;
+    this.isFaq = isFaq;
+    this.closed = true;
   }
 
   public void update(QuestionRequestDTO dto) {

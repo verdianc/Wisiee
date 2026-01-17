@@ -1,9 +1,13 @@
 package com.verdiance.wisiee.Service;
 
 import com.verdiance.wisiee.Common.Enum.Category;
+import com.verdiance.wisiee.Common.Enum.Error.ErrorCode;
 import com.verdiance.wisiee.DTO.Faq.FaqDTO;
+import com.verdiance.wisiee.Entity.AdminEntity;
 import com.verdiance.wisiee.Entity.AnswerEntity;
 import com.verdiance.wisiee.Entity.QuestionEntity;
+import com.verdiance.wisiee.Exception.BaseException;
+import com.verdiance.wisiee.Repository.AdminRepository;
 import com.verdiance.wisiee.Repository.AnswerRepository;
 import com.verdiance.wisiee.Repository.QuestionRepository;
 import com.verdiance.wisiee.Service.Interface.FaqService;
@@ -22,37 +26,39 @@ public class FaqServiceImpl implements FaqService {
 
   private final QuestionRepository questionRepository;
   private final AnswerRepository answerRepository;
+  private final AdminRepository adminRepository;
 
-  /**
-   * FAQ 등록
-   * - user 없음
-   * - 파일 없음
-   * - 관리자 답변 1개 고정
-   */
+
+
   @Override
+  @Transactional
   public FaqDTO createFaq(String question, String answer, Category category) {
 
-    // FAQ 질문 생성 (user = null)
+    // 1. FAQ 질문 생성 (UserEntity는 null)
     QuestionEntity q = new QuestionEntity(
-        null,
-        question,
-        null,
-        category
+        question,  // title
+        question,  // content
+        category,
+        true       // isFaq
     );
+
 
     QuestionEntity savedQuestion = questionRepository.save(q);
 
-    // FAQ 답변 생성 (관리자 답변)
+
+
     AnswerEntity a = new AnswerEntity(
         answer,
         savedQuestion,
-        null   // AdminEntity 필요 없음 (fromAdmin = true는 생성자에서 처리)
+        (AdminEntity) null
     );
 
     answerRepository.save(a);
 
-    return toDto(savedQuestion, a);
+    return toDto(savedQuestion);
   }
+
+
 
   /**
    * 카테고리별 FAQ 조회
@@ -60,15 +66,9 @@ public class FaqServiceImpl implements FaqService {
   @Override
   @Transactional(readOnly = true)
   public Page<FaqDTO> getFaqsByCategory(Category category, Pageable pageable) {
-
     return questionRepository
-        .findByCategory(category, pageable)
-        .map(q -> toDto(
-            q,
-            answerRepository
-                .findFirstByQuestionIdAndFromAdminTrue(q.getId())
-                .orElse(null)
-        ));
+        .findByCategoryAndIsFaqTrue(category, pageable)
+        .map(this::toDto);
   }
 
   /**
@@ -77,15 +77,9 @@ public class FaqServiceImpl implements FaqService {
   @Override
   @Transactional(readOnly = true)
   public Page<FaqDTO> searchFaq(String keyword, Pageable pageable) {
-
     return questionRepository
-        .findByTitleContainingIgnoreCase(keyword, pageable)
-        .map(q -> toDto(
-            q,
-            answerRepository
-                .findFirstByQuestionIdAndFromAdminTrue(q.getId())
-                .orElse(null)
-        ));
+        .findByTitleContainingIgnoreCaseAndIsFaqTrue(keyword, pageable)
+        .map(this::toDto);
   }
 
   /**
@@ -93,17 +87,25 @@ public class FaqServiceImpl implements FaqService {
    */
   @Override
   public void deleteFaq(Long faqId) {
-    questionRepository.deleteById(faqId);
+    // FAQ인 경우만 삭제하도록 검증 로직을 추가하면 더 안전합니다.
+    QuestionEntity q = questionRepository.findById(faqId)
+        .orElseThrow(() -> new BaseException(ErrorCode.RESOURCE_NOT_FOUND, "관련 FAQ를 찾을 수 없습니다."));
+
+    if (!q.isFaq()) {
+      throw new BaseException(ErrorCode.INVALID_REQUEST, "FAQ 데이터만 삭제할 수 있습니다.");
+    }
+
+    questionRepository.delete(q);
   }
 
-  /**
-   * Entity → DTO 변환
-   */
-  private FaqDTO toDto(QuestionEntity q, AnswerEntity a) {
+
+  private FaqDTO toDto(QuestionEntity q) {
+    String answerText = q.getAnswers().isEmpty() ? null : q.getAnswers().get(0).getAnswer();
+
     return FaqDTO.builder()
         .id(q.getId())
         .question(q.getTitle())
-        .answer(a != null ? a.getAnswer() : null)
+        .answer(answerText)
         .category(q.getCategory())
         .build();
   }
