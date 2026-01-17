@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
+    SUCCESS(0, "요청이 성공적으로 처리되었습니다."),
+
     // 1000번대: Form 관련 에러
     FORM_NOT_FOUND(1000, "존재하지 않는 Form 입니다."),
     FORM_CREATE_FAILED(1001, "Form 생성에 실패했습니다."),
