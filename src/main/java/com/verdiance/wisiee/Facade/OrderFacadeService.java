@@ -1,14 +1,12 @@
 package com.verdiance.wisiee.Facade;
 
 import com.verdiance.wisiee.Common.Enum.OrderStatus;
-import com.verdiance.wisiee.Common.Util.CommonUtil;
 import com.verdiance.wisiee.DTO.Order.OrderPageRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
 import com.verdiance.wisiee.Exception.Order.WrongOrderStatusException;
 import com.verdiance.wisiee.Service.Interface.OrderService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -16,12 +14,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderFacadeService {
-    private final CommonUtil commonUtil;
     private final OrderService orderService;
-
-    public Long getUserId(HttpSession session) {
-        return commonUtil.getUserId(session);
-    }
 
 
     public OrderRespDTO createOrder(OrderReqDTO dto) {

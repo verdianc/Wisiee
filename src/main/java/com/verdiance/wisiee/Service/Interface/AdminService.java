@@ -7,10 +7,10 @@ import com.verdiance.wisiee.Entity.AdminEntity;
 
 public interface AdminService {
 
-  void login(AdminLoginRequestDTO dto);
+    void login(AdminLoginRequestDTO dto);
 
-  AdminEntity getCurrentAdmin();
+    AdminEntity getCurrentAdmin(Long adminId);
 
-  AnswerDTO registerAdminAnswer(AnswerRequestDTO dto);
+    AnswerDTO registerAdminAnswer(AnswerRequestDTO dto, Long adminId);
 
 }

@@ -6,11 +6,11 @@ import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespListDTO;
 import com.verdiance.wisiee.DTO.ResDTO;
 import com.verdiance.wisiee.Facade.OrderFacadeService;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,16 +27,14 @@ public class OrderController {
 
     // 주문 생성
     @PostMapping
-    public ResDTO<OrderRespDTO> create(@RequestBody OrderReqDTO dto, HttpSession session) {
-        Long userId = orderFacadeService.getUserId(session);
+    public ResDTO<OrderRespDTO> create(@RequestBody OrderReqDTO dto, @AuthenticationPrincipal Long userId) {
         dto.setUserId(userId);
         return new ResDTO<>(orderFacadeService.createOrder(dto));
     }
 
     // 구매자의 주문 리스트 가져오기
     @GetMapping("/orderList")
-    public ResDTO<OrderRespListDTO> getOrderList(HttpSession session) {
-        Long userId = orderFacadeService.getUserId(session);
+    public ResDTO<OrderRespListDTO> getOrderList(@AuthenticationPrincipal Long userId) {
         return new ResDTO<>(orderFacadeService.getOrderList(userId));
     }
 
@@ -51,8 +49,7 @@ public class OrderController {
 
     // 주문 취소
     @PutMapping("/cancel")
-    public ResDTO<Void> cancelOrder(@RequestBody OrderReqDTO dto, HttpSession session) {
-        Long userId = orderFacadeService.getUserId(session);
+    public ResDTO<Void> cancelOrder(@RequestBody OrderReqDTO dto, @AuthenticationPrincipal Long userId) {
         dto.setUserId(userId);
         orderFacadeService.cancelOrder(dto);
         return new ResDTO<>((Void) null);
@@ -60,8 +57,7 @@ public class OrderController {
 
     // 주소지 변경
     @PutMapping("/updateAddress")
-    public ResDTO<Void> updateAddress(@RequestBody OrderReqDTO dto, HttpSession session) {
-        Long userId = orderFacadeService.getUserId(session);
+    public ResDTO<Void> updateAddress(@RequestBody OrderReqDTO dto, @AuthenticationPrincipal Long userId) {
         dto.setUserId(userId);
         orderFacadeService.updateAddress(dto);
         return new ResDTO<>((Void) null);
@@ -76,9 +72,8 @@ public class OrderController {
     public ResDTO<OrderPageRespDTO> getOrders(
             @RequestParam(required = false) Long formId, // ★ 여기가 핵심 (필수 아님)
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable,
-            HttpSession session
+            @AuthenticationPrincipal Long userId
     ) {
-        Long userId = orderFacadeService.getUserId(session);
         OrderPageRespDTO result;
 
         if (formId!=null) {
