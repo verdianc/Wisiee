@@ -14,15 +14,15 @@ import org.springframework.security.core.Authentication;
 
 public interface UserService {
 
-    UserEntity getUser();
+    UserEntity getUser(Long userId);
 
-    OauthDTO getCurrentUser();
+    OauthDTO getCurrentUser(Long userId);
 
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto);
 
     void updateUserProfileImage(Long userId, String url);
 
-    MyPageDTO getMyPage();
+    MyPageDTO getMyPage(Long userId);
 
     void updateUserProfile(UserInfoUpdateDTO updateUserInfo);
 

@@ -76,6 +76,7 @@ public class UserEntity extends BaseEntity {
         return deletedAt!=null;
     }
 
+
     public void changeProfileImage(String newUrl) {
         this.profileImgUrl = newUrl;
     }
@@ -111,19 +112,8 @@ public class UserEntity extends BaseEntity {
     }
 
     public void softDelete() {
-        // 1. 삭제 시간 기록
         this.deletedAt = LocalDateTime.now();
-
-        // 2. 유니크 제약 조건 충돌 방지 (기존 ID + 타임스탬프)
-        // 재가입 시 동일한 providerId가 들어와도 DB 입장에서는 새로운 값으로 인식됨
         this.providerId = this.providerId + "_del_" + System.currentTimeMillis();
-
-        // 3. 닉네임 점유 해제 (선택 사항)
-        // 탈퇴한 사람의 닉네임을 다른 사람이 즉시 쓸 수 있게 하려면 null 처리
-        this.nickNm = null;
-
-        // 4. 인증 토큰 무효화
-        this.refreshToken = null;
+        this.nickNm = null; // 닉네임 점유 해제 (다른 사람이 쓸 수 있도록)
     }
-
 }

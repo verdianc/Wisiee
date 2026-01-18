@@ -1,6 +1,5 @@
 package com.verdiance.wisiee.Facade;
 
-import com.verdiance.wisiee.Common.Util.CommonUtil;
 import com.verdiance.wisiee.DTO.User.AddressBookListResponseDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookRequestDTO;
 import com.verdiance.wisiee.DTO.User.AddressBookResponseDTO;
@@ -14,7 +13,6 @@ import com.verdiance.wisiee.Infrastructure.S3.S3Port;
 import com.verdiance.wisiee.Service.Interface.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.time.Duration;
 import java.util.Map;
 import java.util.UUID;
@@ -28,22 +26,16 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserFacadeService {
 
-    private final CommonUtil commonUtil;
     private final UserService userService;
     private final S3Port s3Port;
 
-    public OauthDTO getCurrentUser() {
-        return userService.getCurrentUser();
+    public OauthDTO getCurrentUser(Long userId) {
+        return userService.getCurrentUser(userId);
     }
 
     public void logout(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         userService.logout(request, response, authentication);
     }
-
-    public Long getUserId(HttpSession session) {
-        return commonUtil.getUserId(session);
-    }
-
 
     public UserChkExistNickNmDTO chkExistNickNm(UserChkExistNickNmDTO dto) {
         return userService.chkExistNickNm(dto);
@@ -106,7 +98,7 @@ public class UserFacadeService {
     }
 
 
-    public MyPageDTO getMyPage() {
-        return userService.getMyPage();
+    public MyPageDTO getMyPage(Long userId) {
+        return userService.getMyPage(userId);
     }
 }

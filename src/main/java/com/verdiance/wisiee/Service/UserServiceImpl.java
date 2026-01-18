@@ -22,7 +22,6 @@ import com.verdiance.wisiee.Repository.UserRepository;
 import com.verdiance.wisiee.Service.Interface.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +39,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final AddressBookRepository addressBookRepository;
-    private final HttpSession httpSession;
     private final GoogleRevocationService googleRevocationService;
     private final OAuth2AuthorizedClientRepository authorizedClientRepository;
 
@@ -53,8 +51,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserEntity getUser() {
-        Long userId = (Long) httpSession.getAttribute("userId");
+    public UserEntity getUser(Long userId) {
         if (userId==null) {
             throw new SessionUserNotFoundException();
         }
@@ -64,8 +61,7 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public OauthDTO getCurrentUser() {
-        Long userId = (Long) httpSession.getAttribute("userId");
+    public OauthDTO getCurrentUser(Long userId) {
         if (userId==null) {
             throw new SessionUserNotFoundException();
         }
@@ -82,8 +78,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public MyPageDTO getMyPage() {
-        UserEntity user = getUser();
+    public MyPageDTO getMyPage(Long userId) {
+        UserEntity user = getUser(userId);
 
         int formCount = userRepository.countFormsByUser(user);
 
@@ -135,13 +131,11 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void deleteUser(Long userId) {
-        // 1. 유저 조회 (없으면 예외 발생)
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFound(userId));
 
         // 2. 엔티티 내부의 softDelete 로직 실행
         user.softDelete();
-        
     }
 
     @Override
