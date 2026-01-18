@@ -31,8 +31,8 @@ services:
       MINIO_SERVER_URL: "https://wisiee.store:9000"
       MINIO_BROWSER_REDIRECT_URL: "https://wisiee.store:9001"
     ports:
-      - "9000:9000"
-      - "9001:9001"
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
     volumes:
       - wisiee-minio-data:/data
 
