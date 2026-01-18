@@ -11,18 +11,21 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 
 @Entity
 //동일한 provider + providerId는 복수개 존재할 수 없음
 @NoArgsConstructor
 @AllArgsConstructor
+@SQLRestriction("deleted_at IS NULL")
 @Table(name = "USER_INFO",
         uniqueConstraints = {
                 @UniqueConstraint(
@@ -66,6 +69,12 @@ public class UserEntity extends BaseEntity {
     @Column(name = "nickname_updated_at")
     private LocalDate nicknameUpdatedAt;
 
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    public boolean isDeleted() {
+        return deletedAt!=null;
+    }
 
     public void changeProfileImage(String newUrl) {
         this.profileImgUrl = newUrl;
@@ -74,7 +83,7 @@ public class UserEntity extends BaseEntity {
 
     public void validateNicknameChangeAllowed() {
         // null → 최초 변경이므로 허용
-        if (this.nicknameUpdatedAt == null) {
+        if (this.nicknameUpdatedAt==null) {
             return;
         }
 
@@ -82,7 +91,7 @@ public class UserEntity extends BaseEntity {
 
         if (LocalDate.now().isBefore(availableDate)) {
             throw new ResourceUpdateFailedException(
-                "닉네임은 최초 변경 후 60일이 지나야 변경 가능합니다."
+                    "닉네임은 최초 변경 후 60일이 지나야 변경 가능합니다."
             );
         }
     }
@@ -101,5 +110,20 @@ public class UserEntity extends BaseEntity {
         }
     }
 
+    public void softDelete() {
+        // 1. 삭제 시간 기록
+        this.deletedAt = LocalDateTime.now();
+
+        // 2. 유니크 제약 조건 충돌 방지 (기존 ID + 타임스탬프)
+        // 재가입 시 동일한 providerId가 들어와도 DB 입장에서는 새로운 값으로 인식됨
+        this.providerId = this.providerId + "_del_" + System.currentTimeMillis();
+
+        // 3. 닉네임 점유 해제 (선택 사항)
+        // 탈퇴한 사람의 닉네임을 다른 사람이 즉시 쓸 수 있게 하려면 null 처리
+        this.nickNm = null;
+
+        // 4. 인증 토큰 무효화
+        this.refreshToken = null;
+    }
 
 }
