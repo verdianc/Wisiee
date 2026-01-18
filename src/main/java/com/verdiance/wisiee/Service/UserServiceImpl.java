@@ -134,8 +134,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public void deleteUser(Long usedId) {
-        userRepository.deleteById(usedId);
+    public void deleteUser(Long userId) {
+        // 1. 유저 조회 (없으면 예외 발생)
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFound(userId));
+
+        // 2. 엔티티 내부의 softDelete 로직 실행
+        user.softDelete();
+        
     }
 
     @Override

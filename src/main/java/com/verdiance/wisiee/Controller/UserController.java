@@ -83,7 +83,7 @@ public class UserController {
     }
 
     //사용자 탈퇴
-    @DeleteMapping("/user")
+    @PutMapping("/userDel")
     public ResDTO<Void> delUser(HttpServletRequest request, HttpServletResponse response, Authentication authentication, HttpSession session) {
         Long userId = userFacadeService.getUserId(session);
         userFacadeService.deleteUser(userId);
