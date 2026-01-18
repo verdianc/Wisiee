@@ -28,4 +28,5 @@ public interface QuestionRepository extends JpaRepository<QuestionEntity, Long> 
 
 
   Page<QuestionEntity> findByIsFaqTrue(Pageable pageable);
+  Page<QuestionEntity> findByIsFaqFalse(Pageable pageable);
 }

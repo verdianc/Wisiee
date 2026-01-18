@@ -165,7 +165,7 @@ public class QuestionServiceImpl implements QuestionService {
     );
 
     return questionRepository
-        .findAll(pageable)
+        .findByIsFaqFalse(pageable)
         .map(entity -> QuestionDTO.builder()
             .id(entity.getId())
             .title(entity.getTitle())
