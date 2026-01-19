@@ -1,6 +1,7 @@
 package com.verdiance.wisiee.Entity;
 
 import com.verdiance.wisiee.DTO.Product.ProductDTO;
+import com.verdiance.wisiee.DTO.Product.ProductRequestDTO;
 import com.verdiance.wisiee.Exception.Stock.OutOfStockException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -70,5 +72,24 @@ public class ProductEntity {
 
     public void increaseStock(int quantity) {
         this.stock += quantity;
+    }
+
+    public void update(ProductRequestDTO dto) {
+        // 1. 수량 차이 계산 (수정된 총 수량 - 기존 총 수량)
+        int countDifference = dto.getProductCnt() - this.productCnt;
+
+        // 2. 기본 정보 업데이트
+        this.productName = dto.getProductName();
+        this.productDescript = dto.getProductDescript();
+        this.price = dto.getPrice();
+        this.productCnt = dto.getProductCnt();
+
+        // 3. 재고 반영 (이미 구현된 메서드 활용)
+        if (countDifference > 0) {
+            this.increaseStock(countDifference);
+        } else if (countDifference < 0) {
+            // 총 수량을 줄일 때 현재 남은 재고보다 더 많이 줄이려 하면 에러 발생 가능
+            this.decreaseStock(Math.abs(countDifference));
+        }
     }
 }

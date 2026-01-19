@@ -11,7 +11,9 @@ public interface ProductService {
 
   void deleteProductsByFormId(Long formId);
 
-  ProductDTO updateProduct(Long productId, ProductDTO productDTO);
+//  ProductDTO updateProduct(Long productId, ProductDTO productDTO);
+
+  void updateProducts(Long formId, List<ProductRequestDTO> newProductRequests);
 
   void deleteProduct(Long productId);
 

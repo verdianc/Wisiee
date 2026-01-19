@@ -31,7 +31,7 @@ public class ProductMapper {
         .productDescript(dto.getProductDescript())
         .price(dto.getPrice())
         .productCnt(dto.getProductCnt())
-        .stock(dto.getStock())
+        .stock(dto.getProductCnt()) // 처음 생성 시엔 총 수량이 곧 재고
         .build();
   }
 

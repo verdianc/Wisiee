@@ -39,13 +39,41 @@ public class ProductServiceImpl implements ProductService {
 
   @Override
   @Transactional
-  public ProductDTO updateProduct(Long productId, ProductDTO productDTO) {
-    ProductEntity productEntity = productJpaRepository.findById(productId)
-        .orElseThrow(() -> new ProductNotFoundException(productId));
+  public void updateProducts(Long formId, List<ProductRequestDTO> newProductRequests) {
+    // 1. 기존 데이터와 폼 엔티티 조회
+    List<ProductEntity> existingEntities = productJpaRepository.findByForm_Id(formId);
+    FormEntity formEntity = formRepository.findById(formId)
+        .orElseThrow(() -> new FormNotFoundException(formId));
 
-    productEntity.updateFromDTO(productDTO); // 엔티티 안에 update 메서드 정의해두면 깔끔
-    return productMapper.toDTO(productEntity);
+    int existingSize = existingEntities.size();
+    int newSize = newProductRequests.size();
+
+    // 2. 기존 데이터 업데이트 (수정)
+    for (int i = 0; i < Math.min(existingSize, newSize); i++) {
+      ProductEntity entity = existingEntities.get(i);
+      ProductRequestDTO dto = newProductRequests.get(i);
+
+      // 엔티티 자체의 update 메서드 호출 (Dirty Checking)
+      entity.update(dto);
+    }
+
+    // 3. 새로운 데이터 추가 (Insert)
+    if (newSize > existingSize) {
+      for (int i = existingSize; i < newSize; i++) {
+        ProductRequestDTO dto = newProductRequests.get(i);
+        // 매퍼 호출 시 formEntity를 함께 전달
+        ProductEntity newEntity = productMapper.toEntity(dto, formEntity);
+        productJpaRepository.save(newEntity);
+      }
+    }
+    // 4. 남는 데이터 삭제 (Delete)
+    else if (existingSize > newSize) {
+      for (int i = newSize; i < existingSize; i++) {
+        productJpaRepository.delete(existingEntities.get(i));
+      }
+    }
   }
+
 
   @Override
   @Transactional
@@ -74,6 +102,8 @@ public class ProductServiceImpl implements ProductService {
         .map(productMapper::toDTO)
         .toList();
   }
+
+
 
 
 }
