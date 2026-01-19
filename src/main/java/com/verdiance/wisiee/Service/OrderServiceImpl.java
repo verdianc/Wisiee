@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //3. ORDER STATUS가 PREP인지 확인
-        Set<OrderStatus> allowed = EnumSet.of(OrderStatus.PAID, OrderStatus.PREP);
+        Set<OrderStatus> allowed = EnumSet.of(OrderStatus.ORDERED, OrderStatus.PAID, OrderStatus.PREP);
         if (!allowed.contains(order.getOrderStatus())) {
             throw new OrderCancellationNotAllowedException(dto.getOrderId());
         }
