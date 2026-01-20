@@ -51,7 +51,17 @@ public class FormMapper {
         .bank(entity.getBank())
         .build();
 
-    // Product 엔티티 -> ProductDTO 변환
+    // 1. FileEntity -> URL 문자열로 변환하여 추가
+    if (entity.getFiles() != null) {
+      List<String> imageUrls = entity.getFiles().stream()
+          .map(file -> String.format("https://%s.s3.amazonaws.com/%s",
+              file.getBucket(),
+              file.getObjectKey()))
+          .toList();
+      formDTO.setImageUrls(imageUrls);
+    }
+
+    // 2. Product 엔티티 -> ProductDTO 변환 (기존 로직)
     if (entity.getFields() != null) {
       List<ProductDTO> products = entity.getFields().stream()
           .map(p -> ProductDTO.builder()

@@ -97,7 +97,7 @@ public class FormEntity extends BaseEntity {
 
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
-  @OrderColumn(name = "sort _index")
+  @OrderColumn(name = "sort_index")
   private List<FileEntity> files = new ArrayList<>();
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)

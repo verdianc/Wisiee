@@ -94,28 +94,23 @@ public class FormServiceImpl implements FormService {
     @Transactional(readOnly = true)
     public FormDTO getForm(Long id, String code) {
         FormEntity entity = formJpaRepository.findById(id)
-                .orElseThrow(() -> new FormNotFoundException(id));
+            .orElseThrow(() -> new FormNotFoundException(id));
 
-        log.info("Received code: '{}' (length: {})", code, (code!=null ? code.length():"null"));
-        log.info("DB code:       '{}' (length: {})", entity.getCode(), (entity.getCode()!=null ? entity.getCode().length():"null"));
-        log.info("Is it equal? (case-sensitive): {}", entity.getCode().equals(code));
-        log.info("Are they equal? (case-insensitive): {}", entity.getCode().equalsIgnoreCase(code));
-        log.info("--- End of Comparison ---");
-
+        // 1. 비공개 폼인데 코드가 틀린 경우
         if (!entity.isPublic()) {
-            if (code==null || !entity.getCode().equals(code)) {
+            if (entity.getCode() != null && !entity.getCode().equals(code)) {
                 throw new CodeRequiredException();
             }
         }
 
-        // 마감 기한 플래그 변경 시 조회 금지
+        // 2. 마감 기한 체크
         if (entity.getEndDate() != null && LocalDate.now().isAfter(entity.getEndDate())) {
             throw new FormNotFoundException(entity.getId());
         }
 
+
         return formMapper.toDTO(entity);
     }
-
 
     @Override
     @Transactional(readOnly = true)
@@ -123,8 +118,6 @@ public class FormServiceImpl implements FormService {
         return formJpaRepository.findAll(pageable)
             .map(formMapper::toDTO);
     }
-
-
 
     @Override
     public void deleteForm(Long id, UserEntity user) {

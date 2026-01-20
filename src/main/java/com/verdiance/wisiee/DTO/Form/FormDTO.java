@@ -65,5 +65,7 @@ public class FormDTO {
 
   private List<ProductDTO> products;
 
+  private List<String> imageUrls;
+
 
 }
