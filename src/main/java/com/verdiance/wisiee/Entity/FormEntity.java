@@ -97,7 +97,7 @@ public class FormEntity extends BaseEntity {
 
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
-  @OrderColumn(name = "sort_index")
+  @OrderBy("id ASC") // 혹은 생성일 기준 정렬
   private List<FileEntity> files = new ArrayList<>();
 
   @OneToMany(mappedBy = "form", cascade = CascadeType.ALL, orphanRemoval = true)
