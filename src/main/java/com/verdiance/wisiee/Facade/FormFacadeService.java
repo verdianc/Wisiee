@@ -84,19 +84,15 @@ public class FormFacadeService {
     public FormDTO updateForm(Long id, FormRequestDTO request, List<MultipartFile> files) {
         UserEntity user = userService.getUser();
 
-        // 1. Form 기본 정보 수정 (작성자 검증 및 Dirty Checking)
-        FormDTO formDTO = formService.updateForm(id, request, user);
+        // 1. 기본 정보 수정
+        formService.updateForm(id, request, user);
 
-        // 2. Product 수정 (리스트를 통째로 넘겨서 서비스에서 처리)
+        // 2. Product 수정
         if (request.getProducts() != null) {
-            // 기존 데이터를 전부 삭제하는 대신, 서비스 내부에서 인덱스 기반으로 수정/삭제/추가 진행
             productService.updateProducts(id, request.getProducts());
-
-            // 최종 결과물을 다시 조회하여 세팅
-            formDTO.setProducts(productService.getProductsByFormId(id));
         }
 
-        // 3. 파일 처리 (기존 로직 유지)
+        // 3. 파일 처리 (추가만 하는 로직)
         if (files != null && !files.isEmpty()) {
             if (files.size() > 3) throw new FormFileLimitExceededException();
             for (MultipartFile file : files) {
@@ -105,14 +101,16 @@ public class FormFacadeService {
                         .name(file.getOriginalFilename())
                         .description("업데이트된 첨부파일")
                         .build();
-                    fileService.createFile(formDTO.getId(), meta, file.getBytes(), file.getContentType());
+                    fileService.createFile(id, meta, file.getBytes(), file.getContentType());
                 } catch (Exception e) {
                     throw new FileUploadFailedException(e.getMessage());
                 }
             }
         }
 
-        return formDTO;
+        // ★ 중요: 수정이 모두 끝난 후, '새로고침'된 데이터를 조회해서 반환
+        // 그래야 영속성 컨텍스트에 꼬여있던 리스트가 아니라 DB 상태 그대로의 DTO를 만듭니다.
+        return getForm(id, request.getCode());
     }
 
     public void deleteForm(Long formId) {
