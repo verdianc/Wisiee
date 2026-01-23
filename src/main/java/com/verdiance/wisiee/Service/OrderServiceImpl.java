@@ -1,6 +1,7 @@
 package com.verdiance.wisiee.Service;
 
 import com.verdiance.wisiee.Common.Enum.OrderStatus;
+import com.verdiance.wisiee.DTO.Order.OrderItemDTO;
 import com.verdiance.wisiee.DTO.Order.OrderPageRespDTO;
 import com.verdiance.wisiee.DTO.Order.OrderReqDTO;
 import com.verdiance.wisiee.DTO.Order.OrderRespDTO;
@@ -95,13 +96,25 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.updateOrderStatus(orderId, orderStatus);
     }
 
+    @Transactional
     @Override
     public void cancelOrder(OrderReqDTO dto) {
         //Order 상태 변경 확인
         OrderEntity order = chkOrderModi(dto);
+
+        for (OrderItemDTO orderItem : dto.getItems()) {
+
+            // 상품 조회 (Pessimistic Lock이 필요할 수도 있음)
+            ProductEntity product = productJpaRepository.findById(orderItem.getProductId())
+                    .orElseThrow(() -> new ProductNotFoundException(orderItem.getProductId()));
+
+            //재고 증가
+            product.increaseStock(orderItem.getQuantity());
+        }
         // 주문 상태 변경
         order.setDel();
-        orderRepository.save(order);
+
+
     }
 
     @Override
@@ -123,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
 
     private OrderEntity chkOrderModi(OrderReqDTO dto) {
         //1.  기존 주문 조회
-        OrderEntity order = orderRepository.findByIdAndDelYnFalse(dto.getOrderId())
+        OrderEntity order = orderRepository.findById(dto.getOrderId())
                 .orElseThrow(() -> new OrderNotFoundException(dto.getOrderId()));
 
         //2. 해당 Order 주문자와 접속자의 userId 동일 확인
