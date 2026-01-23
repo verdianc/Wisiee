@@ -41,7 +41,7 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "order by o.orderDate desc")
     List<OrderEntity> findOrdersByBuyerId(@Param("buyerId") Long sellerId);
 
-    Optional<OrderEntity> findByIdAndDelYnFalse(Long id);
+    Optional<OrderEntity> findById(Long id);
 
     @Query("select distinct o from OrderEntity o " +
             "join o.orderItemEntities oi " +

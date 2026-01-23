@@ -83,17 +83,12 @@ public class OrderEntity extends BaseEntity {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "del_yn")
-    @Builder.Default
-    private boolean delYn = false;
-
     public void setTotalInfo(int totalPrice, int quantity) {
         this.totalPrice = totalPrice;
         this.quantity = quantity;
     }
 
     public void setDel() {
-        this.delYn = true;
         this.orderStatus = OrderStatus.CANCELED;
     }
 
