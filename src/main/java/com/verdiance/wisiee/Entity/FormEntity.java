@@ -157,4 +157,8 @@ public class FormEntity extends BaseEntity {
     this.accName = dto.getAccName();
     this.bank = dto.getBank();
   }
+
+  public boolean isExpired() {
+    return this.endDate != null && LocalDate.now().isAfter(this.endDate);
+  }
 }

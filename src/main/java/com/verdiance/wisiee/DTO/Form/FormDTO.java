@@ -67,5 +67,6 @@ public class FormDTO {
 
   private List<String> imageUrls;
 
+  private boolean isClosed;
 
 }

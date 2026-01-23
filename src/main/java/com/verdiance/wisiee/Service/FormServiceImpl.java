@@ -91,27 +91,26 @@ public class FormServiceImpl implements FormService {
     }
 
 
+
+
+
     @Override
     @Transactional(readOnly = true)
     public FormDTO getForm(Long id, String code) {
         FormEntity entity = formJpaRepository.findById(id)
             .orElseThrow(() -> new FormNotFoundException(id));
 
-        // 1. 비공개 폼인데 코드가 틀린 경우
+        // 1. 비공개 폼 권한 체크
+        // 공개되지 않은 폼인데, 입력받은 코드가 엔티티의 코드와 다르면 예외 발생
         if (!entity.isPublic()) {
             if (entity.getCode() != null && !entity.getCode().equals(code)) {
                 throw new CodeRequiredException();
             }
         }
 
-        // 2. 마감 기한 체크
-        if (entity.getEndDate() != null && LocalDate.now().isAfter(entity.getEndDate())) {
-            throw new FormNotFoundException(entity.getId());
-        }
-
-
         return formMapper.toDTO(entity);
     }
+
 
     @Override
     @Transactional(readOnly = true)

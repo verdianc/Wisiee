@@ -48,6 +48,7 @@ public class FormMapper {
         .category(entity.getCategory())
         .description(entity.getDescription())
         .isSoldOut(entity.isSoldOut())
+        .isClosed(entity.isExpired())
         .deliveryOption(entity.getDeliveryOption())
         .contact(entity.getContact())
         .account(entity.getAccount())
