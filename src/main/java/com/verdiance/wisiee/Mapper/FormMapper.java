@@ -60,14 +60,13 @@ public class FormMapper {
     if (entity.getFiles() != null) {
       List<String> imageUrls = entity.getFiles().stream()
           .map(file -> {
-            // endpoint 뒤에 /가 붙어있을 경우를 대비해 처리하거나
-            // 단순하게 "endpoint/bucket/objectKey" 구조로 생성
             String baseUrl = endpoint.endsWith("/") ? endpoint.substring(0, endpoint.length()-1) : endpoint;
             return String.format("%s/%s/%s",
                 baseUrl,
                 file.getBucket(),
                 file.getObjectKey());
           })
+          .distinct() // <--- 이 녀석이 범인입니다. 이거 꼭 넣어주세요!
           .toList();
       formDTO.setImageUrls(imageUrls);
     }
