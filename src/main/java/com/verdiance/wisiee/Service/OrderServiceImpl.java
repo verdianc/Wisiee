@@ -96,6 +96,7 @@ public class OrderServiceImpl implements OrderService {
         orderRepository.updateOrderStatus(orderId, orderStatus);
     }
 
+    @Transactional
     @Override
     public void cancelOrder(OrderReqDTO dto) {
         //Order 상태 변경 확인
