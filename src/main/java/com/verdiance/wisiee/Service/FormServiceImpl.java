@@ -68,6 +68,7 @@ public class FormServiceImpl implements FormService {
     }
 
     @Override
+    @Transactional
     public FormDTO updateForm(Long id, FormRequestDTO request, UserEntity user) {
         FormEntity entity = formJpaRepository.findById(id)
                 .orElseThrow(() -> new FormNotFoundException(id));

@@ -6,11 +6,15 @@ import com.verdiance.wisiee.DTO.Product.ProductDTO;
 import com.verdiance.wisiee.Entity.FormEntity;
 import com.verdiance.wisiee.Entity.UserEntity;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
 public class FormMapper {
 
+
+  @Value("${s3.endpoint}")
+  private String endpoint;
 
   public FormEntity toEntity(FormRequestDTO dto, UserEntity user) {
     return FormEntity.builder()
@@ -51,17 +55,23 @@ public class FormMapper {
         .bank(entity.getBank())
         .build();
 
-    // 1. FileEntity -> URL 문자열로 변환하여 추가
+    // 1. MinIO/S3 URL 생성 로직 수정
     if (entity.getFiles() != null) {
       List<String> imageUrls = entity.getFiles().stream()
-          .map(file -> String.format("https://%s.s3.amazonaws.com/%s",
-              file.getBucket(),
-              file.getObjectKey()))
+          .map(file -> {
+            // endpoint 뒤에 /가 붙어있을 경우를 대비해 처리하거나
+            // 단순하게 "endpoint/bucket/objectKey" 구조로 생성
+            String baseUrl = endpoint.endsWith("/") ? endpoint.substring(0, endpoint.length()-1) : endpoint;
+            return String.format("%s/%s/%s",
+                baseUrl,
+                file.getBucket(),
+                file.getObjectKey());
+          })
           .toList();
       formDTO.setImageUrls(imageUrls);
     }
 
-    // 2. Product 엔티티 -> ProductDTO 변환 (기존 로직)
+    // 2. Product 엔티티 -> ProductDTO 변환
     if (entity.getFields() != null) {
       List<ProductDTO> products = entity.getFields().stream()
           .map(p -> ProductDTO.builder()
@@ -80,4 +90,5 @@ public class FormMapper {
 
     return formDTO;
   }
+
 }
