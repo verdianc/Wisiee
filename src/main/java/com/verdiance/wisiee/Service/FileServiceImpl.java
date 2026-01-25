@@ -32,9 +32,6 @@ public class FileServiceImpl implements FileService {
   private final FileMapper fileMapper;
   private final S3Port s3Port;
 
-
-
-
   @Override
   @Transactional
   public FileDTO createFile(Long formId, FileRequestDTO request, byte[] fileData, String contentType) {
@@ -45,18 +42,24 @@ public class FileServiceImpl implements FileService {
 
     try {
       S3Port.PutResult put = s3Port.put(objectKey, fileData, contentType, Map.of());
-      String url = s3Port.presignGet(objectKey, put.versionId(), Duration.ofMinutes(60));
 
       FileEntity entity = fileMapper.toEntity(
           request, form, s3Port.bucket(), objectKey, put.versionId(), put.size()
       );
 
+
       FileEntity saved = fileJpaRepository.save(entity);
+
+      if (form.getFiles() != null) {
+        form.getFiles().add(saved);
+      }
+
       return fileMapper.toDTO(saved);
     } catch (Exception e) {
       throw new FileUploadFailedException("파일 업로드 실패: " + e.getMessage());
     }
   }
+
 
 
 
@@ -71,10 +74,9 @@ public class FileServiceImpl implements FileService {
   @Override
   @Transactional(readOnly = true)
   public List<FileDTO> getFileList(Long formId) {
-    return fileJpaRepository.findAll().stream()
-        .filter(file -> file.getForm().getId().equals(formId))
+    return fileJpaRepository.findByFormId(formId).stream()
         .map(fileMapper::toDTO)
-        .collect(Collectors.toList());
+        .toList();
   }
 
   @Override
@@ -91,4 +93,16 @@ public class FileServiceImpl implements FileService {
     }
   }
 
+
+
+
+  @Override
+  @Transactional
+  public void removeAllFilesByFormId(Long formId) {
+    FormEntity form = formJpaRepository.findById(formId)
+        .orElseThrow(() -> new FileNotFoundException(formId));
+    if (form.getFiles() != null) {
+      form.getFiles().clear();
+    }
+  }
 }

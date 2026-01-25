@@ -84,23 +84,24 @@ public class FormFacadeService {
     public FormDTO updateForm(Long id, FormRequestDTO request, List<MultipartFile> files) {
         UserEntity user = userService.getUser();
 
-        // 1. 기본 정보 수정
         formService.updateForm(id, request, user);
 
-        // 2. Product 수정
         if (request.getProducts() != null) {
             productService.updateProducts(id, request.getProducts());
         }
 
-        // 3. 파일 처리 (추가만 하는 로직)
         if (files != null && !files.isEmpty()) {
+            fileService.removeAllFilesByFormId(id);
+
             if (files.size() > 3) throw new FormFileLimitExceededException();
+
             for (MultipartFile file : files) {
                 try {
                     FileRequestDTO meta = FileRequestDTO.builder()
                         .name(file.getOriginalFilename())
                         .description("업데이트된 첨부파일")
                         .build();
+
                     fileService.createFile(id, meta, file.getBytes(), file.getContentType());
                 } catch (Exception e) {
                     throw new FileUploadFailedException(e.getMessage());
@@ -108,8 +109,8 @@ public class FormFacadeService {
             }
         }
 
-        // ★ 중요: 수정이 모두 끝난 후, '새로고침'된 데이터를 조회해서 반환
-        // 그래야 영속성 컨텍스트에 꼬여있던 리스트가 아니라 DB 상태 그대로의 DTO를 만듭니다.
+        // 4. 마지막 결과 조회
+        // 이제 메모리가 비워졌다가(clear) 다시 채워진(add) 상태라 중복 없이 깨끗하게 나옵니다.
         return getForm(id, request.getCode());
     }
 

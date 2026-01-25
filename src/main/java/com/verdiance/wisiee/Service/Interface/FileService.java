@@ -14,4 +14,6 @@ public interface FileService {
 
   void deleteFile(Long id);
 
+  void removeAllFilesByFormId(Long formId);
+
 }
